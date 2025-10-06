@@ -1,5 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:pcq_fir_pilot_app/providers/connectivity_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/no_internet/providers/connectivity_provider.dart';
 
 class ConnectivityService {
   final Connectivity _connectivity = Connectivity();

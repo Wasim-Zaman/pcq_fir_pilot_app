@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/no_internet/view/no_internet_screen.dart';
 
-import 'providers/connectivity_provider.dart';
+import 'presentation/features/no_internet/providers/connectivity_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
