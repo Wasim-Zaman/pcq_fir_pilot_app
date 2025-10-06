@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_router.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/no_internet/view/no_internet_screen.dart';
 
 import 'presentation/features/no_internet/providers/connectivity_provider.dart';
@@ -13,14 +14,14 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Connectivity Monitor',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ConnectivityWrapper(),
       debugShowCheckedModeBanner: false,
+      routerConfig: ref.watch(goRouterProvider),
     );
   }
 }
