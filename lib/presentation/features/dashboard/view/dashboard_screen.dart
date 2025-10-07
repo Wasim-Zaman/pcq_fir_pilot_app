@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/dashboard_provider.dart';
 
@@ -30,8 +32,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   void _handleScanQRCode() {
-    // TODO: Navigate to QR code scanner
-    CustomSnackbar.showNormal(context, 'QR Code scanner coming soon!');
+    // Navigate to QR code scanner
+    context.push(kScanQrCodeRoute);
   }
 
   void _handleNotifications() {

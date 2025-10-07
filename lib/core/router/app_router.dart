@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/dashboard_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/scan_barcode/view/scan_barcode_screen.dart';
 
 import 'app_routes.dart';
 
@@ -32,6 +33,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           return MaterialPage(
             key: state.pageKey,
             child: const DashboardScreen(),
+          );
+        },
+      ),
+
+      // Scan Barcode Route
+      GoRoute(
+        path: kScanQrCodeRoute,
+        name: 'scan-qr-code',
+        pageBuilder: (context, state) {
+          return MaterialPage(
+            key: state.pageKey,
+            child: const ScanBarcodeScreen(),
           );
         },
       ),

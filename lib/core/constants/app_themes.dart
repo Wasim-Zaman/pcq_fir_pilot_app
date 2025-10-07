@@ -37,6 +37,7 @@ class AppThemes {
       appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: true,
+        scrolledUnderElevation: 0,
         backgroundColor: AppColors.kSurfaceColor,
         foregroundColor: AppColors.kTextPrimaryColor,
         iconTheme: IconThemeData(color: AppColors.kIconPrimaryColor),
@@ -387,6 +388,7 @@ class AppThemes {
       appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: true,
+        scrolledUnderElevation: 0,
         backgroundColor: AppColors.kDarkSurfaceColor,
         foregroundColor: AppColors.kDarkTextPrimaryColor,
         iconTheme: IconThemeData(color: AppColors.kDarkPrimaryColor),
