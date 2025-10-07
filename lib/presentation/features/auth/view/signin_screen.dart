@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/validation_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
@@ -48,13 +49,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           context.go(kDashboardRoute);
 
           // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Sign in successful!'),
-              backgroundColor: AppColors.kSuccessColor,
-              duration: Duration(seconds: 2),
-            ),
-          );
+          CustomSnackbar.showNormal(context, 'Sign in successful!');
         }
       });
     }
@@ -161,12 +156,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           ? null
                           : () {
                               // TODO: Navigate to forgot password screen
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Forgot password feature coming soon!',
-                                  ),
-                                ),
+                              CustomSnackbar.showNormal(
+                                context,
+                                'Forgot password feature coming soon!',
                               );
                             },
                       child: Text(
@@ -209,12 +201,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             ? null
                             : () {
                                 // TODO: Navigate to sign up screen
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Sign up feature coming soon!',
-                                    ),
-                                  ),
+                                CustomSnackbar.showNormal(
+                                  context,
+                                  'Sign up feature coming soon!',
                                 );
                               },
                         style: TextButton.styleFrom(

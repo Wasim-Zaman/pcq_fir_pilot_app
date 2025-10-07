@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/dashboard_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 
@@ -30,23 +31,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   void _handleScanQRCode() {
     // TODO: Navigate to QR code scanner
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('QR Code scanner coming soon!')),
-    );
+    CustomSnackbar.showNormal(context, 'QR Code scanner coming soon!');
   }
 
   void _handleNotifications() {
     // TODO: Navigate to notifications screen
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Notifications coming soon!')));
+    CustomSnackbar.showNormal(context, 'Notifications coming soon!');
   }
 
   void _handleProfile() {
     // TODO: Navigate to profile screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Profile screen coming soon!')),
-    );
+    CustomSnackbar.showNormal(context, 'Profile screen coming soon!');
   }
 
   @override
@@ -296,7 +291,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, size: 24, color: color),
