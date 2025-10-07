@@ -1,53 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pcq_fir_pilot_app/main.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
 
-import '../../presentation/features/no_internet/view/no_internet_screen.dart';
 import 'app_routes.dart';
+
+var navigatorKey = GlobalKey<NavigatorState>();
 
 /// GoRouter provider for app navigation
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: kInitialRoute,
+    initialLocation: kSigninRoute,
     debugLogDiagnostics: true,
+    navigatorKey: navigatorKey,
     routes: [
+      // Auth Routes
       GoRoute(
-        path: kInitialRoute,
-        name: kInitialRouteName,
-        builder: (context, state) => const ConnectivityWrapper(),
-        routes: [
-          // Auth Routes
-          GoRoute(
-            path: kSigninRoute,
-            name: kSigninRouteName,
-            pageBuilder: (context, state) {
-              // Replace with actual SignInScreen
-              return MaterialPage(
-                key: state.pageKey,
-                child: const SignInScreen(),
-              );
-            },
-          ),
-
-          // Utility Routes
-          GoRoute(
-            path: kNoInternetRoute,
-            name: 'no-internet',
-            pageBuilder: (context, state) => MaterialPage(
-              key: state.pageKey,
-              child: const NoInternetScreen(),
-            ),
-          ),
-
-          // Add more routes as needed
-        ],
+        path: kSigninRoute,
+        name: kSigninRouteName,
+        pageBuilder: (context, state) {
+          return MaterialPage(key: state.pageKey, child: const SignInScreen());
+        },
       ),
+
+      // Add more routes as needed
     ],
-    redirect: (context, state) {
-      return null;
-    },
     errorBuilder: (context, state) => Scaffold(
       body: Center(
         child: Column(
