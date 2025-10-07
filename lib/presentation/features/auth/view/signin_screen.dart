@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/validation_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
@@ -38,14 +40,19 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             password: _passwordController.text,
           );
 
-      // Check for success and show message
+      // Check for success and navigate to dashboard
       final signInState = ref.read(signInProvider);
       signInState.whenData((state) {
         if (mounted && state.isAuthenticated) {
+          // Navigate to dashboard
+          context.go(kDashboardRoute);
+
+          // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Sign in successful!'),
               backgroundColor: AppColors.kSuccessColor,
+              duration: Duration(seconds: 2),
             ),
           );
         }

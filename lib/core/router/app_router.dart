@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/dashboard_screen.dart';
 
 import 'app_routes.dart';
 
@@ -20,6 +21,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: kSigninRouteName,
         pageBuilder: (context, state) {
           return MaterialPage(key: state.pageKey, child: const SignInScreen());
+        },
+      ),
+
+      // Dashboard Route
+      GoRoute(
+        path: kDashboardRoute,
+        name: 'dashboard',
+        pageBuilder: (context, state) {
+          return MaterialPage(
+            key: state.pageKey,
+            child: const DashboardScreen(),
+          );
         },
       ),
 
