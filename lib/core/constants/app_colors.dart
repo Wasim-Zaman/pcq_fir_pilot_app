@@ -68,4 +68,16 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+
+  // Dark Theme Colors
+  static const Color kDarkBackgroundColor = Color(0xFF111827);
+  static const Color kDarkSurfaceColor = Color(0xFF1F2937);
+  static const Color kDarkTextPrimaryColor = Color(0xFFF9FAFB);
+  static const Color kDarkTextSecondaryColor = Color(0xFFD1D5DB);
+  static const Color kDarkTextTertiaryColor = Color(0xFF6B7280);
+  static const Color kDarkBorderColor = Color(0xFF374151);
+  static const Color kDarkBorderLightColor = Color(0xFF4B5563);
+  static const Color kDarkShadowColor = Color(0x40000000);
+  static const Color kDarkPrimaryColor = Color(0xFF60A5FA);
+  static const Color kDarkPrimaryDarkColor = Color(0xFF1E40AF);
 }

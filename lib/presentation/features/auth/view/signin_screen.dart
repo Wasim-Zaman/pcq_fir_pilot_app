@@ -9,6 +9,7 @@ import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/validation_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
 /// Sign-in screen that allows users to authenticate using username and password
@@ -64,8 +65,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     // Get loading state from the provider
     final isLoading = signInState.isLoading;
 
-    return Scaffold(
-      backgroundColor: AppColors.kBackgroundColor,
+    return CustomScaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

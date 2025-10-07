@@ -370,28 +370,28 @@ class AppThemes {
         primaryContainer: AppColors.kPrimaryDarkColor,
         secondary: AppColors.kSecondaryLightColor,
         secondaryContainer: AppColors.kSecondaryDarkColor,
-        surface: const Color(0xFF1F2937),
+        surface: AppColors.kDarkSurfaceColor,
         error: AppColors.kErrorColor,
         onPrimary: AppColors.kTextPrimaryColor,
         onSecondary: AppColors.kTextPrimaryColor,
-        onSurface: const Color(0xFFF9FAFB),
+        onSurface: AppColors.kDarkTextPrimaryColor,
         onError: Colors.white,
-        outline: const Color(0xFF374151),
-        shadow: const Color(0x40000000),
+        outline: AppColors.kDarkBorderColor,
+        shadow: AppColors.kDarkShadowColor,
       ),
 
       // Scaffold Background
-      scaffoldBackgroundColor: const Color(0xFF111827),
+      scaffoldBackgroundColor: AppColors.kDarkBackgroundColor,
 
       // App Bar Theme
       appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Color(0xFF1F2937),
-        foregroundColor: Color(0xFFF9FAFB),
-        iconTheme: IconThemeData(color: Color(0xFF60A5FA)),
+        backgroundColor: AppColors.kDarkSurfaceColor,
+        foregroundColor: AppColors.kDarkTextPrimaryColor,
+        iconTheme: IconThemeData(color: AppColors.kDarkPrimaryColor),
         titleTextStyle: TextStyle(
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
@@ -403,77 +403,77 @@ class AppThemes {
         displayLarge: TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.bold,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         displayMedium: TextStyle(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         displaySmall: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         headlineLarge: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w600,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         headlineMedium: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         headlineSmall: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         titleLarge: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         titleMedium: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         titleSmall: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         bodyLarge: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         bodyMedium: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
-          color: Color(0xFFD1D5DB),
+          color: AppColors.kDarkTextSecondaryColor,
         ),
         bodySmall: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.normal,
-          color: Color(0xFFD1D5DB),
+          color: AppColors.kDarkTextSecondaryColor,
         ),
         labelLarge: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         labelMedium: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: Color(0xFFF9FAFB),
+          color: AppColors.kDarkTextPrimaryColor,
         ),
         labelSmall: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: Color(0xFFD1D5DB),
+          color: AppColors.kDarkTextSecondaryColor,
         ),
       ),
 
@@ -481,8 +481,8 @@ class AppThemes {
       cardTheme: CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        color: const Color(0xFF1F2937),
-        shadowColor: const Color(0x40000000),
+        color: AppColors.kDarkSurfaceColor,
+        shadowColor: AppColors.kDarkShadowColor,
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       ),
 
@@ -492,8 +492,8 @@ class AppThemes {
           elevation: 0,
           backgroundColor: AppColors.kPrimaryLightColor,
           foregroundColor: AppColors.kTextPrimaryColor,
-          disabledBackgroundColor: const Color(0xFF374151),
-          disabledForegroundColor: const Color(0xFF6B7280),
+          disabledBackgroundColor: AppColors.kDarkBorderColor,
+          disabledForegroundColor: AppColors.kDarkTextTertiaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -516,7 +516,7 @@ class AppThemes {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.kPrimaryLightColor,
-          side: const BorderSide(color: Color(0xFF374151), width: 1.5),
+          side: const BorderSide(color: AppColors.kDarkBorderColor, width: 1.5),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -528,22 +528,25 @@ class AppThemes {
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF1F2937),
+        fillColor: AppColors.kDarkSurfaceColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF374151)),
+          borderSide: const BorderSide(color: AppColors.kDarkBorderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF374151)),
+          borderSide: const BorderSide(color: AppColors.kDarkBorderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF60A5FA), width: 2),
+          borderSide: const BorderSide(
+            color: AppColors.kDarkPrimaryColor,
+            width: 2,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -555,15 +558,24 @@ class AppThemes {
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF4B5563)),
+          borderSide: const BorderSide(color: AppColors.kDarkBorderLightColor),
         ),
-        labelStyle: const TextStyle(color: Color(0xFFD1D5DB), fontSize: 14),
-        hintStyle: const TextStyle(color: Color(0xFF6B7280), fontSize: 14),
+        labelStyle: const TextStyle(
+          color: AppColors.kDarkTextSecondaryColor,
+          fontSize: 14,
+        ),
+        hintStyle: const TextStyle(
+          color: AppColors.kDarkTextTertiaryColor,
+          fontSize: 14,
+        ),
         errorStyle: const TextStyle(color: AppColors.kErrorColor, fontSize: 12),
       ),
 
       // Icon Theme
-      iconTheme: const IconThemeData(color: Color(0xFF60A5FA), size: 24),
+      iconTheme: const IconThemeData(
+        color: AppColors.kDarkPrimaryColor,
+        size: 24,
+      ),
 
       // Divider Theme
       dividerTheme: const DividerThemeData(

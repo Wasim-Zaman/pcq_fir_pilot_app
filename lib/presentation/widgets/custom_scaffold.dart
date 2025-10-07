@@ -110,6 +110,8 @@ class CustomScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // check if it is dartmode
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value:
           systemOverlayStyle ??
@@ -119,7 +121,11 @@ class CustomScaffold extends StatelessWidget {
             statusBarBrightness: Brightness.light,
           ),
       child: Scaffold(
-        backgroundColor: backgroundColor ?? AppColors.kBackgroundColor,
+        backgroundColor:
+            backgroundColor ??
+            (isDarkMode
+                ? AppColors.kDarkBackgroundColor
+                : AppColors.kBackgroundColor),
         extendBodyBehindAppBar: extendBodyBehindAppBar,
         extendBody: extendBody,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
