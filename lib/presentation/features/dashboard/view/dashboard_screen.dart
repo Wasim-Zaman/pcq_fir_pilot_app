@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/dashboard_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import 'widgets/dashboard_content.dart';
 import 'widgets/dashboard_error_view.dart';
@@ -50,8 +50,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     final dashboardState = ref.watch(dashboardProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.kBackgroundColor,
+    return CustomScaffold(
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _handleRefresh,

@@ -172,6 +172,8 @@ class CustomScaffold extends StatelessWidget {
     if (appBar != null) return appBar;
     if (title == null && !showBackButton) return null;
 
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return AppBar(
       title: title != null
           ? Text(
@@ -184,14 +186,20 @@ class CustomScaffold extends StatelessWidget {
             )
           : null,
       centerTitle: centerTitle,
-      backgroundColor: AppColors.kSurfaceColor,
-      elevation: 0,
+      backgroundColor: isDarkMode
+          ? AppColors.kDarkSurfaceColor
+          : AppColors.kSurfaceColor,
       surfaceTintColor: Colors.transparent,
       leading: leading ?? (showBackButton ? _buildBackButton(context) : null),
       actions: actions,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Container(height: 1, color: AppColors.kBorderLightColor),
+        child: Container(
+          height: 1,
+          color: isDarkMode
+              ? AppColors.kDarkBorderColor
+              : AppColors.kBorderLightColor,
+        ),
       ),
     );
   }

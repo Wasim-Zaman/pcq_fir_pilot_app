@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/dashboard_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/scan_barcode/view/scan_barcode_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import 'app_routes.dart';
 
@@ -51,7 +52,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       // Add more routes as needed
     ],
-    errorBuilder: (context, state) => Scaffold(
+    errorBuilder: (context, state) => CustomScaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

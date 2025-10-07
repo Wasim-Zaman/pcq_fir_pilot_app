@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import '../providers/connectivity_provider.dart';
 
@@ -10,8 +13,7 @@ class NoInternetScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivityStatus = ref.watch(connectivityStatusProvider);
 
-    return Scaffold(
-      backgroundColor: Colors.red.shade50,
+    return CustomScaffold(
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -23,33 +25,33 @@ class NoInternetScreen extends ConsumerWidget {
                 Icon(
                   Icons.wifi_off_rounded,
                   size: 80,
-                  color: Colors.red.shade400,
+                  color: AppColors.kErrorColor,
                 ),
 
-                const SizedBox(height: 24),
+                24.heightBox,
 
                 // Title
                 Text(
                   'No Internet Connection',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.red.shade700,
+                    color: AppColors.kErrorColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 16),
+                16.heightBox,
 
                 // Description
                 Text(
                   'Please check your internet connection and try again.',
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyLarge?.copyWith(color: Colors.red.shade600),
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.kErrorColor),
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 32),
+                32.heightBox,
 
                 // Connection status indicator
                 connectivityStatus.when(
@@ -61,17 +63,17 @@ class NoInternetScreen extends ConsumerWidget {
                       ),
                       decoration: BoxDecoration(
                         color: status == ConnectivityStatus.connected
-                            ? Colors.green.shade100
+                            ? AppColors.kSuccessColor.withValues(alpha: 0.1)
                             : status == ConnectivityStatus.checking
-                            ? Colors.orange.shade100
-                            : Colors.red.shade100,
+                            ? AppColors.kWarningColor.withValues(alpha: 0.1)
+                            : AppColors.kErrorColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: status == ConnectivityStatus.connected
-                              ? Colors.green.shade400
+                              ? AppColors.kSuccessColor
                               : status == ConnectivityStatus.checking
-                              ? Colors.orange.shade400
-                              : Colors.red.shade400,
+                              ? AppColors.kWarningColor
+                              : AppColors.kErrorColor,
                         ),
                       ),
                       child: Row(
@@ -85,12 +87,12 @@ class NoInternetScreen extends ConsumerWidget {
                                 : Icons.wifi_off_rounded,
                             size: 16,
                             color: status == ConnectivityStatus.connected
-                                ? Colors.green.shade700
+                                ? AppColors.kSuccessColor
                                 : status == ConnectivityStatus.checking
-                                ? Colors.orange.shade700
-                                : Colors.red.shade700,
+                                ? AppColors.kWarningColor
+                                : AppColors.kErrorColor,
                           ),
-                          const SizedBox(width: 8),
+                          8.widthBox,
                           Text(
                             status == ConnectivityStatus.connected
                                 ? 'Connected'
@@ -100,10 +102,10 @@ class NoInternetScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               color: status == ConnectivityStatus.connected
-                                  ? Colors.green.shade700
+                                  ? AppColors.kSuccessColor
                                   : status == ConnectivityStatus.checking
-                                  ? Colors.orange.shade700
-                                  : Colors.red.shade700,
+                                  ? AppColors.kWarningColor
+                                  : AppColors.kErrorColor,
                             ),
                           ),
                         ],
@@ -113,32 +115,32 @@ class NoInternetScreen extends ConsumerWidget {
                   loading: () => const CircularProgressIndicator(),
                   error: (error, stackTrace) => Text(
                     'Error checking connectivity',
-                    style: TextStyle(color: Colors.red.shade700),
+                    style: TextStyle(color: AppColors.kErrorColor),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                24.heightBox,
 
                 // Retry instructions
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
+                    border: Border.all(color: AppColors.kBorderColor),
                   ),
                   child: Column(
                     children: [
                       Icon(
                         Icons.info_outline_rounded,
-                        color: Colors.grey.shade600,
+                        color: AppColors.kIconSecondaryColor,
                         size: 20,
                       ),
-                      const SizedBox(height: 8),
+                      8.heightBox,
                       Text(
                         'The app will automatically reconnect when internet is available.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey.shade700,
+                          color: AppColors.kTextSecondaryColor,
                         ),
                         textAlign: TextAlign.center,
                       ),
