@@ -107,12 +107,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
         labelStyle: TextStyle(
           color: Theme.of(
             context,
-          ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+          ).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
           fontSize: 14,
         ),
         hintText: widget.hintText,
         hintStyle: TextStyle(
-          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
+          color: Theme.of(
+            context,
+          ).textTheme.bodySmall?.color?.withValues(alpha: 0.5),
           fontSize: 14,
         ),
         prefixText: widget.prefixText,
