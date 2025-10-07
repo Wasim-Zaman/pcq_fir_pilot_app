@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 
 /// A custom button widget using FilledButton with consistent styling
 /// Provides different button styles and states for the app
@@ -54,9 +55,9 @@ class CustomButton extends StatelessWidget {
             ),
           )
         else ...[
-          if (icon != null) ...[icon!, const SizedBox(width: 8)],
+          if (icon != null) ...[icon!, 8.heightBox],
           Text(
-            text,
+            icon != null ? ' $text' : text,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,

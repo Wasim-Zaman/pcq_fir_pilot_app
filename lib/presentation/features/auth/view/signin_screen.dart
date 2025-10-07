@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
@@ -99,7 +101,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       size: 120,
                       color: AppColors.kPrimaryColor,
                     ),
-                    const SizedBox(height: 32),
+
+                    32.heightBox,
                   ],
 
                   // Welcome Text
@@ -112,7 +115,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
+
+                  8.heightBox,
+
                   Text(
                     'Sign in to continue',
                     style: TextStyle(
@@ -121,7 +126,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 48),
+
+                  48.heightBox,
 
                   // Username Field
                   CustomTextField(
@@ -137,7 +143,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     validator: _validateUsername,
                     enabled: !_isLoading,
                   ),
-                  const SizedBox(height: 16),
+
+                  16.heightBox,
 
                   // Password Field
                   CustomTextField(
@@ -156,7 +163,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     enabled: !_isLoading,
                     onSaved: (_) => _handleSignIn(),
                   ),
-                  const SizedBox(height: 24),
+
+                  24.heightBox,
 
                   // Forgot Password Link
                   Align(
@@ -184,7 +192,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+
+                  24.heightBox,
 
                   // Sign In Button
                   CustomButton(
@@ -192,57 +201,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: _isLoading ? null : _handleSignIn,
                     isLoading: _isLoading,
                     useGradient: true,
+                    icon: const Icon(Iconsax.barcode),
                   ),
-                  const SizedBox(height: 24),
 
-                  // OR Divider
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.kDividerColor,
-                          thickness: 1,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          'OR',
-                          style: TextStyle(
-                            color: AppColors.kTextSecondaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.kDividerColor,
-                          thickness: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Sign In with QR Code Button
-                  CustomOutlinedButton(
-                    text: 'Sign In with QR Code',
-                    icon: const Icon(Icons.qr_code_scanner),
-                    onPressed: _isLoading
-                        ? null
-                        : () {
-                            // TODO: Navigate to QR code scanner screen
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'QR code sign-in feature coming soon!',
-                                ),
-                              ),
-                            );
-                          },
-                  ),
-                  const SizedBox(height: 32),
+                  32.heightBox,
 
                   // Sign Up Link
                   Row(
