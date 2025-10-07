@@ -579,7 +579,7 @@ class AppThemes {
 
       // Divider Theme
       dividerTheme: const DividerThemeData(
-        color: Color(0xFF374151),
+        color: AppColors.kDarkBorderColor,
         thickness: 1,
         space: 1,
       ),
