@@ -1,50 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-/// Dashboard statistics model
-class DashboardStats {
-  final int todayScans;
-  final int pendingVerifications;
-  final DateTime lastUpdated;
-
-  const DashboardStats({
-    required this.todayScans,
-    required this.pendingVerifications,
-    required this.lastUpdated,
-  });
-
-  DashboardStats copyWith({
-    int? todayScans,
-    int? pendingVerifications,
-    DateTime? lastUpdated,
-  }) {
-    return DashboardStats(
-      todayScans: todayScans ?? this.todayScans,
-      pendingVerifications: pendingVerifications ?? this.pendingVerifications,
-      lastUpdated: lastUpdated ?? this.lastUpdated,
-    );
-  }
-}
-
-/// Dashboard state class to track dashboard status
-class DashboardState {
-  final bool isLoading;
-  final String? error;
-  final DashboardStats? stats;
-
-  const DashboardState({this.isLoading = false, this.error, this.stats});
-
-  DashboardState copyWith({
-    bool? isLoading,
-    String? error,
-    DashboardStats? stats,
-  }) {
-    return DashboardState(
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
-      stats: stats ?? this.stats,
-    );
-  }
-}
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_state.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_stats.dart';
 
 /// AsyncNotifier for dashboard business logic
 class DashboardNotifier extends AsyncNotifier<DashboardState> {
