@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/validation_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
 /// Sign-in screen that allows users to authenticate using username and password
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  ConsumerState<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -26,61 +28,39 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  String? _validateUsername(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your username';
-    }
-    if (value.length < 3) {
-      return 'Username must be at least 3 characters';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your password';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
-  }
-
   Future<void> _handleSignIn() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
+      // Call signin provider
+      await ref
+          .read(signInProvider.notifier)
+          .signIn(
+            username: _usernameController.text,
+            password: _passwordController.text,
+          );
+
+      // Check for success and show message
+      final signInState = ref.read(signInProvider);
+      signInState.whenData((state) {
+        if (mounted && state.isAuthenticated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Sign in successful!'),
+              backgroundColor: AppColors.kSuccessColor,
+            ),
+          );
+        }
       });
-
-      // TODO: Implement actual sign-in logic here
-      // Example:
-      // await authProvider.signIn(
-      //   username: _usernameController.text,
-      //   password: _passwordController.text,
-      // );
-
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-
-        // Show success message or navigate to home screen
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Sign in successful!'),
-            backgroundColor: AppColors.kSuccessColor,
-          ),
-        );
-      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final keyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+    final signInState = ref.watch(signInProvider);
+    final validation = ref.read(validationProvider.notifier);
+
+    // Get loading state from the provider
+    final isLoading = signInState.isLoading;
 
     return Scaffold(
       backgroundColor: AppColors.kBackgroundColor,
@@ -140,8 +120,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
-                    validator: _validateUsername,
-                    enabled: !_isLoading,
+                    validator: validation.validateUsername,
+                    enabled: !isLoading,
                   ),
 
                   16.heightBox,
@@ -159,8 +139,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     showPasswordToggle: true,
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.done,
-                    validator: _validatePassword,
-                    enabled: !_isLoading,
+                    validator: validation.validatePassword,
+                    enabled: !isLoading,
                     onSaved: (_) => _handleSignIn(),
                   ),
 
@@ -170,7 +150,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: _isLoading
+                      onPressed: isLoading
                           ? null
                           : () {
                               // TODO: Navigate to forgot password screen
@@ -198,8 +178,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   // Sign In Button
                   CustomButton(
                     text: 'Sign In',
-                    onPressed: _isLoading ? null : _handleSignIn,
-                    isLoading: _isLoading,
+                    onPressed: isLoading ? null : _handleSignIn,
+                    isLoading: isLoading,
                     useGradient: true,
                     icon: const Icon(Iconsax.barcode),
                   ),
@@ -218,7 +198,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: _isLoading
+                        onPressed: isLoading
                             ? null
                             : () {
                                 // TODO: Navigate to sign up screen
