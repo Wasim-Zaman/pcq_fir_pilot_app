@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_themes.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/no_internet/providers/connectivity_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/no_internet/view/no_internet_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
@@ -16,10 +17,9 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       title: 'PCQ FIR Pilot App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(goRouterProvider),
       builder: (context, child) {
