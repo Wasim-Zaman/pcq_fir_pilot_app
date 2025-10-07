@@ -72,7 +72,7 @@ class ConnectivityWrapper extends ConsumerWidget {
         if (kDebugMode) {
           print('⏳ ConnectivityWrapper loading...');
         }
-        return Scaffold(
+        return CustomScaffold(
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
