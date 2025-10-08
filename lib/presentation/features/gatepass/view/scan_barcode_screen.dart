@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
-import '../providers/gatepass_scan_provider.dart';
 import 'widgets/scan_option_card.dart';
 
 /// Scan Barcode screen for document input
@@ -13,8 +14,6 @@ class ScanBarcodeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scanState = ref.watch(scanBarcodeProvider);
-
     return CustomScaffold(
       appBar: AppBar(title: const Text('')),
       body: SafeArea(
@@ -37,7 +36,7 @@ class ScanBarcodeScreen extends ConsumerWidget {
                 icon: Iconsax.scan,
                 title: 'Scan QR Code',
                 subtitle: 'Use camera to scan\ndocument QR code',
-                onTap: () => _handleScanQRCode(context, ref),
+                onTap: () => _showPassNumberDialog(context, true),
               ),
               24.heightBox,
               // Manual Input Card
@@ -45,18 +44,9 @@ class ScanBarcodeScreen extends ConsumerWidget {
                 icon: Iconsax.keyboard,
                 title: 'Manual Input',
                 subtitle: 'Enter document\ndetails manually',
-                onTap: () => _handleManualInput(context, ref),
+                onTap: () => _showPassNumberDialog(context, false),
               ),
               const Spacer(),
-              // Loading indicator
-              if (scanState.maybeWhen(
-                data: (state) => state.isLoading,
-                orElse: () => false,
-              ))
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 24.0),
-                  child: CircularProgressIndicator(),
-                ),
               24.heightBox,
             ],
           ),
@@ -65,36 +55,54 @@ class ScanBarcodeScreen extends ConsumerWidget {
     );
   }
 
-  void _handleScanQRCode(BuildContext context, WidgetRef ref) {
-    // TODO: Navigate to camera scanner or trigger scan
-    ref.read(scanBarcodeProvider.notifier).scanQRCode();
-  }
-
-  void _handleManualInput(BuildContext context, WidgetRef ref) {
-    // TODO: Navigate to manual input screen or show dialog
-    _showManualInputDialog(context, ref);
-  }
-
-  void _showManualInputDialog(BuildContext context, WidgetRef ref) {
+  /// Show dialog for entering pass number
+  /// [isScan] determines if this was triggered by scan or manual input
+  void _showPassNumberDialog(BuildContext context, bool isScan) {
     final controller = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Manual Input'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            hintText: 'Enter document code',
-            border: OutlineInputBorder(),
+        title: Text(isScan ? 'Scan Pass Number' : 'Enter Pass Number'),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isScan)
+                Text(
+                  'Use your PDA device to scan the QR code or enter manually',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                ),
+              if (isScan) 16.heightBox,
+              TextFormField(
+                controller: controller,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  labelText: 'Pass Number',
+                  hintText: 'e.g., AQPCI-2025000001',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.qr_code),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter a pass number';
+                  }
+                  return null;
+                },
+                onFieldSubmitted: (value) {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.pop(context);
+                    _navigateToDetails(context, value.trim());
+                  }
+                },
+              ),
+            ],
           ),
-          autofocus: true,
-          onSubmitted: (value) {
-            Navigator.pop(context);
-            if (value.trim().isNotEmpty) {
-              ref.read(scanBarcodeProvider.notifier).submitManualInput(value);
-            }
-          },
         ),
         actions: [
           TextButton(
@@ -103,10 +111,9 @@ class ScanBarcodeScreen extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              final code = controller.text.trim();
-              if (code.isNotEmpty) {
-                ref.read(scanBarcodeProvider.notifier).submitManualInput(code);
+              if (formKey.currentState!.validate()) {
+                Navigator.pop(context);
+                _navigateToDetails(context, controller.text.trim());
               }
             },
             child: const Text('Submit'),
@@ -114,5 +121,10 @@ class ScanBarcodeScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Navigate to gate pass details screen
+  void _navigateToDetails(BuildContext context, String passNumber) {
+    context.push(kGatePassDetailsRoute, extra: passNumber);
   }
 }

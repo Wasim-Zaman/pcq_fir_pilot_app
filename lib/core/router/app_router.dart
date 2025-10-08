@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/dashboard_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_details_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/scan_barcode_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
@@ -46,6 +47,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           return MaterialPage(
             key: state.pageKey,
             child: const ScanBarcodeScreen(),
+          );
+        },
+      ),
+
+      // Gate Pass Details Route
+      GoRoute(
+        path: kGatePassDetailsRoute,
+        name: 'gate-pass-details',
+        pageBuilder: (context, state) {
+          final passNumber = state.extra as String;
+          return MaterialPage(
+            key: state.pageKey,
+            child: GatePassDetailsScreen(passNumber: passNumber),
           );
         },
       ),
