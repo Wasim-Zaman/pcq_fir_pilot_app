@@ -42,8 +42,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   void _handleProfile() {
-    // TODO: Navigate to profile screen
-    CustomSnackbar.showNormal(context, 'Profile screen coming soon!');
+    // Navigate to profile screen
+    context.push(kMemberDetailsRoute);
   }
 
   @override

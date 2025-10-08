@@ -31,6 +31,8 @@ const String kDocumentVerifiedRoute = '/document-verified';
 // Settings Routes
 const String kSettingsRoute = '/settings';
 const String kProfileRoute = '/profile';
+const String kMemberDetailsRoute = '/member-details';
+const String kMemberDetailsRouteName = 'member-details';
 
 // Utility Routes
 const String kNoInternetRoute = '/no-internet';
