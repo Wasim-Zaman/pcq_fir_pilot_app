@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pcq_fir_pilot_app/core/network/api_client.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_analytics.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_state.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_stats.dart';
+import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
 
 /// AsyncNotifier for dashboard business logic
 class DashboardNotifier extends AsyncNotifier<DashboardState> {
@@ -13,22 +15,19 @@ class DashboardNotifier extends AsyncNotifier<DashboardState> {
   /// Load dashboard data
   Future<DashboardState> loadDashboardData() async {
     try {
-      // TODO: Implement actual API call here
-      // Example:
-      // final dashboardService = ref.read(dashboardServiceProvider);
-      // final stats = await dashboardService.fetchDashboardStats();
+      final gatepassRepo = ref.read(gatepassRepoProvider);
+      final result = await gatepassRepo.getDashboardAnalytics();
 
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      // Mock data
-      final stats = DashboardStats(
-        todayScans: 12,
-        pendingVerifications: 3,
-        lastUpdated: DateTime.now(),
-      );
-
-      return DashboardState(isLoading: false, stats: stats);
+      if (result is ApiSuccess<DashboardAnalytics>) {
+        return DashboardState(isLoading: false, analytics: result.data);
+      } else if (result is ApiError<DashboardAnalytics>) {
+        return DashboardState(isLoading: false, error: result.message);
+      } else {
+        return DashboardState(
+          isLoading: false,
+          error: 'Unexpected error occurred',
+        );
+      }
     } catch (error) {
       return DashboardState(isLoading: false, error: error.toString());
     }
@@ -44,32 +43,6 @@ class DashboardNotifier extends AsyncNotifier<DashboardState> {
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
     }
-  }
-
-  /// Increment today's scans count
-  void incrementTodayScans() {
-    state.whenData((currentState) {
-      if (currentState.stats != null) {
-        final updatedStats = currentState.stats!.copyWith(
-          todayScans: currentState.stats!.todayScans + 1,
-          lastUpdated: DateTime.now(),
-        );
-        state = AsyncValue.data(currentState.copyWith(stats: updatedStats));
-      }
-    });
-  }
-
-  /// Update pending verifications count
-  void updatePendingVerifications(int count) {
-    state.whenData((currentState) {
-      if (currentState.stats != null) {
-        final updatedStats = currentState.stats!.copyWith(
-          pendingVerifications: count,
-          lastUpdated: DateTime.now(),
-        );
-        state = AsyncValue.data(currentState.copyWith(stats: updatedStats));
-      }
-    });
   }
 }
 

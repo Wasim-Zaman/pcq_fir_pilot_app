@@ -1,36 +1,36 @@
-import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_stats.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_analytics.dart';
 
 /// Dashboard state class to track dashboard status
-/// Contains loading state, error messages, and dashboard statistics
+/// Contains loading state, error messages, and dashboard analytics
 class DashboardState {
   final bool isLoading;
   final String? error;
-  final DashboardStats? stats;
+  final DashboardAnalytics? analytics;
 
-  const DashboardState({this.isLoading = false, this.error, this.stats});
+  const DashboardState({this.isLoading = false, this.error, this.analytics});
 
   /// Create a copy of this state with updated fields
   DashboardState copyWith({
     bool? isLoading,
     String? error,
-    DashboardStats? stats,
+    DashboardAnalytics? analytics,
   }) {
     return DashboardState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
-      stats: stats ?? this.stats,
+      analytics: analytics ?? this.analytics,
     );
   }
 
   /// Check if the state has data
-  bool get hasData => stats != null;
+  bool get hasData => analytics != null;
 
   /// Check if the state has error
   bool get hasError => error != null;
 
   @override
   String toString() {
-    return 'DashboardState(isLoading: $isLoading, error: $error, stats: $stats)';
+    return 'DashboardState(isLoading: $isLoading, error: $error, analytics: $analytics)';
   }
 
   @override
@@ -40,11 +40,11 @@ class DashboardState {
     return other is DashboardState &&
         other.isLoading == isLoading &&
         other.error == error &&
-        other.stats == stats;
+        other.analytics == analytics;
   }
 
   @override
   int get hashCode {
-    return isLoading.hashCode ^ error.hashCode ^ stats.hashCode;
+    return isLoading.hashCode ^ error.hashCode ^ analytics.hashCode;
   }
 }

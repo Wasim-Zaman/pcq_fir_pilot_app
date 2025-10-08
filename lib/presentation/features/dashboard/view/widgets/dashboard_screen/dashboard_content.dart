@@ -41,9 +41,9 @@ class DashboardContent extends StatelessWidget {
 
             // Today's Scans Card
             DashboardStatCard(
-              title: 'Today\'s Scans',
-              value: state.stats?.todayScans.toString() ?? '0',
-              subtitle: 'documents verified',
+              title: 'Total Gate Passes',
+              value: state.analytics?.summary.totalGatePasses.toString() ?? '0',
+              subtitle: 'total gate passes',
               icon: Iconsax.document,
               color: AppColors.kPrimaryColor,
             ),
@@ -52,11 +52,33 @@ class DashboardContent extends StatelessWidget {
 
             // Pending Verifications Card
             DashboardStatCard(
-              title: 'Pending Verifications',
-              value: state.stats?.pendingVerifications.toString() ?? '0',
-              subtitle: 'documents in progress',
+              title: 'Pending Approvals',
+              value: state.analytics?.summary.pendingApprovals.toString() ?? '0',
+              subtitle: 'pending approvals',
               icon: Iconsax.clock,
               color: AppColors.kWarningColor,
+            ),
+
+            16.heightBox,
+
+            // In Transit Card
+            DashboardStatCard(
+              title: 'In Transit',
+              value: state.analytics?.summary.inTransit.toString() ?? '0',
+              subtitle: 'in transit',
+              icon: Iconsax.truck_fast,
+              color: Colors.blue,
+            ),
+
+            16.heightBox,
+
+            // Completed Today Card
+            DashboardStatCard(
+              title: 'Completed Today',
+              value: state.analytics?.summary.completedToday.toString() ?? '0',
+              subtitle: 'completed today',
+              icon: Iconsax.tick_circle,
+              color: Colors.green,
             ),
 
             32.heightBox,
