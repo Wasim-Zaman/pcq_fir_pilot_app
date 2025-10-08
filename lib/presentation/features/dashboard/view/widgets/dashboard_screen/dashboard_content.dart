@@ -53,7 +53,8 @@ class DashboardContent extends StatelessWidget {
             // Pending Verifications Card
             DashboardStatCard(
               title: 'Pending Approvals',
-              value: state.analytics?.summary.pendingApprovals.toString() ?? '0',
+              value:
+                  state.analytics?.summary.pendingApprovals.toString() ?? '0',
               subtitle: 'pending approvals',
               icon: Iconsax.clock,
               color: AppColors.kWarningColor,
@@ -87,6 +88,7 @@ class DashboardContent extends StatelessWidget {
             CustomButton(
               text: 'Scan QR Code',
               onPressed: onScanQRCode,
+              width: double.infinity,
               icon: const Icon(Iconsax.scan_barcode),
               useGradient: true,
             ),

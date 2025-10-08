@@ -25,8 +25,11 @@ class GatepassRepo {
   Future<ApiState<DashboardAnalytics>> getDashboardAnalytics() async {
     return _apiClient.get<DashboardAnalytics>(
       '/gate-passes/analytics/dashboard',
-      parser: (data) =>
-          DashboardAnalytics.fromJson(data as Map<String, dynamic>),
+      parser: (data) {
+        final responseData = data as Map<String, dynamic>;
+        final analyticsData = responseData['data'] as Map<String, dynamic>;
+        return DashboardAnalytics.fromJson(analyticsData);
+      },
     );
   }
 }

@@ -38,7 +38,7 @@ class AppThemes {
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        backgroundColor: AppColors.kSurfaceColor,
+        backgroundColor: AppColors.kBackgroundColor,
         foregroundColor: AppColors.kTextPrimaryColor,
         iconTheme: IconThemeData(color: AppColors.kIconPrimaryColor),
         titleTextStyle: TextStyle(
@@ -389,7 +389,7 @@ class AppThemes {
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        backgroundColor: AppColors.kDarkSurfaceColor,
+        backgroundColor: AppColors.kDarkBackgroundColor,
         foregroundColor: AppColors.kDarkTextPrimaryColor,
         iconTheme: IconThemeData(color: AppColors.kDarkPrimaryColor),
         titleTextStyle: TextStyle(
