@@ -156,10 +156,10 @@ class MemberDetailsScreen extends ConsumerWidget {
                   ],
                 ),
                 24.heightBox,
-
+                // TODO: Uncomment and implement action buttons if needed
                 // Action Buttons
-                const ActionButtons(),
-                32.heightBox,
+                // const ActionButtons(),
+                // 32.heightBox,
               ],
             ),
           ),
