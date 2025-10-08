@@ -22,12 +22,12 @@ class SignInScreen extends ConsumerStatefulWidget {
 
 class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -38,19 +38,23 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       await ref
           .read(signInProvider.notifier)
           .signIn(
-            username: _usernameController.text,
+            email: _emailController.text,
             password: _passwordController.text,
           );
 
       // Check for success and navigate to dashboard
       final signInState = ref.read(signInProvider);
       signInState.whenData((state) {
-        if (mounted && state.isAuthenticated) {
-          // Navigate to dashboard
-          context.go(kDashboardRoute);
-
-          // Show success message
-          CustomSnackbar.showNormal(context, 'Sign in successful!');
+        if (mounted) {
+          if (state.isAuthenticated) {
+            // Navigate to dashboard
+            context.go(kDashboardRoute);
+            // Show success message
+            CustomSnackbar.showNormal(context, 'Sign in successful!');
+          } else if (state.error != null) {
+            // Show error message
+            CustomSnackbar.showError(context, state.error!);
+          }
         }
       });
     }
@@ -111,18 +115,18 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
                   48.heightBox,
 
-                  // Username Field
+                  // Email Field
                   CustomTextField(
-                    controller: _usernameController,
-                    labelText: 'Username',
-                    hintText: 'Enter your username',
+                    controller: _emailController,
+                    labelText: 'Email',
+                    hintText: 'Enter your email',
                     prefixIcon: const Icon(
-                      Icons.person_outline,
+                      Icons.email_outlined,
                       color: AppColors.kIconSecondaryColor,
                     ),
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
-                    validator: validation.validateUsername,
+                    validator: validation.validateEmail,
                     enabled: !isLoading,
                   ),
 

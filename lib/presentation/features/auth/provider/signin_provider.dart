@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pcq_fir_pilot_app/core/network/api_client.dart';
+import 'package:pcq_fir_pilot_app/repos/member_repo.dart';
 
 /// Sign-in state class to track authentication status
 class SignInState {
@@ -33,27 +35,39 @@ class SignInNotifier extends AsyncNotifier<SignInState> {
     return const SignInState();
   }
 
-  /// Sign in with username and password
-  Future<void> signIn({
-    required String username,
-    required String password,
-  }) async {
+  /// Sign in with email and password
+  Future<void> signIn({required String email, required String password}) async {
     // Set loading state
     state = const AsyncValue.loading();
 
     try {
-      // TODO: Implement actual sign-in logic here
-      // Example:
-      // final authService = ref.read(authServiceProvider);
-      // await authService.signIn(username: username, password: password);
+      // Get member repository
+      final memberRepo = ref.read(memberRepoProvider);
 
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
+      // Call login API
+      final result = await memberRepo.login(email: email, password: password);
 
-      // Set success state
-      state = AsyncValue.data(
-        const SignInState(isLoading: false, isAuthenticated: true),
-      );
+      // Handle API response
+      if (result is ApiSuccess<Map<String, dynamic>>) {
+        // Login successful
+        state = AsyncValue.data(
+          const SignInState(isLoading: false, isAuthenticated: true),
+        );
+      } else if (result is ApiError<Map<String, dynamic>>) {
+        // Login failed
+        state = AsyncValue.data(
+          SignInState(
+            isLoading: false,
+            isAuthenticated: false,
+            error: result.message,
+          ),
+        );
+      } else {
+        // Handle other states (initial, loading)
+        state = AsyncValue.data(
+          const SignInState(isLoading: false, isAuthenticated: false),
+        );
+      }
     } catch (error, stackTrace) {
       // Set error state
       state = AsyncValue.error(error, stackTrace);

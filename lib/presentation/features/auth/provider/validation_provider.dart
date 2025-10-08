@@ -8,14 +8,16 @@ class ValidationNotifier extends Notifier<void> {
     // No state to initialize
   }
 
-  /// Validates username
+  /// Validates email
   /// Returns error message if validation fails, null otherwise
-  String? validateUsername(String? value) {
+  String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your username';
+      return 'Please enter your email';
     }
-    if (value.length < 3) {
-      return 'Username must be at least 3 characters';
+    // Basic email validation
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email address';
     }
     return null;
   }

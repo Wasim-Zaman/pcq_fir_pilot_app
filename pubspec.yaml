@@ -38,6 +38,7 @@ dependencies:
   flutter_riverpod: ^3.0.1
   connectivity_plus: ^7.0.0
   iconsax: ^0.0.8
+  dio: ^5.9.0
 
 dev_dependencies:
   flutter_test:
