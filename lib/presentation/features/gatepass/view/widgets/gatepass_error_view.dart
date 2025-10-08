@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 
 /// Error view widget for gate pass details screen
 class GatePassErrorView extends StatelessWidget {
@@ -43,14 +44,12 @@ class GatePassErrorView extends StatelessWidget {
               ),
             ),
             24.heightBox,
-            ElevatedButton.icon(
-              onPressed: onRetry,
+
+            CustomButton(
+              text: "Retry",
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.kPrimaryColor,
-                foregroundColor: AppColors.kTextOnPrimaryColor,
-              ),
+              width: 300,
+              onPressed: onRetry,
             ),
           ],
         ),
