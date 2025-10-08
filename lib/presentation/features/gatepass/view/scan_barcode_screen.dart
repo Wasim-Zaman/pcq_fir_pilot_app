@@ -15,7 +15,7 @@ class ScanBarcodeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScaffold(
-      appBar: AppBar(title: const Text('')),
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
