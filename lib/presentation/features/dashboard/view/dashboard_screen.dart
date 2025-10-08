@@ -6,8 +6,8 @@ import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/dashboard_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
-import 'widgets/dashboard_content.dart';
-import 'widgets/dashboard_error_view.dart';
+import 'widgets/dashboard_screen/dashboard_content.dart';
+import 'widgets/dashboard_screen/dashboard_error_view.dart';
 
 /// Dashboard screen displaying user statistics and quick actions
 class DashboardScreen extends ConsumerStatefulWidget {

@@ -8,7 +8,7 @@ import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
-import 'widgets/dashboard_screen/dashboard_screen_widgets.dart';
+import 'widgets/member_screen/dashboard_screen_widgets.dart';
 
 /// Member Details Screen showing user profile information
 class MemberDetailsScreen extends ConsumerWidget {
