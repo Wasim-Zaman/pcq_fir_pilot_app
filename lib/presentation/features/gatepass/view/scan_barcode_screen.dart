@@ -4,7 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
-import '../providers/scan_barcode_provider.dart';
+import '../providers/gatepass_scan_provider.dart';
 import 'widgets/scan_option_card.dart';
 
 /// Scan Barcode screen for document input

@@ -1,24 +1,24 @@
 /// Represents the state of scan barcode screen
-class ScanBarcodeState {
+class GatePassState {
   final bool isLoading;
   final String? error;
   final String? scannedCode;
   final ScanMode scanMode;
 
-  const ScanBarcodeState({
+  const GatePassState({
     this.isLoading = false,
     this.error,
     this.scannedCode,
     this.scanMode = ScanMode.qrCode,
   });
 
-  ScanBarcodeState copyWith({
+  GatePassState copyWith({
     bool? isLoading,
     String? error,
     String? scannedCode,
     ScanMode? scanMode,
   }) {
-    return ScanBarcodeState(
+    return GatePassState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
       scannedCode: scannedCode ?? this.scannedCode,
@@ -33,8 +33,8 @@ class ScanBarcodeState {
     'scanMode': scanMode.name,
   };
 
-  factory ScanBarcodeState.fromJson(Map<String, dynamic> json) {
-    return ScanBarcodeState(
+  factory GatePassState.fromJson(Map<String, dynamic> json) {
+    return GatePassState(
       isLoading: json['isLoading'] as bool? ?? false,
       error: json['error'] as String?,
       scannedCode: json['scannedCode'] as String?,
