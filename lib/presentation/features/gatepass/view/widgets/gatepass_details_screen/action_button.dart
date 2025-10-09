@@ -15,10 +15,13 @@ class GatePassActionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final scanState = ref.watch(gatePassScanProvider);
+    final isLoading = scanState.value?.isScanning ?? false;
+
     return CustomButton(
       text: _getButtonText(),
       icon: const Icon(Iconsax.verify),
-      isLoading: ref.watch(gatePassScanProvider).isLoading,
+      isLoading: isLoading,
       onPressed: () => _handleButtonPress(context, ref),
     );
   }
@@ -129,52 +132,72 @@ class GatePassActionButton extends ConsumerWidget {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text('$title Notes'),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Add optional notes for this $title action',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+      builder: (dialogContext) => Consumer(
+        builder: (context, ref, child) {
+          final scanState = ref.watch(gatePassScanProvider);
+          final isLoading = scanState.value?.isScanning ?? false;
+
+          return AlertDialog(
+            title: Text('$title Notes'),
+            content: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Add optional notes for this $title action',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                  ),
+                  16.heightBox,
+                  CustomTextField(
+                    controller: controller,
+                    autofocus: true,
+                    maxLines: 3,
+                    labelText: 'Notes (Optional)',
+                    hintText: 'Enter any additional notes...',
+                    prefixIcon: const Icon(Icons.note_outlined),
+                    enabled: !isLoading,
+                  ),
+                ],
               ),
-              16.heightBox,
-              CustomTextField(
-                controller: controller,
-                autofocus: true,
-                maxLines: 3,
-                labelText: 'Notes (Optional)',
-                hintText: 'Enter any additional notes...',
-                prefixIcon: const Icon(Icons.note_outlined),
+            ),
+            actions: [
+              TextButton(
+                onPressed: isLoading
+                    ? null
+                    : () => Navigator.pop(dialogContext),
+                child: const Text('Cancel'),
+              ),
+              CustomButton(
+                text: "Confirm",
+                isLoading: isLoading,
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        final notes = controller.text.trim().isEmpty
+                            ? null
+                            : controller.text.trim();
+
+                        // Perform the scan action
+                        _performScanAction(
+                          context: context,
+                          ref: ref,
+                          actionType: actionType,
+                          notes: notes,
+                          onComplete: () {
+                            // Close the notes dialog after API completes
+                            if (dialogContext.mounted) {
+                              Navigator.pop(dialogContext);
+                            }
+                          },
+                        );
+                      },
               ),
             ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          CustomButton(
-            text: "Confirm",
-            onPressed: () {
-              Navigator.pop(context);
-              final notes = controller.text.trim().isEmpty
-                  ? null
-                  : controller.text.trim();
-              _performScanAction(
-                context: context,
-                ref: ref,
-                actionType: actionType,
-                notes: notes,
-              );
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -185,37 +208,46 @@ class GatePassActionButton extends ConsumerWidget {
     required WidgetRef ref,
     required String actionType,
     String? notes,
+    VoidCallback? onComplete,
   }) {
     final scanNotifier = ref.read(gatePassScanProvider.notifier);
 
     switch (actionType) {
       case 'Check-Out':
-        scanNotifier.performCheckOut(
-          context: context,
-          gatePassId: gatePass.id,
-          notes: notes,
-        );
+        scanNotifier
+            .performCheckOut(
+              context: context,
+              gatePassId: gatePass.id,
+              notes: notes,
+            )
+            .then((_) => onComplete?.call());
         break;
       case 'Check-In':
-        scanNotifier.performCheckIn(
-          context: context,
-          gatePassId: gatePass.id,
-          notes: notes,
-        );
+        scanNotifier
+            .performCheckIn(
+              context: context,
+              gatePassId: gatePass.id,
+              notes: notes,
+            )
+            .then((_) => onComplete?.call());
         break;
       case 'Return-Out':
-        scanNotifier.performReturnOut(
-          context: context,
-          gatePassId: gatePass.id,
-          notes: notes,
-        );
+        scanNotifier
+            .performReturnOut(
+              context: context,
+              gatePassId: gatePass.id,
+              notes: notes,
+            )
+            .then((_) => onComplete?.call());
         break;
       case 'Return-In':
-        scanNotifier.performReturnIn(
-          context: context,
-          gatePassId: gatePass.id,
-          notes: notes,
-        );
+        scanNotifier
+            .performReturnIn(
+              context: context,
+              gatePassId: gatePass.id,
+              notes: notes,
+            )
+            .then((_) => onComplete?.call());
         break;
     }
   }
