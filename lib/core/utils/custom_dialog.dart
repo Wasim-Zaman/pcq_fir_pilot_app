@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 
 class CustomDialog {
   static void showInfoDialog(
@@ -35,7 +39,7 @@ class CustomDialog {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -49,12 +53,12 @@ class CustomDialog {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: AppColors.kSuccessColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.check_circle,
-                    color: Colors.green,
+                    color: AppColors.kSuccessColor,
                     size: 48,
                   ),
                 ),
@@ -65,7 +69,7 @@ class CustomDialog {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: AppColors.kSuccessColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -78,28 +82,14 @@ class CustomDialog {
                 ),
                 const SizedBox(height: 24),
                 // Continue button
-                SizedBox(
+                CustomButton(
+                  text: "Continue",
+                  icon: Icon(Iconsax.tick_circle),
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                  onPressed: () {
+                    // navigate to dashboard
+                    context.go(kDashboardRoute);
+                  },
                 ),
               ],
             ),
@@ -118,7 +108,7 @@ class CustomDialog {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -132,12 +122,12 @@ class CustomDialog {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: AppColors.kErrorColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.error_outline,
-                    color: Colors.red,
+                    color: AppColors.kErrorColor,
                     size: 48,
                   ),
                 ),
@@ -148,7 +138,7 @@ class CustomDialog {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: AppColors.kErrorColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -161,28 +151,13 @@ class CustomDialog {
                 ),
                 const SizedBox(height: 24),
                 // Try Again button
-                SizedBox(
+                CustomButton(
+                  text: "Try Again",
+                  icon: Icon(Iconsax.refresh),
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Try Again',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
                 ),
               ],
             ),

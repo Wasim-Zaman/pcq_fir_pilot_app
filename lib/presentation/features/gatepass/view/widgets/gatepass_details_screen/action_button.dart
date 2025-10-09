@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_verification_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
-import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
 class GatePassActionButton extends ConsumerWidget {
   final GatePass gatePass;
@@ -15,14 +13,10 @@ class GatePassActionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scanState = ref.watch(gatePassScanProvider);
-    final isLoading = scanState.value?.isScanning ?? false;
-
     return CustomButton(
       text: _getButtonText(),
       icon: const Icon(Iconsax.verify),
-      isLoading: isLoading,
-      onPressed: () => _handleButtonPress(context, ref),
+      onPressed: () => _handleButtonPress(context),
     );
   }
 
@@ -54,7 +48,7 @@ class GatePassActionButton extends ConsumerWidget {
     }
   }
 
-  void _handleButtonPress(BuildContext context, WidgetRef ref) {
+  void _handleButtonPress(BuildContext context) {
     // Handle button press based on gate pass status
     final normalized = gatePass.status.toLowerCase().replaceAll(
       RegExp(r'[^a-z0-9]'),
@@ -63,40 +57,20 @@ class GatePassActionButton extends ConsumerWidget {
 
     switch (normalized) {
       case 'approved':
-        // Handle Check-Out action
-        _showNotesDialog(
-          context: context,
-          ref: ref,
-          title: 'Check-Out',
-          actionType: 'Check-Out',
-        );
+        // Navigate to Check-Out verification screen
+        _navigateToVerificationScreen(context, 'Check-Out');
         break;
       case 'intransit':
-        // Handle Check-In action
-        _showNotesDialog(
-          context: context,
-          ref: ref,
-          title: 'Check-In',
-          actionType: 'Check-In',
-        );
+        // Navigate to Check-In verification screen
+        _navigateToVerificationScreen(context, 'Check-In');
         break;
       case 'arrived':
-        // Handle Return-Out action
-        _showNotesDialog(
-          context: context,
-          ref: ref,
-          title: 'Return-Out',
-          actionType: 'Return-Out',
-        );
+        // Navigate to Return-Out verification screen
+        _navigateToVerificationScreen(context, 'Return-Out');
         break;
       case 'returning':
-        // Handle Return-In action
-        _showNotesDialog(
-          context: context,
-          ref: ref,
-          title: 'Return-In',
-          actionType: 'Return-In',
-        );
+        // Navigate to Return-In verification screen
+        _navigateToVerificationScreen(context, 'Return-In');
         break;
       case 'completed':
         // Journey already completed
@@ -119,136 +93,16 @@ class GatePassActionButton extends ConsumerWidget {
     }
   }
 
-  /// Show dialog for entering notes before performing scan action
-  void _showNotesDialog({
-    required BuildContext context,
-    required WidgetRef ref,
-    required String title,
-    required String actionType,
-  }) {
-    final controller = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => Consumer(
-        builder: (context, ref, child) {
-          final scanState = ref.watch(gatePassScanProvider);
-          final isLoading = scanState.value?.isScanning ?? false;
-
-          return AlertDialog(
-            title: Text('$title Notes'),
-            content: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Add optional notes for this $title action',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
-                  ),
-                  16.heightBox,
-                  CustomTextField(
-                    controller: controller,
-                    autofocus: true,
-                    maxLines: 3,
-                    labelText: 'Notes (Optional)',
-                    hintText: 'Enter any additional notes...',
-                    prefixIcon: const Icon(Icons.note_outlined),
-                    enabled: !isLoading,
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: isLoading
-                    ? null
-                    : () => Navigator.pop(dialogContext),
-                child: const Text('Cancel'),
-              ),
-              CustomButton(
-                text: "Confirm",
-                isLoading: isLoading,
-                onPressed: isLoading
-                    ? null
-                    : () {
-                        final notes = controller.text.trim().isEmpty
-                            ? null
-                            : controller.text.trim();
-
-                        // Perform the scan action
-                        _performScanAction(
-                          context: context,
-                          ref: ref,
-                          actionType: actionType,
-                          notes: notes,
-                          onComplete: () {
-                            // Close the notes dialog after API completes
-                            if (dialogContext.mounted) {
-                              Navigator.pop(dialogContext);
-                            }
-                          },
-                        );
-                      },
-              ),
-            ],
-          );
-        },
+  /// Navigate to the verification screen
+  void _navigateToVerificationScreen(BuildContext context, String actionType) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GatePassVerificationScreen(
+          gatePass: gatePass,
+          actionType: actionType,
+        ),
       ),
     );
-  }
-
-  /// Perform the actual scan action based on action type
-  void _performScanAction({
-    required BuildContext context,
-    required WidgetRef ref,
-    required String actionType,
-    String? notes,
-    VoidCallback? onComplete,
-  }) {
-    final scanNotifier = ref.read(gatePassScanProvider.notifier);
-
-    switch (actionType) {
-      case 'Check-Out':
-        scanNotifier
-            .performCheckOut(
-              context: context,
-              gatePassId: gatePass.id,
-              notes: notes,
-            )
-            .then((_) => onComplete?.call());
-        break;
-      case 'Check-In':
-        scanNotifier
-            .performCheckIn(
-              context: context,
-              gatePassId: gatePass.id,
-              notes: notes,
-            )
-            .then((_) => onComplete?.call());
-        break;
-      case 'Return-Out':
-        scanNotifier
-            .performReturnOut(
-              context: context,
-              gatePassId: gatePass.id,
-              notes: notes,
-            )
-            .then((_) => onComplete?.call());
-        break;
-      case 'Return-In':
-        scanNotifier
-            .performReturnIn(
-              context: context,
-              gatePassId: gatePass.id,
-              notes: notes,
-            )
-            .then((_) => onComplete?.call());
-        break;
-    }
   }
 }
