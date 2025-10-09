@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
@@ -62,29 +63,17 @@ class _GatePassScanItemsScreenState
     final currentState = ref.read(gatePassScanItemProvider).value;
 
     if (currentState?.verifiedItem == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No item to verify'),
-          backgroundColor: AppColors.kErrorColor,
-        ),
-      );
+      CustomSnackbar.showNormal(context, "No Item to verify");
       return;
     }
 
     final item = currentState!.verifiedItem!;
 
     // Navigate to verification screen using Go Router
-    final result = await context.push<bool>(
+    context.push(
       kGatePassItemVerificationRoute,
       extra: {'gatePass': widget.gatePass, 'item': item},
     );
-
-    // If verification was successful, the item is already cleared in the verification screen
-    // No need to do anything here
-    if (result == true) {
-      // Item was verified and screen returned true
-      // The verification screen already handles clearing the item
-    }
   }
 
   @override
@@ -127,6 +116,8 @@ class _GatePassScanItemsScreenState
                       width: double.infinity,
                       icon: Icon(Iconsax.verify1),
                       backgroundColor: AppColors.kSuccessColor,
+                      foregroundColor: AppColors.kCardColor,
+                      isLoading: state.isLoading,
                       onPressed: state.isLoading ? null : _handleVerifyItem,
                     ),
                   ] else ...[

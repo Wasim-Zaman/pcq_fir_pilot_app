@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
@@ -61,12 +62,7 @@ class _GatePassItemVerificationScreenState
     // Get member ID from sign in provider
     final signInState = ref.read(signInProvider).value;
     if (signInState == null || signInState.member == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User not authenticated'),
-          backgroundColor: AppColors.kErrorColor,
-        ),
-      );
+      CustomSnackbar.showNormal(context, "User not authenticated");
       return;
     }
 
@@ -130,8 +126,8 @@ class _GatePassItemVerificationScreenState
 
           if (allItemsProcessed) {
             // Navigate to gate pass verification screen using Go Router
-            context.go(
-              '/gatepass-verification',
+            context.push(
+              kGatePassVerificationRoute,
               extra: {
                 'gatePass': widget.gatePass,
                 'actionType': _getActionType(),
