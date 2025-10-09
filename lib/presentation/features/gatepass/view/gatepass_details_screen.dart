@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
-import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import '../models/gatepass_models.dart';
@@ -146,23 +145,11 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
             ),
             24.heightBox,
 
-            GatePassActionButton(
-              onPressed: () => _handleStartVerification(gatePass),
-              passNumber: gatePass.passNumber,
-              status: gatePass.status,
-            ),
+            GatePassActionButton(gatePass: gatePass),
             24.heightBox,
           ],
         ),
       ),
-    );
-  }
-
-  void _handleStartVerification(GatePass gatePass) {
-    // TODO: Navigate to verification screen or start verification flow
-    CustomSnackbar.showNormal(
-      context,
-      'Starting verification for ${gatePass.passNumber}',
     );
   }
 

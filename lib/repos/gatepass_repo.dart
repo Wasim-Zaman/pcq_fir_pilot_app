@@ -32,6 +32,80 @@ class GatepassRepo {
       },
     );
   }
+
+  // ==================== Scan APIs ====================
+
+  // Check-Out scan
+  Future<ApiState<Map<String, dynamic>>> scanCheckOut({
+    required String gatePassId,
+    required String scannedById,
+    String? notes,
+  }) async {
+    final scanData = {
+      "scannedById": scannedById,
+      if (notes != null) "notes": notes,
+    };
+
+    return _apiClient.post<Map<String, dynamic>>(
+      '/gate-passes/$gatePassId/scan/check-out',
+      data: scanData,
+      parser: (data) => data as Map<String, dynamic>,
+    );
+  }
+
+  // Check-In scan
+  Future<ApiState<Map<String, dynamic>>> scanCheckIn({
+    required String gatePassId,
+    required String scannedById,
+    String? notes,
+  }) async {
+    final scanData = {
+      "scannedById": scannedById,
+      if (notes != null) "notes": notes,
+    };
+
+    return _apiClient.post<Map<String, dynamic>>(
+      '/gate-passes/$gatePassId/scan/check-in',
+      data: scanData,
+      parser: (data) => data as Map<String, dynamic>,
+    );
+  }
+
+  // Return-Out scan
+  Future<ApiState<Map<String, dynamic>>> scanReturnOut({
+    required String gatePassId,
+    required String scannedById,
+    String? notes,
+  }) async {
+    final scanData = {
+      "scannedById": scannedById,
+      if (notes != null) "notes": notes,
+    };
+
+    return _apiClient.post<Map<String, dynamic>>(
+      '/gate-passes/$gatePassId/scan/return-out',
+      data: scanData,
+      parser: (data) => data as Map<String, dynamic>,
+    );
+  }
+
+  // Return-In scan
+  Future<ApiState<Map<String, dynamic>>> scanReturnIn({
+    required String gatePassId,
+    required String scannedById,
+    String? notes,
+  }) async {
+    final scanData = {
+      "scannedById": scannedById,
+      if (notes != null) "notes": notes,
+    };
+
+    return _apiClient.post<Map<String, dynamic>>(
+      '/gate-passes/$gatePassId/scan/return-in',
+      data: scanData,
+      parser: (data) => data as Map<String, dynamic>,
+    );
+  }
 }
 
 // ==================== Gatepass Repository Provider ====================
