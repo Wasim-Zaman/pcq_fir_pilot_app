@@ -25,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final bool autofocus;
   final TextCapitalization textCapitalization;
+  final void Function(String)? onFieldSubmitted;
 
   const CustomTextField({
     super.key,
@@ -50,6 +51,7 @@ class CustomTextField extends StatefulWidget {
     this.focusNode,
     this.autofocus = false,
     this.textCapitalization = TextCapitalization.none,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -98,6 +100,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       focusNode: widget.focusNode,
       autofocus: widget.autofocus,
       textCapitalization: widget.textCapitalization,
+      onFieldSubmitted: widget.onFieldSubmitted,
       style: TextStyle(
         color: Theme.of(context).colorScheme.onSurface,
         fontSize: 16,

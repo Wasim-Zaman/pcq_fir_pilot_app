@@ -6,6 +6,7 @@ import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import 'widgets/member_screen/dashboard_screen_widgets.dart';
@@ -234,13 +235,13 @@ class MemberDetailsScreen extends ConsumerWidget {
             onPressed: () => Navigator.of(context).pop(false),
             child: const Text('Cancel'),
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.kErrorColor,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Logout'),
+          CustomButton(
+            text: "Logout",
+            backgroundColor: AppColors.kErrorColor,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
           ),
         ],
       ),

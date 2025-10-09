@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
 import 'widgets/scan_gatepass_screen/scan_option_card.dart';
 
@@ -79,15 +81,13 @@ class ScanGatepassScreen extends ConsumerWidget {
                   ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
                 ),
               if (isScan) 16.heightBox,
-              TextFormField(
+              CustomTextField(
                 controller: controller,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  labelText: 'Pass Number',
-                  hintText: 'e.g., AQPCI-2025000001',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.qr_code),
-                ),
+                labelText: 'Pass Number',
+                hintText: 'e.g., AQPCI-2025000001',
+                prefixIcon: const Icon(Icons.qr_code),
+                textInputAction: TextInputAction.done,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Please enter a pass number';
@@ -109,14 +109,14 @@ class ScanGatepassScreen extends ConsumerWidget {
             onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
-          ElevatedButton(
+          CustomButton(
+            text: "Submit",
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 Navigator.pop(context);
                 _navigateToDetails(context, controller.text.trim());
               }
             },
-            child: const Text('Submit'),
           ),
         ],
       ),
