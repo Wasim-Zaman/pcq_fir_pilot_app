@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/dashboard_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/member_details_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_details_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_scan_items_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/scan_gatepass_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
@@ -68,12 +70,24 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       // Gate Pass Details Route
       GoRoute(
         path: kGatePassDetailsRoute,
-        name: 'gate-pass-details',
+        name: kGatePassDetailsRouteName,
         pageBuilder: (context, state) {
           final passNumber = state.extra as String;
           return MaterialPage(
             key: state.pageKey,
             child: GatePassDetailsScreen(passNumber: passNumber),
+          );
+        },
+      ),
+
+      // Item Verification Route
+      GoRoute(
+        path: kGatePassScanItemRoute,
+        name: kGatePassScanItemRouteName,
+        pageBuilder: (context, state) {
+          return MaterialPage(
+            key: state.pageKey,
+            child: const GatePassScanItemsScreen(),
           );
         },
       ),
@@ -85,7 +99,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const Icon(
+              Icons.error_outline,
+              size: 64,
+              color: AppColors.kErrorColor,
+            ),
             const SizedBox(height: 16),
             Text(
               'Page not found: ${state.uri.path}',

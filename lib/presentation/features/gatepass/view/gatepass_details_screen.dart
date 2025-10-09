@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import '../models/gatepass_models.dart';
 import '../providers/gatepass_details_provider.dart';
-import 'widgets/gatepass_details_screen/action_button.dart';
 import 'widgets/gatepass_details_screen/additional_info_card.dart';
 import 'widgets/gatepass_details_screen/approval_info_card.dart';
 import 'widgets/gatepass_details_screen/basic_info_card.dart';
@@ -145,8 +147,15 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
             ),
             24.heightBox,
 
-            GatePassActionButton(gatePass: gatePass),
-            24.heightBox,
+            CustomButton(
+              text: "Start Verification",
+              onPressed: () {
+                context.push(kGatePassScanItemRoute);
+              },
+            ),
+
+            // GatePassActionButton(gatePass: gatePass),
+            // 24.heightBox,
           ],
         ),
       ),

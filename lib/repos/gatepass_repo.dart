@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pcq_fir_pilot_app/core/network/api_client.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/models/dashboard_analytics.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 
 // ==================== Gatepass Repository ====================
 class GatepassRepo {
@@ -104,6 +105,18 @@ class GatepassRepo {
       '/gate-passes/$gatePassId/scan/return-in',
       data: scanData,
       parser: (data) => data as Map<String, dynamic>,
+    );
+  }
+
+  // Get item verification details
+  Future<ApiState<ItemVerificationResponse>> getItemVerification({
+    required String itemId,
+  }) async {
+    return _apiClient.get<ItemVerificationResponse>(
+      '/gate-passes/gatepassitems/items',
+      queryParameters: {'id': itemId},
+      parser: (data) =>
+          ItemVerificationResponse.fromJson(data as Map<String, dynamic>),
     );
   }
 }
