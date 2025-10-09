@@ -7,26 +7,26 @@ import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
 class ItemVerificationState {
   final bool isLoading;
   final String? error;
-  final List<VerifiedItem> verifiedItems;
+  final VerifiedItem? verifiedItem;
   final ItemVerificationResponse? response;
 
   const ItemVerificationState({
     this.isLoading = false,
     this.error,
-    this.verifiedItems = const [],
+    this.verifiedItem,
     this.response,
   });
 
   ItemVerificationState copyWith({
     bool? isLoading,
     String? error,
-    List<VerifiedItem>? verifiedItems,
+    VerifiedItem? verifiedItem,
     ItemVerificationResponse? response,
   }) {
     return ItemVerificationState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
-      verifiedItems: verifiedItems ?? this.verifiedItems,
+      verifiedItem: verifiedItem,
       response: response ?? this.response,
     );
   }
@@ -55,27 +55,18 @@ class ItemVerificationNotifier extends AsyncNotifier<ItemVerificationState> {
       if (result is ApiSuccess<ItemVerificationResponse>) {
         final response = result.data;
 
-        // Merge incoming items with existing items while preventing duplicates
-        state.whenData((currentState) {
-          final Map<String, VerifiedItem> byId = {
-            for (final item in currentState.verifiedItems) item.id: item,
-          };
+        // Get the first item from the response (since we only scan one item at a time)
+        final verifiedItem = response.data.isNotEmpty
+            ? response.data.first
+            : null;
 
-          for (final newItem in response.data) {
-            // replace or add by id
-            byId[newItem.id] = newItem;
-          }
-
-          final merged = byId.values.toList();
-
-          state = AsyncValue.data(
-            currentState.copyWith(
-              isLoading: false,
-              verifiedItems: merged,
-              response: response,
-            ),
-          );
-        });
+        state = AsyncValue.data(
+          ItemVerificationState(
+            isLoading: false,
+            verifiedItem: verifiedItem,
+            response: response,
+          ),
+        );
       } else if (result is ApiError<ItemVerificationResponse>) {
         // Handle error
         state = AsyncValue.data(
@@ -90,37 +81,8 @@ class ItemVerificationNotifier extends AsyncNotifier<ItemVerificationState> {
     }
   }
 
-  /// Add a verified item to the list
-  void addVerifiedItem(VerifiedItem item) {
-    state.whenData((currentState) {
-      // Ensure the item is not already present (by id)
-      final exists = currentState.verifiedItems.any(
-        (existing) => existing.id == item.id,
-      );
-
-      if (!exists) {
-        final updatedItems = [...currentState.verifiedItems, item];
-        state = AsyncValue.data(
-          currentState.copyWith(verifiedItems: updatedItems),
-        );
-      }
-    });
-  }
-
-  /// Remove a verified item by id
-  void removeVerifiedItem(String id) {
-    state.whenData((currentState) {
-      final updatedItems = currentState.verifiedItems
-          .where((item) => item.id != id)
-          .toList();
-      state = AsyncValue.data(
-        currentState.copyWith(verifiedItems: updatedItems),
-      );
-    });
-  }
-
-  /// Clear all verified items
-  void clearVerifiedItems() {
+  /// Clear verified item
+  void clearVerifiedItem() {
     state = const AsyncValue.data(ItemVerificationState());
   }
 

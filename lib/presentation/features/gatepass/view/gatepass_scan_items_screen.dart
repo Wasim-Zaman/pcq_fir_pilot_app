@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/item_verification_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_dialog.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_section.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/verified_items_header.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/verified_items_list.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scanned_item_card.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 /// Item Verification Screen with QR scanning capability
@@ -49,6 +52,20 @@ class _GatePassScanItemsScreenState
         .fetchItemVerification(itemId);
   }
 
+  /// Handle verify item button
+  void _handleVerifyItem() {
+    // TODO: Implement verify item logic
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Item verified successfully!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+
+    // Clear the verified item after verification
+    ref.read(itemVerificationProvider.notifier).clearVerifiedItem();
+  }
+
   @override
   Widget build(BuildContext context) {
     final itemVerificationState = ref.watch(itemVerificationProvider);
@@ -70,38 +87,29 @@ class _GatePassScanItemsScreenState
                   ScanSection(onTap: _showScanDialog),
                   24.heightBox,
 
-                  // Verified Items Section
-                  if (state.verifiedItems.isNotEmpty) ...[
-                    VerifiedItemsHeader(itemCount: state.verifiedItems.length),
-                    16.heightBox,
-                    Expanded(
-                      child: VerifiedItemsList(
-                        verifiedItems: state.verifiedItems,
+                  // Verified Item Section
+                  if (state.verifiedItem != null) ...[
+                    const Text(
+                      'Scanned Item',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    16.heightBox,
+                    ScannedItemCard(item: state.verifiedItem!),
+                    24.heightBox,
+
+                    // Verify Item Button
+                    CustomButton(
+                      text: "Verify Item",
+                      width: double.infinity,
+                      icon: Icon(Iconsax.verify1),
+                      backgroundColor: AppColors.kSuccessColor,
+                      onPressed: state.isLoading ? null : _handleVerifyItem,
                     ),
                   ] else ...[
-                    const Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.qr_code_scanner,
-                              size: 80,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No items scanned yet',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    const EmptyScanState(),
                   ],
 
                   // Show error if any
@@ -110,19 +118,37 @@ class _GatePassScanItemsScreenState
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.red.shade50,
+                        color: AppColors.kErrorColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.red.shade200),
+                        border: Border.all(
+                          color: AppColors.kErrorColor.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.error_outline, color: Colors.red),
+                          const Icon(
+                            Icons.error_outline,
+                            color: AppColors.kErrorColor,
+                          ),
                           12.widthBox,
                           Expanded(
                             child: Text(
                               state.error!,
-                              style: const TextStyle(color: Colors.red),
+                              style: const TextStyle(
+                                color: AppColors.kErrorColor,
+                              ),
                             ),
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.close,
+                              color: AppColors.kErrorColor,
+                            ),
+                            onPressed: () {
+                              ref
+                                  .read(itemVerificationProvider.notifier)
+                                  .resetError();
+                            },
                           ),
                         ],
                       ),
@@ -150,7 +176,11 @@ class _GatePassScanItemsScreenState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const Icon(
+                Icons.error_outline,
+                size: 64,
+                color: AppColors.kErrorColor,
+              ),
               16.heightBox,
               Text(
                 'Error: $error',
