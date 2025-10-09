@@ -33,7 +33,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   void _handleScanQRCode() {
     // Navigate to QR code scanner
-    context.push(kScanQrCodeRoute);
+    context.push(kScanGatepassRoute);
   }
 
   void _handleNotifications() {

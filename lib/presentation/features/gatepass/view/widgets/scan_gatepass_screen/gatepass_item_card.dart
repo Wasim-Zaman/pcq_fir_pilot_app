@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 
-import '../../models/gatepass_models.dart';
+import '../../../models/gatepass_models.dart';
 
 /// Item card widget for displaying gate pass items
 class GatePassItemCard extends StatelessWidget {

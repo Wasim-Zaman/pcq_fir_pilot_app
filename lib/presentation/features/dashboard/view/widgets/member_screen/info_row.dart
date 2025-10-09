@@ -29,7 +29,7 @@ class InfoRow extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppColors.kPrimaryColor.withOpacity(0.1),
+              color: AppColors.kPrimaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, size: 20, color: AppColors.kPrimaryColor),

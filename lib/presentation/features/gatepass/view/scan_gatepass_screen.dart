@@ -6,11 +6,11 @@ import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
-import 'widgets/scan_option_card.dart';
+import 'widgets/scan_gatepass_screen/scan_option_card.dart';
 
 /// Scan Barcode screen for document input
-class ScanBarcodeScreen extends ConsumerWidget {
-  const ScanBarcodeScreen({super.key});
+class ScanGatepassScreen extends ConsumerWidget {
+  const ScanGatepassScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

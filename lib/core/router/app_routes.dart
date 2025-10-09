@@ -18,7 +18,10 @@ const String kHomeRoute = '/home';
 
 // Document Routes
 const String kDocumentInputRoute = '/document-input';
-const String kScanQrCodeRoute = '/scan-qr-code';
+
+const String kScanGatepassRoute = '/scan-gatepass';
+const String kScanGatepassRouteName = 'scan-gatepass';
+
 const String kManualInputRoute = '/manual-input';
 
 // Verification Routes
