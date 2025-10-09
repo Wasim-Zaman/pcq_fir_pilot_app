@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 
 class GatePassActionButton extends StatelessWidget {
@@ -17,7 +18,7 @@ class GatePassActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomButton(
       text: _getButtonText(),
-      icon: const Icon(Icons.verified),
+      icon: const Icon(Iconsax.verify),
       onPressed: onPressed,
     );
   }
