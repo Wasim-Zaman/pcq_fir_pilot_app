@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/item_verification_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_item_verification_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_dialog.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_section.dart';
@@ -53,17 +54,37 @@ class _GatePassScanItemsScreenState
   }
 
   /// Handle verify item button
-  void _handleVerifyItem() {
-    // TODO: Implement verify item logic
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Item verified successfully!'),
-        backgroundColor: Colors.green,
+  void _handleVerifyItem() async {
+    final currentState = ref.read(itemVerificationProvider).value;
+
+    if (currentState?.verifiedItem == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No item to verify'),
+          backgroundColor: AppColors.kErrorColor,
+        ),
+      );
+      return;
+    }
+
+    final item = currentState!.verifiedItem!;
+
+    // Navigate to verification screen
+    final result = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (context) => GatePassItemVerificationScreen(
+          gatePassId: item.gatePassId,
+          item: item,
+        ),
       ),
     );
 
-    // Clear the verified item after verification
-    ref.read(itemVerificationProvider.notifier).clearVerifiedItem();
+    // If verification was successful, the item is already cleared in the verification screen
+    // No need to do anything here
+    if (result == true) {
+      // Item was verified and screen returned true
+      // The verification screen already handles clearing the item
+    }
   }
 
   @override
