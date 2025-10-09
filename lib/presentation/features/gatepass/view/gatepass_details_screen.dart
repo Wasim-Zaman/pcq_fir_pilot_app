@@ -150,7 +150,7 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
             CustomButton(
               text: "Start Verification",
               onPressed: () {
-                context.push(kGatePassScanItemRoute);
+                context.push(kGatePassScanItemRoute, extra: gatePass);
               },
             ),
 

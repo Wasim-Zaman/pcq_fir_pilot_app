@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_item_verification_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_dialog.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_section.dart';
@@ -14,7 +16,9 @@ import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 /// Item Verification Screen with QR scanning capability
 class GatePassScanItemsScreen extends ConsumerStatefulWidget {
-  const GatePassScanItemsScreen({super.key});
+  final GatePass gatePass;
+
+  const GatePassScanItemsScreen({super.key, required this.gatePass});
 
   @override
   ConsumerState<GatePassScanItemsScreen> createState() =>
@@ -69,14 +73,10 @@ class _GatePassScanItemsScreenState
 
     final item = currentState!.verifiedItem!;
 
-    // Navigate to verification screen
-    final result = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
-        builder: (context) => GatePassItemVerificationScreen(
-          gatePassId: item.gatePassId,
-          item: item,
-        ),
-      ),
+    // Navigate to verification screen using Go Router
+    final result = await context.push<bool>(
+      kGatePassItemVerificationRoute,
+      extra: {'gatePass': widget.gatePass, 'item': item},
     );
 
     // If verification was successful, the item is already cleared in the verification screen

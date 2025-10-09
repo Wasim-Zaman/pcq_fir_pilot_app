@@ -30,6 +30,10 @@ const String kGatePassDetailsRouteName = 'gate-pass-details';
 
 const String kGatePassScanItemRoute = '/gatepass-scan-item';
 const String kGatePassScanItemRouteName = 'gatepass-scan-item';
+const String kGatePassItemVerificationRoute = '/gatepass-item-verification';
+const String kGatePassItemVerificationRouteName = 'gatepass-item-verification';
+const String kGatePassVerificationRoute = '/gatepass-verification';
+const String kGatePassVerificationRouteName = 'gatepass-verification';
 const String kVerifiedItemsRoute = '/verified-items';
 const String kVerificationFailedRoute = '/verification-failed';
 const String kDocumentVerifiedRoute = '/document-verified';

@@ -6,8 +6,12 @@ import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/dashboard_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/view/member_details_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_details_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_item_verification_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_scan_items_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_verification_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/scan_gatepass_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
@@ -85,9 +89,46 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: kGatePassScanItemRoute,
         name: kGatePassScanItemRouteName,
         pageBuilder: (context, state) {
+          final gatePass = state.extra as GatePass;
           return MaterialPage(
             key: state.pageKey,
-            child: const GatePassScanItemsScreen(),
+            child: GatePassScanItemsScreen(gatePass: gatePass),
+          );
+        },
+      ),
+
+      // Gate Pass Verification Route
+      GoRoute(
+        path: kGatePassVerificationRoute,
+        name: kGatePassVerificationRouteName,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final gatePass = extra['gatePass'] as GatePass;
+          final actionType = extra['actionType'] as String;
+          return MaterialPage(
+            key: state.pageKey,
+            child: GatePassVerificationScreen(
+              gatePass: gatePass,
+              actionType: actionType,
+            ),
+          );
+        },
+      ),
+
+      // Gate Pass Item Verification Route
+      GoRoute(
+        path: kGatePassItemVerificationRoute,
+        name: kGatePassItemVerificationRouteName,
+        pageBuilder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final gatePass = extra['gatePass'] as GatePass;
+          final item = extra['item'] as VerifiedItem;
+          return MaterialPage(
+            key: state.pageKey,
+            child: GatePassItemVerificationScreen(
+              gatePass: gatePass,
+              item: item,
+            ),
           );
         },
       ),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_verify_item_provider.dart';
@@ -14,12 +17,12 @@ import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 /// Gate Pass Item Verification Screen
 class GatePassItemVerificationScreen extends ConsumerStatefulWidget {
-  final String gatePassId;
+  final GatePass gatePass;
   final VerifiedItem item;
 
   const GatePassItemVerificationScreen({
     super.key,
-    required this.gatePassId,
+    required this.gatePass,
     required this.item,
   });
 
@@ -75,13 +78,34 @@ class _GatePassItemVerificationScreenState
     await ref
         .read(verifyItemProvider.notifier)
         .verifyItem(
-          gatePassId: widget.gatePassId,
+          gatePassId: widget.gatePass.id,
           itemId: widget.item.id,
           scannedById: memberId,
           verificationStatus: _selectedStatus,
           verifiedQuantity: quantity,
           verificationRemarks: remarks,
         );
+  }
+
+  /// Get the action type based on gate pass status (same logic as action_button.dart)
+  String _getActionType() {
+    final normalized = widget.gatePass.status.toLowerCase().replaceAll(
+      RegExp(r'[^a-z0-9]'),
+      '',
+    );
+
+    switch (normalized) {
+      case 'approved':
+        return 'Check-Out';
+      case 'intransit':
+        return 'Check-In';
+      case 'arrived':
+        return 'Return-Out';
+      case 'returning':
+        return 'Return-In';
+      default:
+        return 'Start Verification';
+    }
   }
 
   @override
@@ -99,26 +123,24 @@ class _GatePassItemVerificationScreenState
               state.response!.data.verificationSummary.allItemsProcessed;
 
           // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.response!.message),
-              backgroundColor: AppColors.kSuccessColor,
-            ),
+          CustomSnackbar.showNormal(
+            context,
+            state.response?.message ?? 'Item verified successfully',
           );
 
           if (allItemsProcessed) {
-            // TODO: Navigate to completion screen or show all items processed
-            Navigator.of(context).pop(true);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('All items have been processed!'),
-                backgroundColor: AppColors.kSuccessColor,
-              ),
+            // Navigate to gate pass verification screen using Go Router
+            context.go(
+              '/gatepass-verification',
+              extra: {
+                'gatePass': widget.gatePass,
+                'actionType': _getActionType(),
+              },
             );
           } else {
             // Clear the scanned item and go back to scan screen
             ref.read(gatePassScanItemProvider.notifier).clearVerifiedItem();
-            Navigator.of(context).pop(true);
+            context.pop(true);
           }
         } else if (state.error != null) {
           // Show error message
