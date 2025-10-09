@@ -4,26 +4,26 @@ import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_mod
 import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
 
 /// State class for Item Verification
-class ItemVerificationState {
+class GatePassScanItemState {
   final bool isLoading;
   final String? error;
   final VerifiedItem? verifiedItem;
   final ItemVerificationResponse? response;
 
-  const ItemVerificationState({
+  const GatePassScanItemState({
     this.isLoading = false,
     this.error,
     this.verifiedItem,
     this.response,
   });
 
-  ItemVerificationState copyWith({
+  GatePassScanItemState copyWith({
     bool? isLoading,
     String? error,
     VerifiedItem? verifiedItem,
     ItemVerificationResponse? response,
   }) {
-    return ItemVerificationState(
+    return GatePassScanItemState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
       verifiedItem: verifiedItem,
@@ -33,16 +33,16 @@ class ItemVerificationState {
 }
 
 /// AsyncNotifier for Item Verification
-class ItemVerificationNotifier extends AsyncNotifier<ItemVerificationState> {
+class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   @override
-  Future<ItemVerificationState> build() async {
-    return const ItemVerificationState();
+  Future<GatePassScanItemState> build() async {
+    return const GatePassScanItemState();
   }
 
   /// Fetch item verification details by item ID
   Future<void> fetchItemVerification(String itemId) async {
     // Set loading state
-    state = const AsyncValue.data(ItemVerificationState(isLoading: true));
+    state = const AsyncValue.data(GatePassScanItemState(isLoading: true));
 
     try {
       // Get gatepass repository
@@ -61,7 +61,7 @@ class ItemVerificationNotifier extends AsyncNotifier<ItemVerificationState> {
             : null;
 
         state = AsyncValue.data(
-          ItemVerificationState(
+          GatePassScanItemState(
             isLoading: false,
             verifiedItem: verifiedItem,
             response: response,
@@ -70,20 +70,20 @@ class ItemVerificationNotifier extends AsyncNotifier<ItemVerificationState> {
       } else if (result is ApiError<ItemVerificationResponse>) {
         // Handle error
         state = AsyncValue.data(
-          ItemVerificationState(isLoading: false, error: result.message),
+          GatePassScanItemState(isLoading: false, error: result.message),
         );
       }
     } catch (e) {
       // Handle unexpected errors
       state = AsyncValue.data(
-        ItemVerificationState(isLoading: false, error: e.toString()),
+        GatePassScanItemState(isLoading: false, error: e.toString()),
       );
     }
   }
 
   /// Clear verified item
   void clearVerifiedItem() {
-    state = const AsyncValue.data(ItemVerificationState());
+    state = const AsyncValue.data(GatePassScanItemState());
   }
 
   /// Reset error state
@@ -95,7 +95,7 @@ class ItemVerificationNotifier extends AsyncNotifier<ItemVerificationState> {
 }
 
 /// Provider for Item Verification
-final itemVerificationProvider =
-    AsyncNotifierProvider<ItemVerificationNotifier, ItemVerificationState>(
-      () => ItemVerificationNotifier(),
+final gatePassScanItemProvider =
+    AsyncNotifierProvider<GatePassScanItemNotifier, GatePassScanItemState>(
+      () => GatePassScanItemNotifier(),
     );

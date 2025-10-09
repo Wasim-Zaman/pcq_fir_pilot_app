@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/item_verification_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_item_verification_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_dialog.dart';
@@ -49,13 +49,13 @@ class _GatePassScanItemsScreenState
 
     // Call the provider to fetch item verification
     await ref
-        .read(itemVerificationProvider.notifier)
+        .read(gatePassScanItemProvider.notifier)
         .fetchItemVerification(itemId);
   }
 
   /// Handle verify item button
   void _handleVerifyItem() async {
-    final currentState = ref.read(itemVerificationProvider).value;
+    final currentState = ref.read(gatePassScanItemProvider).value;
 
     if (currentState?.verifiedItem == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +89,7 @@ class _GatePassScanItemsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final itemVerificationState = ref.watch(itemVerificationProvider);
+    final itemVerificationState = ref.watch(gatePassScanItemProvider);
 
     return itemVerificationState.when(
       data: (state) {
@@ -167,7 +167,7 @@ class _GatePassScanItemsScreenState
                             ),
                             onPressed: () {
                               ref
-                                  .read(itemVerificationProvider.notifier)
+                                  .read(gatePassScanItemProvider.notifier)
                                   .resetError();
                             },
                           ),
