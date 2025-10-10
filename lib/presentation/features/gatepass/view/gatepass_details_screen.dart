@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
@@ -149,6 +151,8 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
 
             CustomButton(
               text: "Start Verification",
+              icon: Icon(Iconsax.verify4),
+              backgroundColor: AppColors.kSuccessColor,
               onPressed: () {
                 context.push(kGatePassScanItemRoute, extra: gatePass);
               },

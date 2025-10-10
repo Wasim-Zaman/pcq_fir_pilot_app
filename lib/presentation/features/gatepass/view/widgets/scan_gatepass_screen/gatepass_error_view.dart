@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
@@ -23,7 +24,7 @@ class GatePassErrorView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.error_outline,
+              Iconsax.warning_2,
               size: 64,
               color: AppColors.kErrorColor.withValues(alpha: 0.7),
             ),
@@ -47,7 +48,7 @@ class GatePassErrorView extends StatelessWidget {
 
             CustomButton(
               text: "Retry",
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Iconsax.warning_2),
               width: 300,
               onPressed: onRetry,
             ),
