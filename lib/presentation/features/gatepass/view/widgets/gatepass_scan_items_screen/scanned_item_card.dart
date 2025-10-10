@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 
@@ -13,12 +14,12 @@ class ScannedItemCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.kSurfaceColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200, width: 1),
+        border: Border.all(color: AppColors.kBorderLightColor, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade100,
+            color: AppColors.kHoverColor,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -43,12 +44,12 @@ class ScannedItemCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade50,
+                  color: AppColors.kHighlightColor,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.check_circle,
-                  color: Colors.green.shade700,
+                  color: AppColors.kSuccessColor,
                   size: 24,
                 ),
               ),
@@ -59,12 +60,15 @@ class ScannedItemCard extends StatelessWidget {
           // Description
           Text(
             item.description,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.kTextSecondaryColor,
+            ),
           ),
           16.heightBox,
 
           // Divider
-          Divider(color: Colors.grey.shade200),
+          Divider(color: AppColors.kBorderLightColor),
           16.heightBox,
 
           // Quantity
@@ -99,14 +103,14 @@ class ScannedItemCard extends StatelessWidget {
     switch (status.toLowerCase()) {
       case 'verified':
       case 'approved':
-        return Colors.green;
+        return AppColors.kSuccessColor;
       case 'pending':
-        return Colors.orange;
+        return AppColors.kWarningColor;
       case 'rejected':
       case 'failed':
-        return Colors.red;
+        return AppColors.kErrorColor;
       default:
-        return Colors.grey;
+        return AppColors.kTextSecondaryColor;
     }
   }
 }
@@ -135,7 +139,7 @@ class InfoRow extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade600,
+              color: AppColors.kTextSecondaryColor,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -146,7 +150,7 @@ class InfoRow extends StatelessWidget {
             value,
             style: TextStyle(
               fontSize: 14,
-              color: valueColor ?? Colors.black87,
+              color: valueColor ?? AppColors.kTextPrimaryColor,
               fontWeight: FontWeight.w600,
             ),
           ),

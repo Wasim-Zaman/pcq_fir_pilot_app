@@ -68,7 +68,7 @@ class DashboardContent extends StatelessWidget {
               value: state.analytics?.summary.inTransit.toString() ?? '0',
               subtitle: 'in transit',
               icon: Iconsax.truck_fast,
-              color: Colors.blue,
+              color: AppColors.kInfoColor,
             ),
 
             16.heightBox,
@@ -79,7 +79,7 @@ class DashboardContent extends StatelessWidget {
               value: state.analytics?.summary.completedToday.toString() ?? '0',
               subtitle: 'completed today',
               icon: Iconsax.tick_circle,
-              color: Colors.green,
+              color: AppColors.kSuccessColor,
             ),
 
             32.heightBox,

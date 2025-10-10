@@ -99,8 +99,8 @@ class CustomButton extends StatelessWidget {
       child: buttonChild,
     );
 
-    // Wrap with gradient container if useGradient is true
-    if (useGradient && !effectivelyDisabled) {
+    // Wrap with gradient container if useGradient is true and no custom background color
+    if (useGradient && !effectivelyDisabled && backgroundColor == null) {
       return Container(
         width: width,
         height: responsiveHeight,
@@ -120,14 +120,13 @@ class CustomButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: Colors.transparent,
             foregroundColor: foregroundColor ?? AppColors.kTextOnPrimaryColor,
-            padding:
-                padding ??
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: responsivePadding,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             elevation: 0,
             shadowColor: Colors.transparent,
+            minimumSize: Size(width ?? double.infinity, responsiveHeight),
           ),
           child: buttonChild,
         ),

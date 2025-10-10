@@ -57,7 +57,10 @@ class ScanSection extends StatelessWidget {
             8.heightBox,
             Text(
               'Tap to scan or enter item ID',
-              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.kTextSecondaryColor,
+              ),
             ),
           ],
         ),

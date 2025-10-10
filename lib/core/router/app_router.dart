@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/view/signin_screen.dart';
@@ -141,17 +142,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
-              Icons.error_outline,
+              Iconsax.warning_2,
               size: 64,
               color: AppColors.kErrorColor,
             ),
-            const SizedBox(height: 16),
+            16.heightBox,
             Text(
               'Page not found: ${state.uri.path}',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 16),
+            16.heightBox,
             CustomButton(text: "Go Back", onPressed: () => context.pop()),
             12.heightBox,
             CustomOutlinedButton(

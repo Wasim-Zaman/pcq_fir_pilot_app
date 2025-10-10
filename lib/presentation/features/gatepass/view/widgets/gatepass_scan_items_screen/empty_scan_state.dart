@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 
 /// Empty scan state widget
 class EmptyScanState extends StatelessWidget {
@@ -6,21 +9,31 @@ class EmptyScanState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
+    return Expanded(
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.qr_code_scanner, size: 80, color: Colors.grey),
-            SizedBox(height: 16),
+            Icon(
+              Iconsax.scanner,
+              size: 80,
+              color: AppColors.kTextSecondaryColor,
+            ),
+            16.heightBox,
             Text(
               'No item scanned yet',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColors.kTextSecondaryColor,
+              ),
             ),
-            SizedBox(height: 8),
+            8.heightBox,
             Text(
               'Tap the scan button to start',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.kTextSecondaryColor,
+              ),
             ),
           ],
         ),
