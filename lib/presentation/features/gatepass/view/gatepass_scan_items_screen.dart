@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
-import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
-import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_dialog.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_section.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scanned_item_card.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
@@ -36,16 +32,17 @@ class _GatePassScanItemsScreenState
     super.dispose();
   }
 
-  /// Show scan dialog
-  void _showScanDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => ScanDialog(
-        controller: _scanController,
-        onCancel: () => _scanController.clear(),
-        onScan: _handleScan,
-      ),
-    );
+  /// Verify the scanned item
+  void _verifyItem() {
+    ref
+        .read(gatePassScanItemProvider.notifier)
+        .handleVerifyItem(context, widget.gatePass);
+  }
+
+  void _scanItemDialog() {
+    ref
+        .read(gatePassScanItemProvider.notifier)
+        .showScanDialog(context, _handleScan);
   }
 
   /// Handle scan action
@@ -56,24 +53,6 @@ class _GatePassScanItemsScreenState
     await ref
         .read(gatePassScanItemProvider.notifier)
         .fetchItemVerification(itemId);
-  }
-
-  /// Handle verify item button
-  void _handleVerifyItem() async {
-    final currentState = ref.read(gatePassScanItemProvider).value;
-
-    if (currentState?.verifiedItem == null) {
-      CustomSnackbar.showNormal(context, "No Item to verify");
-      return;
-    }
-
-    final item = currentState!.verifiedItem!;
-
-    // Navigate to verification screen using Go Router
-    context.push(
-      kGatePassItemVerificationRoute,
-      extra: {'gatePass': widget.gatePass, 'item': item},
-    );
   }
 
   @override
@@ -94,7 +73,7 @@ class _GatePassScanItemsScreenState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Scan Section
-                  ScanSection(onTap: _showScanDialog),
+                  ScanSection(onTap: _scanItemDialog),
                   24.heightBox,
 
                   // Verified Item Section
@@ -118,7 +97,7 @@ class _GatePassScanItemsScreenState
                       backgroundColor: AppColors.kSuccessColor,
                       foregroundColor: AppColors.kCardColor,
                       isLoading: state.isLoading,
-                      onPressed: state.isLoading ? null : _handleVerifyItem,
+                      onPressed: state.isLoading ? null : _verifyItem,
                     ),
                   ] else ...[
                     const EmptyScanState(),

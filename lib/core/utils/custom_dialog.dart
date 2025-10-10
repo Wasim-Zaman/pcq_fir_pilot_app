@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
 class CustomDialog {
   static void showInfoDialog(
@@ -77,7 +78,10 @@ class CustomDialog {
                 // Message
                 Text(
                   message,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.kTextSecondaryColor,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -146,7 +150,10 @@ class CustomDialog {
                 // Message
                 Text(
                   message,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.kTextSecondaryColor,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -164,6 +171,69 @@ class CustomDialog {
           ),
         );
       },
+    );
+  }
+
+  /// Show input dialog for text input (e.g., pass number, item ID)
+  static Future<String?> showInputDialog(
+    BuildContext context, {
+    required String title,
+    required String hintText,
+    String? initialValue,
+    String? prefixText,
+    Widget? prefixIcon,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+    bool autofocus = true,
+  }) async {
+    final controller = TextEditingController(text: initialValue);
+    final formKey = GlobalKey<FormState>();
+
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Form(
+          key: formKey,
+          child: CustomTextField(
+            controller: controller,
+            hintText: hintText,
+            prefixText: prefixText,
+            prefixIcon: prefixIcon ?? Icon(Iconsax.barcode),
+            keyboardType: keyboardType,
+            autofocus: autofocus,
+            validator:
+                validator ??
+                (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Field cannot be empty';
+                  }
+                  return null;
+                },
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (value) {
+              if (formKey.currentState!.validate()) {
+                Navigator.pop(context, value);
+              }
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          CustomButton(
+            text: "Submit",
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                Navigator.pop(context, controller.text.trim());
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
