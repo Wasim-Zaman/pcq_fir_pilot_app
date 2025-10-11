@@ -67,7 +67,7 @@ class _GatePassScanItemsScreenState
             centerTitle: true,
           ),
           body: SafeArea(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -100,7 +100,10 @@ class _GatePassScanItemsScreenState
                       onPressed: state.isLoading ? null : _verifyItem,
                     ),
                   ] else ...[
-                    const EmptyScanState(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: const EmptyScanState(),
+                    ),
                   ],
 
                   // Show error if any

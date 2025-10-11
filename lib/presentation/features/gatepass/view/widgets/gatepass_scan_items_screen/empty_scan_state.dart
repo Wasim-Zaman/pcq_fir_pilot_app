@@ -9,34 +9,29 @@ class EmptyScanState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Iconsax.scanner,
-              size: 80,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Iconsax.scanner, size: 80, color: AppColors.kTextSecondaryColor),
+          16.heightBox,
+          Text(
+            'No item scanned yet',
+            style: TextStyle(
+              fontSize: 16,
               color: AppColors.kTextSecondaryColor,
             ),
-            16.heightBox,
-            Text(
-              'No item scanned yet',
-              style: TextStyle(
-                fontSize: 16,
-                color: AppColors.kTextSecondaryColor,
-              ),
+          ),
+          8.heightBox,
+          Text(
+            'Tap the scan button to start',
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.kTextSecondaryColor,
             ),
-            8.heightBox,
-            Text(
-              'Tap the scan button to start',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.kTextSecondaryColor,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
