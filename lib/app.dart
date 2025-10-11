@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_themes.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/no_internet/providers/connectivity_provider.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/no_internet/view/no_internet_screen.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/connectivity/providers/connectivity_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/connectivity/view/no_internet_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
@@ -47,26 +47,17 @@ class ConnectivityWrapper extends ConsumerWidget {
           print('🔄 ConnectivityWrapper status: $status');
         }
 
-        // Use a Stack to overlay no internet screen when disconnected
-        if (status == ConnectivityStatus.disconnected) {
-          if (kDebugMode) {
-            print('❌ Showing NoInternetScreen overlay');
-          }
-          return Stack(
-            children: [
-              // Keep the original app in background
-              if (child != null) child!,
-              // Overlay the no internet screen
-              const Positioned.fill(child: NoInternetScreen()),
-            ],
-          );
-        }
-
-        // Show the normal app when connected
-        if (kDebugMode) {
-          print('✅ Showing normal app (child)');
-        }
-        return child ?? const SizedBox.shrink();
+        // Always maintain the same widget tree structure using Stack
+        // This ensures the child widget's state is preserved
+        return Stack(
+          children: [
+            // Always show the child widget (preserves its state)
+            if (child != null) child!,
+            // Conditionally overlay the no internet screen
+            if (status == ConnectivityStatus.disconnected)
+              Positioned.fill(child: const NoInternetScreen()),
+          ],
+        );
       },
       loading: () {
         if (kDebugMode) {
