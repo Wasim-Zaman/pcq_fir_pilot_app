@@ -123,6 +123,9 @@ class _GatePassItemVerificationScreenState
             state.response?.message ?? 'Item verified successfully',
           );
 
+          // Reset verify item provider state
+          ref.read(verifyItemProvider.notifier).reset();
+
           if (allItemsProcessed) {
             // Navigate to gate pass verification screen using Go Router
             context.push(
@@ -133,8 +136,7 @@ class _GatePassItemVerificationScreenState
               },
             );
           } else {
-            // Clear the scanned item and go back to scan screen
-            // ref.read(gatePassScanItemProvider.notifier).clearVerifiedItem();
+            // Go back to scan screen
             context.pop(true);
           }
         } else if (state.error != null) {

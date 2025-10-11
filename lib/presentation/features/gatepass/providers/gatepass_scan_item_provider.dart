@@ -119,6 +119,21 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
     });
   }
 
+  /// Update a specific item in the scanned items list after verification
+  void updateScannedItem(VerifiedItem updatedItem) {
+    state.whenData((currentState) {
+      final updatedList = currentState.scannedItems.map((item) {
+        // Find the item by ID and replace it with the updated item
+        if (item.id == updatedItem.id) {
+          return updatedItem;
+        }
+        return item;
+      }).toList();
+
+      state = AsyncValue.data(currentState.copyWith(scannedItems: updatedList));
+    });
+  }
+
   /// Reset error state
   void resetError() {
     state.whenData((data) {

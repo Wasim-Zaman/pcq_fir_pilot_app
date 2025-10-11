@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pcq_fir_pilot_app/core/network/api_client.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
 
 /// State class for Verify Item
@@ -68,6 +69,12 @@ class VerifyItemNotifier extends AsyncNotifier<VerifyItemState> {
       // Handle API response
       if (result is ApiSuccess<VerifyItemResponse>) {
         final response = result.data;
+
+        // Update the scanned item list with the verified item
+        final verifiedItem = response.data.item;
+        ref
+            .read(gatePassScanItemProvider.notifier)
+            .updateScannedItem(verifiedItem);
 
         state = AsyncValue.data(
           VerifyItemState(
