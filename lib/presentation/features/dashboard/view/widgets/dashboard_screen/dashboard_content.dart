@@ -76,7 +76,7 @@ class DashboardContent extends StatelessWidget {
             // Completed Today Card
             DashboardStatCard(
               title: 'Completed Today',
-              value: state.analytics?.summary.completedToday.toString() ?? '0',
+              value: state.analytics?.summary.completed.toString() ?? '0',
               subtitle: 'completed today',
               icon: Iconsax.tick_circle,
               color: AppColors.kSuccessColor,
