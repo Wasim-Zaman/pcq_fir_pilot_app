@@ -56,7 +56,7 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
       final gatepassRepo = ref.read(gatepassRepoProvider);
 
       // Call item verification API
-      final result = await gatepassRepo.getItemVerification(itemId: itemId);
+      final result = await gatepassRepo.getItemVerification(itemCode: itemId);
 
       // Handle API response
       if (result is ApiSuccess<ItemVerificationResponse>) {

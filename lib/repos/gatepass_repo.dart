@@ -110,11 +110,11 @@ class GatepassRepo {
 
   // Get item verification details
   Future<ApiState<ItemVerificationResponse>> getItemVerification({
-    required String itemId,
+    required String itemCode,
   }) async {
     return _apiClient.get<ItemVerificationResponse>(
       '/gate-passes/gatepassitems/items',
-      queryParameters: {'id': itemId},
+      queryParameters: {'itemCode': itemCode},
       parser: (data) =>
           ItemVerificationResponse.fromJson(data as Map<String, dynamic>),
     );

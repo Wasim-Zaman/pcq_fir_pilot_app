@@ -41,6 +41,12 @@ class ScannedItemCard extends StatelessWidget {
     }
   }
 
+  /// Check if item is already verified
+  bool _isItemVerified() {
+    final status = item.verificationStatus.toLowerCase();
+    return status == 'verified' || status == 'approved';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -153,54 +159,107 @@ class ScannedItemCard extends StatelessWidget {
             16.heightBox,
             Divider(color: AppColors.kBorderLightColor),
             16.heightBox,
-            Row(
-              children: [
-                if (onRemove != null)
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: isLoading ? null : onRemove,
-                      icon: const Icon(Iconsax.trash, size: 18),
-                      label: const Text('Remove'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.kErrorColor,
-                        side: const BorderSide(color: AppColors.kErrorColor),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+            // Show "Already Verified" message if item is verified
+            if (_isItemVerified()) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.kSuccessColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.kSuccessColor.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Iconsax.verify5,
+                      color: AppColors.kSuccessColor,
+                      size: 20,
+                    ),
+                    8.widthBox,
+                    const Text(
+                      'Already Verified',
+                      style: TextStyle(
+                        color: AppColors.kSuccessColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (onRemove != null) ...[
+                12.heightBox,
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: isLoading ? null : onRemove,
+                    icon: const Icon(Iconsax.trash, size: 18),
+                    label: const Text('Remove'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.kErrorColor,
+                      side: const BorderSide(color: AppColors.kErrorColor),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),
-                if (onRemove != null && onVerify != null) 12.widthBox,
-                if (onVerify != null)
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: isLoading ? null : onVerify,
-                      icon: isLoading
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.kCardColor,
-                                ),
-                              ),
-                            )
-                          : const Icon(Iconsax.verify5, size: 18),
-                      label: Text(isLoading ? 'Verifying...' : 'Verify'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.kSuccessColor,
-                        foregroundColor: AppColors.kCardColor,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
+                ),
               ],
-            ),
+            ] else ...[
+              // Show action buttons for unverified items
+              Row(
+                children: [
+                  if (onRemove != null)
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: isLoading ? null : onRemove,
+                        icon: const Icon(Iconsax.trash, size: 18),
+                        label: const Text('Remove'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.kErrorColor,
+                          side: const BorderSide(color: AppColors.kErrorColor),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (onRemove != null && onVerify != null) 12.widthBox,
+                  if (onVerify != null)
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: isLoading ? null : onVerify,
+                        icon: isLoading
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppColors.kCardColor,
+                                  ),
+                                ),
+                              )
+                            : const Icon(Iconsax.verify5, size: 18),
+                        label: Text(isLoading ? 'Verifying...' : 'Verify'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.kSuccessColor,
+                          foregroundColor: AppColors.kCardColor,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ],
         ],
       ),
