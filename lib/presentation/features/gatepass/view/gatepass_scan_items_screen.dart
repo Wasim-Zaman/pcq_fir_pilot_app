@@ -60,6 +60,14 @@ class _GatePassScanItemsScreenState
         .fetchItemVerification(itemId);
   }
 
+  /// Get count of verified items
+  int _getVerifiedCount(List<VerifiedItem> items) {
+    return items.where((item) {
+      final status = item.verificationStatus.toLowerCase();
+      return status == 'verified' || status == 'approved';
+    }).length;
+  }
+
   @override
   Widget build(BuildContext context) {
     final itemVerificationState = ref.watch(gatePassScanItemProvider);
@@ -86,11 +94,37 @@ class _GatePassScanItemsScreenState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Scanned Items (${state.scannedItems.length})',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Scanned Items (${state.scannedItems.length})',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              4.heightBox,
+                              Row(
+                                children: [
+                                  Icon(
+                                    Iconsax.verify5,
+                                    size: 16,
+                                    color: AppColors.kSuccessColor,
+                                  ),
+                                  4.widthBox,
+                                  Text(
+                                    '${_getVerifiedCount(state.scannedItems)} of ${state.scannedItems.length} verified',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: AppColors.kTextSecondaryColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                         if (state.scannedItems.isNotEmpty)
