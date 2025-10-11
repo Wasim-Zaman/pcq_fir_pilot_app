@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/core/network/api_client.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
-import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
@@ -13,26 +12,26 @@ import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
 class GatePassScanItemState {
   final bool isLoading;
   final String? error;
-  final VerifiedItem? verifiedItem;
+  final List<VerifiedItem> scannedItems;
   final ItemVerificationResponse? response;
 
   const GatePassScanItemState({
     this.isLoading = false,
     this.error,
-    this.verifiedItem,
+    this.scannedItems = const [],
     this.response,
   });
 
   GatePassScanItemState copyWith({
     bool? isLoading,
     String? error,
-    VerifiedItem? verifiedItem,
+    List<VerifiedItem>? scannedItems,
     ItemVerificationResponse? response,
   }) {
     return GatePassScanItemState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
-      verifiedItem: verifiedItem,
+      scannedItems: scannedItems ?? this.scannedItems,
       response: response ?? this.response,
     );
   }
@@ -47,8 +46,10 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
 
   /// Fetch item verification details by item ID
   Future<void> fetchItemVerification(String itemId) async {
-    // Set loading state
-    state = const AsyncValue.data(GatePassScanItemState(isLoading: true));
+    // Set loading state while keeping existing scanned items
+    state.whenData((currentState) {
+      state = AsyncValue.data(currentState.copyWith(isLoading: true));
+    });
 
     try {
       // Get gatepass repository
@@ -61,35 +62,61 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
       if (result is ApiSuccess<ItemVerificationResponse>) {
         final response = result.data;
 
-        // Get the first item from the response (since we only scan one item at a time)
+        // Get the first item from the response
         final verifiedItem = response.data.isNotEmpty
             ? response.data.first
             : null;
 
-        state = AsyncValue.data(
-          GatePassScanItemState(
-            isLoading: false,
-            verifiedItem: verifiedItem,
-            response: response,
-          ),
-        );
+        if (verifiedItem != null) {
+          // Add new item to the list
+          state.whenData((currentState) {
+            final updatedList = [...currentState.scannedItems, verifiedItem];
+            state = AsyncValue.data(
+              currentState.copyWith(
+                isLoading: false,
+                scannedItems: updatedList,
+                response: response,
+              ),
+            );
+          });
+        } else {
+          state.whenData((currentState) {
+            state = AsyncValue.data(
+              currentState.copyWith(isLoading: false, error: 'No item found'),
+            );
+          });
+        }
       } else if (result is ApiError<ItemVerificationResponse>) {
         // Handle error
-        state = AsyncValue.data(
-          GatePassScanItemState(isLoading: false, error: result.message),
-        );
+        state.whenData((currentState) {
+          state = AsyncValue.data(
+            currentState.copyWith(isLoading: false, error: result.message),
+          );
+        });
       }
     } catch (e) {
       // Handle unexpected errors
-      state = AsyncValue.data(
-        GatePassScanItemState(isLoading: false, error: e.toString()),
-      );
+      state.whenData((currentState) {
+        state = AsyncValue.data(
+          currentState.copyWith(isLoading: false, error: e.toString()),
+        );
+      });
     }
   }
 
-  /// Clear verified item
-  void clearVerifiedItem() {
+  /// Clear all scanned items
+  void clearScannedItems() {
     state = const AsyncValue.data(GatePassScanItemState());
+  }
+
+  /// Remove a specific item from the list
+  void removeScannedItem(String itemId) {
+    state.whenData((currentState) {
+      final updatedList = currentState.scannedItems
+          .where((item) => item.id != itemId)
+          .toList();
+      state = AsyncValue.data(currentState.copyWith(scannedItems: updatedList));
+    });
   }
 
   /// Reset error state
@@ -111,15 +138,12 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
     }
   }
 
-  /// Handle verify item button
-  void handleVerifyItem(BuildContext context, GatePass gatePass) async {
-    if (state.value?.verifiedItem == null) {
-      CustomSnackbar.showNormal(context, "No Item to verify");
-      return;
-    }
-
-    final item = state.value?.verifiedItem!;
-
+  /// Handle verify item button for a specific item
+  void handleVerifyItem(
+    BuildContext context,
+    GatePass gatePass,
+    VerifiedItem item,
+  ) async {
     // Navigate to verification screen using Go Router
     context.push(
       kGatePassItemVerificationRoute,

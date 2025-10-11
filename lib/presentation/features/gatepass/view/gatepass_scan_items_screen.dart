@@ -4,11 +4,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_section.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scanned_item_card.dart';
-import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 /// Item Verification Screen with QR scanning capability
@@ -32,11 +32,16 @@ class _GatePassScanItemsScreenState
     super.dispose();
   }
 
-  /// Verify the scanned item
-  void _verifyItem() {
+  /// Verify a specific scanned item
+  void _verifyItem(VerifiedItem item) {
     ref
         .read(gatePassScanItemProvider.notifier)
-        .handleVerifyItem(context, widget.gatePass);
+        .handleVerifyItem(context, widget.gatePass, item);
+  }
+
+  /// Remove a scanned item from the list
+  void _removeItem(String itemId) {
+    ref.read(gatePassScanItemProvider.notifier).removeScannedItem(itemId);
   }
 
   void _scanItemDialog() {
@@ -76,28 +81,53 @@ class _GatePassScanItemsScreenState
                   ScanSection(onTap: _scanItemDialog),
                   24.heightBox,
 
-                  // Verified Item Section
-                  if (state.verifiedItem != null) ...[
-                    const Text(
-                      'Scanned Item',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  // Scanned Items List Section
+                  if (state.scannedItems.isNotEmpty) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Scanned Items (${state.scannedItems.length})',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (state.scannedItems.isNotEmpty)
+                          TextButton.icon(
+                            onPressed: () {
+                              ref
+                                  .read(gatePassScanItemProvider.notifier)
+                                  .clearScannedItems();
+                            },
+                            icon: const Icon(
+                              Iconsax.trash,
+                              size: 18,
+                              color: AppColors.kErrorColor,
+                            ),
+                            label: const Text(
+                              'Clear All',
+                              style: TextStyle(color: AppColors.kErrorColor),
+                            ),
+                          ),
+                      ],
                     ),
                     16.heightBox,
-                    ScannedItemCard(item: state.verifiedItem!),
-                    24.heightBox,
-
-                    // Verify Item Button
-                    CustomButton(
-                      text: "Verify Item",
-                      width: double.infinity,
-                      icon: Icon(Iconsax.verify1),
-                      backgroundColor: AppColors.kSuccessColor,
-                      foregroundColor: AppColors.kCardColor,
-                      isLoading: state.isLoading,
-                      onPressed: state.isLoading ? null : _verifyItem,
+                    // List of scanned items
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.scannedItems.length,
+                      separatorBuilder: (context, index) => 16.heightBox,
+                      itemBuilder: (context, index) {
+                        final item = state.scannedItems[index];
+                        return ScannedItemCard(
+                          item: item,
+                          isLoading: state.isLoading,
+                          onVerify: () => _verifyItem(item),
+                          onRemove: () => _removeItem(item.id),
+                        );
+                      },
                     ),
                   ] else ...[
                     SizedBox(

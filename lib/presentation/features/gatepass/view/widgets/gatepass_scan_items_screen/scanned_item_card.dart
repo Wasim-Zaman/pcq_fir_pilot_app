@@ -8,8 +8,17 @@ import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_mod
 /// Scanned item card widget
 class ScannedItemCard extends StatelessWidget {
   final VerifiedItem item;
+  final VoidCallback? onVerify;
+  final VoidCallback? onRemove;
+  final bool isLoading;
 
-  const ScannedItemCard({super.key, required this.item});
+  const ScannedItemCard({
+    super.key,
+    required this.item,
+    this.onVerify,
+    this.onRemove,
+    this.isLoading = false,
+  });
 
   /// Show full item details in a dialog
   void _showItemDetails(BuildContext context) {
@@ -137,6 +146,61 @@ class ScannedItemCard extends StatelessWidget {
           if (item.remarks.isNotEmpty) ...[
             12.heightBox,
             InfoRow(label: 'Remarks', value: item.remarks),
+          ],
+
+          // Action Buttons
+          if (onVerify != null || onRemove != null) ...[
+            16.heightBox,
+            Divider(color: AppColors.kBorderLightColor),
+            16.heightBox,
+            Row(
+              children: [
+                if (onRemove != null)
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: isLoading ? null : onRemove,
+                      icon: const Icon(Iconsax.trash, size: 18),
+                      label: const Text('Remove'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.kErrorColor,
+                        side: const BorderSide(color: AppColors.kErrorColor),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (onRemove != null && onVerify != null) 12.widthBox,
+                if (onVerify != null)
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: isLoading ? null : onVerify,
+                      icon: isLoading
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.kCardColor,
+                                ),
+                              ),
+                            )
+                          : const Icon(Iconsax.verify5, size: 18),
+                      label: Text(isLoading ? 'Verifying...' : 'Verify'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.kSuccessColor,
+                        foregroundColor: AppColors.kCardColor,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ],
       ),
