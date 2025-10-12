@@ -75,7 +75,7 @@ class _GatePassScanItemsScreenState
     return itemVerificationState.when(
       data: (state) {
         return CustomScaffold(
-          appBar: AppBar(title: const Text('Scan Items'), centerTitle: true),
+          appBar: AppBar(title: const Text('Scan Items')),
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),

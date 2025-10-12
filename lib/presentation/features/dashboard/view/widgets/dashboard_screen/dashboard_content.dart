@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/action_type_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_dropdown.dart';
 
 import 'compact_stat_card.dart';
 import 'daily_trend_chart.dart';
@@ -10,7 +13,7 @@ import 'dashboard_header.dart';
 import 'status_distribution_chart.dart';
 
 /// Main content widget for the dashboard
-class DashboardContent extends StatelessWidget {
+class DashboardContent extends ConsumerWidget {
   final dynamic state;
   final VoidCallback onScanQRCode;
   final VoidCallback onNotifications;
@@ -25,7 +28,9 @@ class DashboardContent extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedActionType = ref.watch(actionTypeProvider);
+    final actionTypes = ref.watch(actionTypeListProvider);
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
@@ -188,6 +193,27 @@ class DashboardContent extends StatelessWidget {
             ),
 
             24.heightBox,
+
+            // Action Type Dropdown
+            CustomDropdown<ActionType>(
+              value: selectedActionType,
+              labelText: 'Select Action Type',
+              hintText: 'Choose an action',
+              prefixIcon: const Icon(Iconsax.setting_2),
+              items: actionTypes.map((actionType) {
+                return DropdownMenuItem<ActionType>(
+                  value: actionType,
+                  child: Text(actionType.displayName),
+                );
+              }).toList(),
+              onChanged: (ActionType? newValue) {
+                if (newValue != null) {
+                  ref.read(actionTypeProvider.notifier).setActionType(newValue);
+                }
+              },
+            ),
+
+            16.heightBox,
 
             // Scan QR Code Button
             CustomButton(

@@ -16,21 +16,13 @@ class ScanGatepassScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScaffold(
+      appBar: AppBar(title: const Text('Scan Document')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              8.heightBox,
-              // Title
-              Text(
-                'Document Input',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              40.heightBox,
               // Scan QR Code Card
               ScanOptionCard(
                 icon: Iconsax.scan,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 
 import '../../../models/gatepass_models.dart';
@@ -7,13 +8,8 @@ import '../../../models/gatepass_models.dart';
 /// Verification card widget for displaying verification history
 class GatePassVerificationCard extends StatelessWidget {
   final Verification verification;
-  final String Function(DateTime) formatDateTime;
 
-  const GatePassVerificationCard({
-    super.key,
-    required this.verification,
-    required this.formatDateTime,
-  });
+  const GatePassVerificationCard({super.key, required this.verification});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +56,7 @@ class GatePassVerificationCard extends StatelessWidget {
           ),
           4.heightBox,
           Text(
-            'Time: ${formatDateTime(verification.scannedAt)}',
+            'Time: ${verification.scannedAt.toFormattedDateTime()}',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: AppColors.kTextSecondaryColor,
             ),

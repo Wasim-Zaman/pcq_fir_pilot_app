@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
-import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
@@ -143,10 +142,7 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
             ),
             24.heightBox,
 
-            GatePassVerificationsSection(
-              verifications: gatePass.verifications,
-              formatDateTime: _formatDateTime,
-            ),
+            GatePassVerificationsSection(verifications: gatePass.verifications),
             24.heightBox,
 
             CustomButton(
@@ -157,9 +153,6 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
                 context.push(kGatePassScanItemRoute, extra: gatePass);
               },
             ),
-
-            // GatePassActionButton(gatePass: gatePass),
-            // 24.heightBox,
           ],
         ),
       ),
@@ -173,16 +166,5 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
       message:
           'This screen displays detailed information about the gate pass including items, vehicle, driver, and verification history.',
     );
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    // final day = dateTime.day.toString().padLeft(2, '0');
-    // final month = dateTime.month.toString().padLeft(2, '0');
-    // final year = dateTime.year.toString();
-    // final hour = dateTime.hour.toString().padLeft(2, '0');
-    // final minute = dateTime.minute.toString().padLeft(2, '0');
-    // return '$day/$month/$year $hour:$minute';
-
-    return dateTime.toFormattedDateTime();
   }
 }
