@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
@@ -9,6 +10,7 @@ class VerificationForm extends StatelessWidget {
   final TextEditingController remarksController;
   final String? quantityError;
   final String? remarksError;
+  final int? actualQuantity;
 
   const VerificationForm({
     super.key,
@@ -16,6 +18,7 @@ class VerificationForm extends StatelessWidget {
     required this.remarksController,
     this.quantityError,
     this.remarksError,
+    this.actualQuantity,
   });
 
   @override
@@ -23,12 +26,46 @@ class VerificationForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Display actual quantity if provided
+        if (actualQuantity != null) ...[
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 20, color: Colors.grey.shade700),
+                const SizedBox(width: 8),
+                Text(
+                  'Actual Quantity: ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+                Text(
+                  '$actualQuantity',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          16.heightBox,
+        ],
+
         // Verified Quantity Field
         CustomTextField(
           controller: quantityController,
           labelText: 'Verified Quantity',
           hintText: 'Enter verified quantity',
-          prefixIcon: const Icon(Icons.numbers),
+          prefixIcon: const Icon(Iconsax.box_add),
           keyboardType: TextInputType.number,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -55,7 +92,7 @@ class VerificationForm extends StatelessWidget {
           controller: remarksController,
           labelText: 'Verification Remarks',
           hintText: 'Enter verification remarks',
-          prefixIcon: const Icon(Icons.note_alt_outlined),
+          prefixIcon: const Icon(Iconsax.note),
           maxLines: 3,
           minLines: 3,
           textCapitalization: TextCapitalization.sentences,

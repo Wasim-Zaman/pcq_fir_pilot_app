@@ -181,6 +181,7 @@ class _GatePassItemVerificationScreenState
                     VerificationForm(
                       quantityController: _quantityController,
                       remarksController: _remarksController,
+                      actualQuantity: widget.item.quantity,
                     ),
                     32.heightBox,
 
