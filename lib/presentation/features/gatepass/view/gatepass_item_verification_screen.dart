@@ -8,6 +8,7 @@ import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_verify_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_item_verification_screen/item_info_card.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_item_verification_screen/verification_form.dart';
@@ -127,6 +128,9 @@ class _GatePassItemVerificationScreenState
           ref.read(verifyItemProvider.notifier).reset();
 
           if (allItemsProcessed) {
+            // Clear all the scanned items
+            ref.read(gatePassScanItemProvider.notifier).clearScannedItems();
+
             // Navigate to gate pass verification screen using Go Router
             context.push(
               kGatePassVerificationRoute,
@@ -141,12 +145,7 @@ class _GatePassItemVerificationScreenState
           }
         } else if (state.error != null) {
           // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.error!),
-              backgroundColor: AppColors.kErrorColor,
-            ),
-          );
+          CustomSnackbar.showError(context, state.error ?? '');
         }
       });
     });
