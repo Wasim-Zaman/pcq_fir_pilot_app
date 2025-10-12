@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pcq_fir_pilot_app/core/network/api_client.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/action_type_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
@@ -56,8 +57,12 @@ class VerifyItemNotifier extends AsyncNotifier<VerifyItemState> {
       // Get gatepass repository
       final gatepassRepo = ref.read(gatepassRepoProvider);
 
+      // Get current action type
+      final actionType = ref.read(actionTypeProvider).value;
+
       // Call verify item API
       final result = await gatepassRepo.verifyItem(
+        scanType: actionType,
         gatePassId: gatePassId,
         itemId: itemId,
         scannedById: scannedById,

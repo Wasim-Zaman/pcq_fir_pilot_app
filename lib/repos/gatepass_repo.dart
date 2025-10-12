@@ -129,8 +129,10 @@ class GatepassRepo {
     required String verificationStatus,
     required int verifiedQuantity,
     required String verificationRemarks,
+    required String scanType,
   }) async {
     final verifyData = {
+      "scanType": scanType,
       "scannedById": scannedById,
       "verificationStatus": verificationStatus,
       "verifiedQuantity": verifiedQuantity,
