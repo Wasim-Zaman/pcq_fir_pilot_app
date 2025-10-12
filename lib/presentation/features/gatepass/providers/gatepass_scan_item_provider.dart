@@ -45,7 +45,7 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   }
 
   /// Fetch item verification details by item ID
-  Future<void> fetchItemVerification(String itemId) async {
+  Future<void> fetchItemVerification(String itemId, String gatePassId) async {
     // Set loading state while keeping existing scanned items
     state.whenData((currentState) {
       state = AsyncValue.data(currentState.copyWith(isLoading: true));
@@ -56,7 +56,10 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
       final gatepassRepo = ref.read(gatepassRepoProvider);
 
       // Call item verification API
-      final result = await gatepassRepo.getItemVerification(itemCode: itemId);
+      final result = await gatepassRepo.getItemVerification(
+        itemCode: itemId,
+        gatePassId: gatePassId,
+      );
 
       // Handle API response
       if (result is ApiSuccess<ItemVerificationResponse>) {

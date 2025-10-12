@@ -57,7 +57,7 @@ class _GatePassScanItemsScreenState
     // Call the provider to fetch item verification
     await ref
         .read(gatePassScanItemProvider.notifier)
-        .fetchItemVerification(itemId);
+        .fetchItemVerification(itemId, widget.gatePass.id);
   }
 
   /// Get count of verified items
