@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 
@@ -45,40 +46,33 @@ class CustomCachedNetworkImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: borderRadius,
         child: imageUrl != null && imageUrl!.isNotEmpty
-            ? Image.network(
-                'https://pcq.gstsa1.org/api$imageUrl',
+            ? CachedNetworkImage(
+                imageUrl: imageUrl!.startsWith('http')
+                    ? imageUrl!
+                    : 'https://pcq.gstsa1.org$imageUrl',
                 fit: fit,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: backgroundColor ?? AppColors.kBackgroundColor,
+                placeholder: (context, url) => Container(
+                  color: backgroundColor ?? AppColors.kBackgroundColor,
+                  child: Center(
                     child:
-                        errorWidget ??
-                        const Icon(
-                          Icons.error_outline,
-                          color: AppColors.kTextSecondaryColor,
-                        ),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: backgroundColor ?? AppColors.kBackgroundColor,
-                    child: Center(
-                      child:
-                          placeholderWidget ??
-                          CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                : null,
-                            strokeWidth: 2,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppColors.kPrimaryColor,
-                            ),
+                        placeholderWidget ??
+                        const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.kPrimaryColor,
                           ),
-                    ),
-                  );
-                },
+                        ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: backgroundColor ?? AppColors.kBackgroundColor,
+                  child:
+                      errorWidget ??
+                      const Icon(
+                        Icons.error_outline,
+                        color: AppColors.kTextSecondaryColor,
+                      ),
+                ),
               )
             : Container(
                 color: backgroundColor ?? AppColors.kBackgroundColor,

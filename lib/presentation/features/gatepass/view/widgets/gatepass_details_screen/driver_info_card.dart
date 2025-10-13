@@ -36,7 +36,7 @@ class GatePassDriverInfoCard extends StatelessWidget {
             children: [
               // Driver Image
               CustomCachedNetworkImage(
-                imageUrl: "https://pcq.gstsa1.org${driver.photoUrl}",
+                imageUrl: driver.photoUrl,
                 width: 100,
                 height: 100,
                 borderRadius: BorderRadius.circular(50),

@@ -37,7 +37,7 @@ class GatePassVehicleInfoCard extends StatelessWidget {
             children: [
               // Vehicle Image
               CustomCachedNetworkImage(
-                imageUrl: "https://pcq.gstsa1.org${vehicle.imageUrl}",
+                imageUrl: vehicle.imageUrl,
                 width: double.infinity,
                 height: 150,
                 borderRadius: BorderRadius.circular(12),
