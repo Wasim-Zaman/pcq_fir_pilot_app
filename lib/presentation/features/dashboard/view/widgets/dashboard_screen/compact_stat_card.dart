@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 
 /// Compact stat card widget for grid layout
 class CompactStatCard extends StatelessWidget {
@@ -20,7 +21,7 @@ class CompactStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.kSurfaceColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -61,7 +62,7 @@ class CompactStatCard extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 13,
-              color: Colors.grey[600],
+              color: AppColors.kTextSecondaryColor,
               fontWeight: FontWeight.w500,
             ),
             maxLines: 2,

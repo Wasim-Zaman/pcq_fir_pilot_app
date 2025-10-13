@@ -63,7 +63,7 @@ class DashboardContent extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppColors.kBlack87Color,
               ),
             ),
 
@@ -110,13 +110,13 @@ class DashboardContent extends ConsumerWidget {
                   title: 'Approved',
                   value: state.analytics?.summary.approved.toString() ?? '0',
                   icon: Iconsax.verify5,
-                  color: Colors.green,
+                  color: AppColors.kSuccessColor,
                 ),
                 CompactStatCard(
                   title: 'Arrived',
                   value: state.analytics?.summary.arrived.toString() ?? '0',
                   icon: Iconsax.location,
-                  color: Colors.purple,
+                  color: AppColors.kPurpleColor,
                 ),
                 CompactStatCard(
                   title: 'Rejected',
@@ -128,7 +128,7 @@ class DashboardContent extends ConsumerWidget {
                   title: 'Cancelled',
                   value: state.analytics?.summary.cancelled.toString() ?? '0',
                   icon: Iconsax.slash5,
-                  color: Colors.grey,
+                  color: AppColors.kGreyColor,
                 ),
               ],
             ),
@@ -139,7 +139,7 @@ class DashboardContent extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.kSurfaceColor,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -172,7 +172,7 @@ class DashboardContent extends ConsumerWidget {
                           'Average Processing Time',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey,
+                            color: AppColors.kTextSecondaryColor,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

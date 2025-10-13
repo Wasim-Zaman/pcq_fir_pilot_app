@@ -16,7 +16,7 @@ class DailyTrendChart extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.kSurfaceColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -29,7 +29,7 @@ class DailyTrendChart extends StatelessWidget {
         child: const Center(
           child: Text(
             'No trend data available',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: AppColors.kTextSecondaryColor),
           ),
         ),
       );
@@ -38,7 +38,7 @@ class DailyTrendChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.kSurfaceColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -56,13 +56,13 @@ class DailyTrendChart extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: AppColors.kBlack87Color,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             'Gate passes over time',
-            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 14, color: AppColors.kGrey600Color),
           ),
           const SizedBox(height: 24),
           SizedBox(
@@ -74,7 +74,10 @@ class DailyTrendChart extends StatelessWidget {
                   drawVerticalLine: false,
                   horizontalInterval: 1,
                   getDrawingHorizontalLine: (value) {
-                    return FlLine(color: Colors.grey[200]!, strokeWidth: 1);
+                    return FlLine(
+                      color: AppColors.kGrey200Color,
+                      strokeWidth: 1,
+                    );
                   },
                 ),
                 titlesData: FlTitlesData(
@@ -101,7 +104,7 @@ class DailyTrendChart extends StatelessWidget {
                           child: Text(
                             DateFormat('MM/dd').format(date),
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: AppColors.kGrey600Color,
                               fontWeight: FontWeight.w500,
                               fontSize: 10,
                             ),
@@ -119,7 +122,7 @@ class DailyTrendChart extends StatelessWidget {
                         return Text(
                           value.toInt().toString(),
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: AppColors.kGrey600Color,
                             fontWeight: FontWeight.w500,
                             fontSize: 10,
                           ),
@@ -131,8 +134,8 @@ class DailyTrendChart extends StatelessWidget {
                 borderData: FlBorderData(
                   show: true,
                   border: Border(
-                    bottom: BorderSide(color: Colors.grey[300]!),
-                    left: BorderSide(color: Colors.grey[300]!),
+                    bottom: BorderSide(color: AppColors.kGrey300Color),
+                    left: BorderSide(color: AppColors.kGrey300Color),
                   ),
                 ),
                 minX: 0,
@@ -160,7 +163,7 @@ class DailyTrendChart extends StatelessWidget {
                       getDotPainter: (spot, percent, barData, index) {
                         return FlDotCirclePainter(
                           radius: 4,
-                          color: Colors.white,
+                          color: AppColors.kSurfaceColor,
                           strokeWidth: 2,
                           strokeColor: AppColors.kPrimaryColor,
                         );
@@ -181,7 +184,7 @@ class DailyTrendChart extends StatelessWidget {
                         return LineTooltipItem(
                           '${DateFormat('MMM dd').format(date)}\n${touchedSpot.y.toInt()} passes',
                           const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.kSurfaceColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),

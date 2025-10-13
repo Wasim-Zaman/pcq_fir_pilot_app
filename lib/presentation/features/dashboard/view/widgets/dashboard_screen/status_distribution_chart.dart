@@ -15,7 +15,7 @@ class StatusDistributionChart extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.kSurfaceColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -28,7 +28,7 @@ class StatusDistributionChart extends StatelessWidget {
         child: const Center(
           child: Text(
             'No status data available',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: AppColors.kTextSecondaryColor),
           ),
         ),
       );
@@ -42,7 +42,7 @@ class StatusDistributionChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.kSurfaceColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -60,13 +60,16 @@ class StatusDistributionChart extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: AppColors.kBlack87Color,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             'Gate pass status breakdown',
-            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.kTextSecondaryColor,
+            ),
           ),
           const SizedBox(height: 24),
           Row(
@@ -128,7 +131,7 @@ class StatusDistributionChart extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey[700],
+                              color: AppColors.kTextPrimaryColor,
                             ),
                           ),
                         ],
@@ -158,7 +161,7 @@ class StatusDistributionChart extends StatelessWidget {
         titleStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: AppColors.kSurfaceColor,
         ),
       );
     }).toList();
@@ -174,17 +177,17 @@ class StatusDistributionChart extends StatelessWidget {
       case 'IN_TRANSIT':
         return AppColors.kInfoColor;
       case 'ARRIVED':
-        return Colors.purple;
+        return AppColors.kPurpleColor;
       case 'COMPLETED':
         return AppColors.kSuccessColor;
       case 'REJECTED':
         return AppColors.kErrorColor;
       case 'CANCELLED':
-        return Colors.grey;
+        return AppColors.kGreyColor;
       case 'RETURNING':
-        return Colors.orange;
+        return AppColors.kOrangeColor;
       default:
-        return Colors.blueGrey;
+        return AppColors.kBlueGreyColor;
     }
   }
 

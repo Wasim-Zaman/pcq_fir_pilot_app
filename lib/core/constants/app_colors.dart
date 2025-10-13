@@ -31,6 +31,14 @@ class AppColors {
   static const Color kErrorColor = Color(0xFFEF4444);
   static const Color kWarningColor = Color(0xFFF59E0B);
   static const Color kInfoColor = Color(0xFF3B82F6);
+  static const Color kPurpleColor = Color(0xFF9C27B0);
+  static const Color kGreyColor = Color(0xFF9E9E9E);
+  static const Color kOrangeColor = Color(0xFFFF9800);
+  static const Color kBlueGreyColor = Color(0xFF607D8B);
+  static const Color kGrey200Color = Color(0xFFEEEEEE);
+  static const Color kGrey300Color = Color(0xFFE0E0E0);
+  static const Color kGrey600Color = Color(0xFF757575);
+  static const Color kBlack87Color = Color(0xffdd000000);
 
   // Border Colors
   static const Color kBorderColor = Color(0xFFE5E7EB);
