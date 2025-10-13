@@ -148,28 +148,16 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   /// NOTE: updatedItem.id is the verification record ID, not the gate pass item ID
   /// We need to pass the original gatePassItemId to match the correct item
   void updateScannedItem(VerifiedItem updatedItem, String gatePassItemId) {
-    print('🔄 updateScannedItem called');
-    print('   Gate Pass Item ID to match: $gatePassItemId');
-    print('   Updated verification status: ${updatedItem.verificationStatus}');
-    print('   Updated verified quantity: ${updatedItem.verifiedQuantity}');
-
     // Get current state value
     final currentStateValue = state.value;
     if (currentStateValue == null) {
-      print('❌ ERROR: currentStateValue is NULL!');
       return;
     }
-
-    print('   Current items count: ${currentStateValue.scannedItems.length}');
-    print(
-      '   Scanned items IDs: ${currentStateValue.scannedItems.map((i) => i.id).toList()}',
-    );
 
     // Create new list with updated item
     // We compare by the original scanned item ID (gate pass item ID)
     final updatedList = currentStateValue.scannedItems.map((item) {
       if (item.id == gatePassItemId) {
-        print('   ✅ Found item to update: ${item.id}');
         // Keep the original item's ID (gate pass item ID) but update verification fields
         final updated = item.copyWith(
           verificationStatus: updatedItem.verificationStatus,
@@ -178,15 +166,10 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
           hasDiscrepancy: updatedItem.hasDiscrepancy,
           quantityDifference: updatedItem.quantityDifference,
         );
-        print(
-          '   📝 Updated item verification status: ${updated.verificationStatus}',
-        );
         return updated;
       }
       return item;
     }).toList();
-
-    print('   Updated list count: ${updatedList.length}');
 
     // Update state with new list
     state = AsyncValue.data(
@@ -196,11 +179,6 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
         scannedItems: updatedList,
         response: currentStateValue.response,
       ),
-    );
-
-    print('   ✅ State updated successfully');
-    print(
-      '   Verified count: ${updatedList.where((i) => i.verificationStatus.toLowerCase() == 'verified').length}',
     );
   }
 
