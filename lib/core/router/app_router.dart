@@ -16,6 +16,7 @@ import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_v
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/scan_gatepass_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
+import 'package:pcq_fir_pilot_app/services/shared_preferences_service.dart';
 
 import 'app_routes.dart';
 
@@ -133,6 +134,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       // Add more routes as needed
     ],
+    redirect: (context, state) {
+      //if not signed in, go to sign-in page
+      final isLoggedIn = ref
+          .read(sharedPreferencesServiceProvider)
+          .isLoggedIn();
+      final goingToSignIn = state.matchedLocation == kSigninRoute;
+
+      if (!isLoggedIn && !goingToSignIn) {
+        return kSigninRoute;
+      } else if (isLoggedIn && goingToSignIn) {
+        return kDashboardRoute;
+      }
+      return null; // No redirect
+    },
     errorBuilder: (context, state) => CustomScaffold(
       body: Center(
         child: Column(
