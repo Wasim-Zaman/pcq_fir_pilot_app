@@ -83,27 +83,6 @@ class _GatePassItemVerificationScreenState
         );
   }
 
-  /// Get the action type based on gate pass status (same logic as action_button.dart)
-  String _getActionType() {
-    final normalized = widget.gatePass.status.toLowerCase().replaceAll(
-      RegExp(r'[^a-z0-9]'),
-      '',
-    );
-
-    switch (normalized) {
-      case 'approved':
-        return 'Check-Out';
-      case 'intransit':
-        return 'Check-In';
-      case 'arrived':
-        return 'Return-Out';
-      case 'returning':
-        return 'Return-In';
-      default:
-        return 'Start Verification';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final verifyItemState = ref.watch(verifyItemProvider);
@@ -115,8 +94,11 @@ class _GatePassItemVerificationScreenState
     ) {
       next.whenData((state) {
         if (state.isSuccess && state.response != null) {
-          final allItemsProcessed =
-              state.response!.data.verificationSummary.allItemsProcessed;
+          final total = state.response!.data.progress.totalItems;
+          final pendings = state.response!.data.progress.pendingItems;
+          final verified = state.response!.data.progress.verifiedItems;
+
+          final allItemsProcessed = (pendings == 0) && (total == verified);
 
           // Show success message
           CustomSnackbar.showNormal(
@@ -134,10 +116,7 @@ class _GatePassItemVerificationScreenState
             // Navigate to gate pass verification screen using Go Router
             context.push(
               kGatePassVerificationRoute,
-              extra: {
-                'gatePass': widget.gatePass,
-                'actionType': _getActionType(),
-              },
+              extra: {'gatePass': widget.gatePass},
             );
           } else {
             // Go back to scan screen

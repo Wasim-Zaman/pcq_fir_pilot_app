@@ -105,13 +105,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
           final gatePass = extra['gatePass'] as GatePass;
-          final actionType = extra['actionType'] as String;
+
           return MaterialPage(
             key: state.pageKey,
-            child: GatePassVerificationScreen(
-              gatePass: gatePass,
-              actionType: actionType,
-            ),
+            child: GatePassVerificationScreen(gatePass: gatePass),
           );
         },
       ),

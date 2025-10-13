@@ -238,7 +238,7 @@ class ItemVerificationResult {
 class VerifyItemResponse {
   final bool success;
   final String message;
-  final ItemVerificationResult data;
+  final VerificationResponseData data;
 
   VerifyItemResponse({
     required this.success,
@@ -250,7 +250,7 @@ class VerifyItemResponse {
     return VerifyItemResponse(
       success: (json['success'] as bool?) ?? false,
       message: (json['message'] as String?) ?? '',
-      data: ItemVerificationResult.fromJson(
+      data: VerificationResponseData.fromJson(
         json['data'] as Map<String, dynamic>? ?? <String, dynamic>{},
       ),
     );
@@ -258,5 +258,35 @@ class VerifyItemResponse {
 
   Map<String, dynamic> toJson() {
     return {'success': success, 'message': message, 'data': data.toJson()};
+  }
+}
+
+/// Model to correctly map the nested 'data' object in the response.
+class VerificationResponseData {
+  final VerifiedItem verification;
+  final VerificationSummary progress;
+
+  VerificationResponseData({
+    required this.verification,
+    required this.progress,
+  });
+
+  factory VerificationResponseData.fromJson(Map<String, dynamic> json) {
+    return VerificationResponseData(
+      // The JSON has 'verification' and 'progress' fields at the same level.
+      verification: VerifiedItem.fromJson(
+        json['verification'] as Map<String, dynamic>? ?? <String, dynamic>{},
+      ),
+      progress: VerificationSummary.fromJson(
+        json['progress'] as Map<String, dynamic>? ?? <String, dynamic>{},
+      ),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'verification': verification.toJson(),
+      'progress': progress.toJson(),
+    };
   }
 }

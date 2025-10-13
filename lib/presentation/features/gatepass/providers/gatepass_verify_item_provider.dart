@@ -76,7 +76,7 @@ class VerifyItemNotifier extends AsyncNotifier<VerifyItemState> {
         final response = result.data;
 
         // Update the scanned item list with the verified item
-        final verifiedItem = response.data.item;
+        final verifiedItem = response.data.verification;
         ref
             .read(gatePassScanItemProvider.notifier)
             .updateScannedItem(verifiedItem);

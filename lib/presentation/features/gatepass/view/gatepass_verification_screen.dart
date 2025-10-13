@@ -4,21 +4,17 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/action_type_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_verification_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
 class GatePassVerificationScreen extends ConsumerStatefulWidget {
   final GatePass gatePass;
-  final String actionType; // 'Check-Out', 'Check-In', 'Return-Out', 'Return-In'
 
-  const GatePassVerificationScreen({
-    super.key,
-    required this.gatePass,
-    required this.actionType,
-  });
+  const GatePassVerificationScreen({super.key, required this.gatePass});
 
   @override
   ConsumerState<GatePassVerificationScreen> createState() =>
@@ -30,6 +26,15 @@ class _GatePassVerificationScreenState
   final TextEditingController _notesController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _hasShownDialog = false;
+  String? actionType;
+
+  @override
+  void initState() {
+    Future.microtask(() {
+      actionType = ref.read(actionTypeProvider).displayName;
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -39,11 +44,11 @@ class _GatePassVerificationScreenState
 
   @override
   Widget build(BuildContext context) {
-    final scanState = ref.watch(gatePassScanProvider);
+    final scanState = ref.watch(gatePassVerificationProvider);
     final isLoading = scanState.value?.isScanning ?? false;
 
     // Listen to scan state changes for showing dialogs
-    ref.listen<AsyncValue<GatePassScanState>>(gatePassScanProvider, (
+    ref.listen<AsyncValue<GatePassScanState>>(gatePassVerificationProvider, (
       previous,
       next,
     ) {
@@ -55,7 +60,7 @@ class _GatePassVerificationScreenState
         // Show success dialog
         CustomDialog.showScanSuccessDialog(
           context,
-          title: '${widget.actionType} Successful',
+          title: '$actionType Successful',
           message: next.value!.successMessage!,
         );
       } else if (next.value?.error != null && context.mounted) {
@@ -63,14 +68,14 @@ class _GatePassVerificationScreenState
         // Show error dialog
         CustomDialog.showScanErrorDialog(
           context,
-          title: '${widget.actionType} Failed',
+          title: '$actionType Failed',
           message: next.value!.error!,
         );
       }
     });
 
     return CustomScaffold(
-      title: '${widget.actionType} Verification',
+      title: '$actionType Verification',
       showBackButton: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -131,7 +136,7 @@ class _GatePassVerificationScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.actionType,
+                    actionType ?? '',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: _getActionColor(),
@@ -225,7 +230,7 @@ class _GatePassVerificationScreenState
         ),
         8.heightBox,
         Text(
-          'Add optional notes for this ${widget.actionType} action',
+          'Add optional notes for this $actionType action',
           style: Theme.of(
             context,
           ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
@@ -244,7 +249,7 @@ class _GatePassVerificationScreenState
 
   Widget _buildActionButton(bool isLoading) {
     return CustomButton(
-      text: 'Confirm ${widget.actionType}',
+      text: 'Confirm $actionType',
       icon: Icon(_getActionIcon()),
       isLoading: isLoading,
       width: double.infinity,
@@ -256,49 +261,25 @@ class _GatePassVerificationScreenState
     final notes = _notesController.text.trim().isEmpty
         ? null
         : _notesController.text.trim();
-    final scanNotifier = ref.read(gatePassScanProvider.notifier);
 
-    switch (widget.actionType) {
-      case 'Check-Out':
-        scanNotifier.performCheckOut(
+    ref
+        .read(gatePassVerificationProvider.notifier)
+        .verifyGatepass(
           context: context,
           gatePassId: widget.gatePass.id,
           notes: notes,
         );
-        break;
-      case 'Check-In':
-        scanNotifier.performCheckIn(
-          context: context,
-          gatePassId: widget.gatePass.id,
-          notes: notes,
-        );
-        break;
-      case 'Return-Out':
-        scanNotifier.performReturnOut(
-          context: context,
-          gatePassId: widget.gatePass.id,
-          notes: notes,
-        );
-        break;
-      case 'Return-In':
-        scanNotifier.performReturnIn(
-          context: context,
-          gatePassId: widget.gatePass.id,
-          notes: notes,
-        );
-        break;
-    }
   }
 
   Color _getActionColor() {
-    switch (widget.actionType) {
-      case 'Check-Out':
+    switch (actionType) {
+      case 'Check Out':
         return Colors.blue;
-      case 'Check-In':
+      case 'Check In':
         return Colors.green;
-      case 'Return-Out':
+      case 'Return Out':
         return Colors.orange;
-      case 'Return-In':
+      case 'Return In':
         return Colors.purple;
       default:
         return Colors.grey;
@@ -306,14 +287,14 @@ class _GatePassVerificationScreenState
   }
 
   IconData _getActionIcon() {
-    switch (widget.actionType) {
-      case 'Check-Out':
+    switch (actionType) {
+      case 'Check Out':
         return Iconsax.logout;
-      case 'Check-In':
+      case 'Check In':
         return Iconsax.login;
-      case 'Return-Out':
+      case 'Return Out':
         return Iconsax.arrow_left;
-      case 'Return-In':
+      case 'Return In':
         return Iconsax.arrow_right;
       default:
         return Iconsax.verify;
