@@ -40,6 +40,49 @@ class VerifiedItem {
     required this.quantityDifference,
   });
 
+  /// Create a copy of the VerifiedItem with updated fields
+  VerifiedItem copyWith({
+    String? id,
+    int? srNo,
+    String? gatePassId,
+    String? itemId,
+    String? itemCode,
+    String? description,
+    String? uom,
+    int? quantity,
+    String? remarks,
+    String? verificationStatus,
+    int? verifiedQuantity,
+    String? verificationRemarks,
+    DateTime? verifiedAt,
+    String? verifiedById,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? hasDiscrepancy,
+    int? quantityDifference,
+  }) {
+    return VerifiedItem(
+      id: id ?? this.id,
+      srNo: srNo ?? this.srNo,
+      gatePassId: gatePassId ?? this.gatePassId,
+      itemId: itemId ?? this.itemId,
+      itemCode: itemCode ?? this.itemCode,
+      description: description ?? this.description,
+      uom: uom ?? this.uom,
+      quantity: quantity ?? this.quantity,
+      remarks: remarks ?? this.remarks,
+      verificationStatus: verificationStatus ?? this.verificationStatus,
+      verifiedQuantity: verifiedQuantity ?? this.verifiedQuantity,
+      verificationRemarks: verificationRemarks ?? this.verificationRemarks,
+      verifiedAt: verifiedAt ?? this.verifiedAt,
+      verifiedById: verifiedById ?? this.verifiedById,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      hasDiscrepancy: hasDiscrepancy ?? this.hasDiscrepancy,
+      quantityDifference: quantityDifference ?? this.quantityDifference,
+    );
+  }
+
   factory VerifiedItem.fromJson(Map<String, dynamic> json) {
     return VerifiedItem(
       id: (json['id'] as String?) ?? '',

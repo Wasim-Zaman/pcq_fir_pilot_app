@@ -75,11 +75,19 @@ class VerifyItemNotifier extends AsyncNotifier<VerifyItemState> {
       if (result is ApiSuccess<VerifyItemResponse>) {
         final response = result.data;
 
+        print('✅ Verify API Success');
+        print('   Gate Pass Item ID: $itemId');
+        print(
+          '   Verification Status: ${response.data.verification.verificationStatus}',
+        );
+
         // Update the scanned item list with the verified item
+        // Pass the original gate pass item ID for matching
         final verifiedItem = response.data.verification;
+        print('🔄 Calling updateScannedItem with gate pass item ID: $itemId');
         ref
             .read(gatePassScanItemProvider.notifier)
-            .updateScannedItem(verifiedItem);
+            .updateScannedItem(verifiedItem, itemId);
 
         state = AsyncValue.data(
           VerifyItemState(
@@ -88,6 +96,8 @@ class VerifyItemNotifier extends AsyncNotifier<VerifyItemState> {
             isSuccess: true,
           ),
         );
+
+        print('✅ Verify state updated to success');
       } else if (result is ApiError<VerifyItemResponse>) {
         // Handle error
         state = AsyncValue.data(

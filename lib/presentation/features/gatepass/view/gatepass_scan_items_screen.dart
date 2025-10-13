@@ -27,6 +27,11 @@ class _GatePassScanItemsScreenState
   final TextEditingController _scanController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _scanController.dispose();
     super.dispose();
@@ -34,9 +39,22 @@ class _GatePassScanItemsScreenState
 
   /// Verify a specific scanned item
   void _verifyItem(VerifiedItem item) {
+    // Check if item is already verified
+    final status = item.verificationStatus.toLowerCase();
+    final isVerified = status == 'verified' || status == 'approved';
+
+    if (isVerified) {
+      // Don't navigate if already verified
+      return;
+    }
+
+    // Navigate to verification screen
     ref
         .read(gatePassScanItemProvider.notifier)
         .handleVerifyItem(context, widget.gatePass, item);
+
+    // The state will be automatically updated by the verifyItemProvider
+    // when the verification is complete
   }
 
   /// Remove a scanned item from the list
@@ -115,8 +133,14 @@ class _GatePassScanItemsScreenState
                                     '${_getVerifiedCount(state.scannedItems)} of ${state.scannedItems.length} verified',
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: AppColors.kTextSecondaryColor,
-                                      fontWeight: FontWeight.w500,
+                                      color:
+                                          _getVerifiedCount(
+                                                state.scannedItems,
+                                              ) ==
+                                              state.scannedItems.length
+                                          ? AppColors.kSuccessColor
+                                          : AppColors.kTextSecondaryColor,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],

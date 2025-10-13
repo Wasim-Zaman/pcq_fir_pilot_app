@@ -106,22 +106,25 @@ class _GatePassItemVerificationScreenState
             state.response?.message ?? 'Item verified successfully',
           );
 
-          // Reset verify item provider state
-          ref.read(verifyItemProvider.notifier).reset();
+          // Important: Wait a frame to ensure state update completes
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            // Reset verify item provider state
+            ref.read(verifyItemProvider.notifier).reset();
 
-          if (allItemsProcessed) {
-            // Clear all the scanned items
-            ref.read(gatePassScanItemProvider.notifier).clearScannedItems();
+            if (allItemsProcessed) {
+              // Clear all the scanned items
+              ref.read(gatePassScanItemProvider.notifier).clearScannedItems();
 
-            // Navigate to gate pass verification screen using Go Router
-            context.push(
-              kGatePassVerificationRoute,
-              extra: {'gatePass': widget.gatePass},
-            );
-          } else {
-            // Go back to scan screen
-            context.pop(true);
-          }
+              // Navigate to gate pass verification screen using Go Router
+              context.push(
+                kGatePassVerificationRoute,
+                extra: {'gatePass': widget.gatePass},
+              );
+            } else {
+              // Go back to scan screen
+              context.pop(true);
+            }
+          });
         } else if (state.error != null) {
           // Show error message
           CustomSnackbar.showError(context, state.error ?? '');

@@ -49,15 +49,24 @@ class ScannedItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isVerified = _isItemVerified();
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.kSurfaceColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.kBorderLightColor, width: 1),
+        border: Border.all(
+          color: isVerified
+              ? AppColors.kSuccessColor.withValues(alpha: 0.3)
+              : AppColors.kBorderLightColor,
+          width: isVerified ? 2 : 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.kHoverColor,
+            color: isVerified
+                ? AppColors.kSuccessColor.withValues(alpha: 0.1)
+                : AppColors.kHoverColor,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -99,18 +108,20 @@ class ScannedItemCard extends StatelessWidget {
                     ),
                   ),
                   8.widthBox,
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.kHighlightColor,
-                      shape: BoxShape.circle,
+                  // Show checkmark only if verified
+                  if (isVerified)
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.kSuccessColor.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: AppColors.kSuccessColor,
+                        size: 24,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.check_circle,
-                      color: AppColors.kSuccessColor,
-                      size: 24,
-                    ),
-                  ),
                 ],
               ),
             ],
@@ -132,10 +143,7 @@ class ScannedItemCard extends StatelessWidget {
           16.heightBox,
 
           // Quantity
-          InfoRow(
-            label: 'Quantity',
-            value: '${item.verifiedQuantity} ${item.uom}',
-          ),
+          InfoRow(label: 'Quantity', value: '${item.quantity} ${item.uom}'),
           12.heightBox,
 
           // UOM
@@ -145,13 +153,31 @@ class ScannedItemCard extends StatelessWidget {
           // Verification Status
           InfoRow(
             label: 'Status',
-            value: item.verificationStatus,
+            value: item.verificationStatus.toUpperCase(),
             valueColor: _getStatusColor(item.verificationStatus),
           ),
+
+          // Show verified quantity if item is verified
+          if (_isItemVerified()) ...[
+            12.heightBox,
+            InfoRow(
+              label: 'Verified Quantity',
+              value: '${item.verifiedQuantity} ${item.uom}',
+            ),
+          ],
 
           if (item.remarks.isNotEmpty) ...[
             12.heightBox,
             InfoRow(label: 'Remarks', value: item.remarks),
+          ],
+
+          // Show verification remarks if item is verified and has remarks
+          if (_isItemVerified() && item.verificationRemarks.isNotEmpty) ...[
+            12.heightBox,
+            InfoRow(
+              label: 'Verification Remarks',
+              value: item.verificationRemarks,
+            ),
           ],
 
           // Action Buttons
@@ -162,6 +188,7 @@ class ScannedItemCard extends StatelessWidget {
             // Show "Already Verified" message if item is verified
             if (_isItemVerified()) ...[
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: AppColors.kSuccessColor.withValues(alpha: 0.1),
@@ -180,11 +207,11 @@ class ScannedItemCard extends StatelessWidget {
                     ),
                     8.widthBox,
                     const Text(
-                      'Already Verified',
+                      'Item Verified',
                       style: TextStyle(
                         color: AppColors.kSuccessColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
                       ),
                     ),
                   ],

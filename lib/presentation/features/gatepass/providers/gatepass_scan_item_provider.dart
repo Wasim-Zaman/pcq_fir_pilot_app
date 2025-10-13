@@ -48,8 +48,29 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   Future<void> fetchItemVerification(String itemId, String gatePassId) async {
     // Set loading state while keeping existing scanned items
     state.whenData((currentState) {
+      // Check if item is already scanned
+      final isAlreadyScanned = currentState.scannedItems.any(
+        (item) => item.itemCode.toLowerCase() == itemId.toLowerCase(),
+      );
+
+      if (isAlreadyScanned) {
+        state = AsyncValue.data(
+          currentState.copyWith(
+            isLoading: false,
+            error: 'Item already scanned',
+          ),
+        );
+        return;
+      }
+
       state = AsyncValue.data(currentState.copyWith(isLoading: true));
     });
+
+    // Early return if already showing error
+    final currentError = state.value?.error;
+    if (currentError != null) {
+      return;
+    }
 
     try {
       // Get gatepass repository
@@ -79,6 +100,7 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
                 isLoading: false,
                 scannedItems: updatedList,
                 response: response,
+                error: null,
               ),
             );
           });
@@ -123,18 +145,63 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   }
 
   /// Update a specific item in the scanned items list after verification
-  void updateScannedItem(VerifiedItem updatedItem) {
-    state.whenData((currentState) {
-      final updatedList = currentState.scannedItems.map((item) {
-        // Find the item by ID and replace it with the updated item
-        if (item.id == updatedItem.id) {
-          return updatedItem;
-        }
-        return item;
-      }).toList();
+  /// NOTE: updatedItem.id is the verification record ID, not the gate pass item ID
+  /// We need to pass the original gatePassItemId to match the correct item
+  void updateScannedItem(VerifiedItem updatedItem, String gatePassItemId) {
+    print('🔄 updateScannedItem called');
+    print('   Gate Pass Item ID to match: $gatePassItemId');
+    print('   Updated verification status: ${updatedItem.verificationStatus}');
+    print('   Updated verified quantity: ${updatedItem.verifiedQuantity}');
 
-      state = AsyncValue.data(currentState.copyWith(scannedItems: updatedList));
-    });
+    // Get current state value
+    final currentStateValue = state.value;
+    if (currentStateValue == null) {
+      print('❌ ERROR: currentStateValue is NULL!');
+      return;
+    }
+
+    print('   Current items count: ${currentStateValue.scannedItems.length}');
+    print(
+      '   Scanned items IDs: ${currentStateValue.scannedItems.map((i) => i.id).toList()}',
+    );
+
+    // Create new list with updated item
+    // We compare by the original scanned item ID (gate pass item ID)
+    final updatedList = currentStateValue.scannedItems.map((item) {
+      if (item.id == gatePassItemId) {
+        print('   ✅ Found item to update: ${item.id}');
+        // Keep the original item's ID (gate pass item ID) but update verification fields
+        final updated = item.copyWith(
+          verificationStatus: updatedItem.verificationStatus,
+          verifiedQuantity: updatedItem.verifiedQuantity,
+          verificationRemarks: updatedItem.verificationRemarks,
+          hasDiscrepancy: updatedItem.hasDiscrepancy,
+          quantityDifference: updatedItem.quantityDifference,
+        );
+        print(
+          '   📝 Updated item verification status: ${updated.verificationStatus}',
+        );
+        return updated;
+      }
+      return item;
+    }).toList();
+
+    print('   Updated list count: ${updatedList.length}');
+
+    // Update state with new list
+    state = AsyncValue.data(
+      GatePassScanItemState(
+        isLoading: false,
+        error: null,
+        scannedItems: updatedList,
+        response: currentStateValue.response,
+      ),
+    );
+
+    print('   ✅ State updated successfully');
+    print(
+      '   Verified count: ${updatedList.where((i) => i.verificationStatus.toLowerCase() == 'verified').length}',
+    );
   }
 
   /// Reset error state
