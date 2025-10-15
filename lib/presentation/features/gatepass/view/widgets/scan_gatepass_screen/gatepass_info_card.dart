@@ -9,14 +9,18 @@ class GatePassInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.kShadowLightColor,
+            color: isDark
+                ? AppColors.kDarkShadowColor
+                : AppColors.kShadowLightColor,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),

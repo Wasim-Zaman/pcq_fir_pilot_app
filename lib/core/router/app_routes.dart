@@ -26,7 +26,14 @@ const String kManualInputRoute = '/manual-input';
 
 // Verification Routes
 const String kGatePassDetailsRoute = '/gate-pass-details';
-const String kItemVerificationRoute = '/item-verification';
+const String kGatePassDetailsRouteName = 'gate-pass-details';
+
+const String kGatePassScanItemRoute = '/gatepass-scan-item';
+const String kGatePassScanItemRouteName = 'gatepass-scan-item';
+const String kGatePassItemVerificationRoute = '/gatepass-item-verification';
+const String kGatePassItemVerificationRouteName = 'gatepass-item-verification';
+const String kGatePassVerificationRoute = '/gatepass-verification';
+const String kGatePassVerificationRouteName = 'gatepass-verification';
 const String kVerifiedItemsRoute = '/verified-items';
 const String kVerificationFailedRoute = '/verification-failed';
 const String kDocumentVerifiedRoute = '/document-verified';

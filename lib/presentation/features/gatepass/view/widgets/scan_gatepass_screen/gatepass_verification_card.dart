@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 
 import '../../../models/gatepass_models.dart';
@@ -7,13 +8,8 @@ import '../../../models/gatepass_models.dart';
 /// Verification card widget for displaying verification history
 class GatePassVerificationCard extends StatelessWidget {
   final Verification verification;
-  final String Function(DateTime) formatDateTime;
 
-  const GatePassVerificationCard({
-    super.key,
-    required this.verification,
-    required this.formatDateTime,
-  });
+  const GatePassVerificationCard({super.key, required this.verification});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +36,7 @@ class GatePassVerificationCard extends StatelessWidget {
                 verification.scanType.replaceAll('_', ' '),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.kTextPrimaryColor,
+                  // color: AppColors.kTextPrimaryColor,
                 ),
               ),
               Icon(
@@ -55,14 +51,14 @@ class GatePassVerificationCard extends StatelessWidget {
           Text(
             'Scanned by: ${verification.scannedBy.fullName}',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.kTextPrimaryColor,
+              // color: AppColors.kTextPrimaryColor,
             ),
           ),
           4.heightBox,
           Text(
-            'Time: ${formatDateTime(verification.scannedAt)}',
+            'Time: ${verification.scannedAt.toFormattedDateTime()}',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppColors.kTextSecondaryColor,
+              // color: AppColors.kTextSecondaryColor,
             ),
           ),
           if (verification.notes != null && verification.notes!.isNotEmpty) ...[
@@ -71,7 +67,7 @@ class GatePassVerificationCard extends StatelessWidget {
               verification.notes!,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontStyle: FontStyle.italic,
-                color: AppColors.kTextPrimaryColor,
+                // color: AppColors.kTextPrimaryColor,
               ),
             ),
           ],

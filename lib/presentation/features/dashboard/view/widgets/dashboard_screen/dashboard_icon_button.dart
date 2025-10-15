@@ -14,13 +14,17 @@ class DashboardIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: AppColors.kBackgroundColor,
+          color: isDark
+              ? AppColors.kDarkPrimaryDarkColor
+              : AppColors.kBackgroundColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon, size: 20, color: AppColors.kTextPrimaryColor),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
 
 import '../../../models/gatepass_models.dart';
 
@@ -10,14 +12,25 @@ class GatePassItemCard extends StatelessWidget {
 
   const GatePassItemCard({super.key, required this.item});
 
+  /// Show full item details in a dialog
+  void _showItemDetails(BuildContext context) {
+    CustomDialog.showGatePassItemDetailsDialog(context, item: item);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.kBorderLightColor),
+        border: Border.all(
+          color: isDark
+              ? AppColors.kDarkBorderColor
+              : AppColors.kBorderLightColor,
+        ),
       ),
       child: Row(
         children: [
@@ -29,14 +42,14 @@ class GatePassItemCard extends StatelessWidget {
                   item.itemCode,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.kTextPrimaryColor,
+                    // color: AppColors.kTextPrimaryColor,
                   ),
                 ),
                 4.heightBox,
                 Text(
                   item.description,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.kTextSecondaryColor,
+                    // color: AppColors.kTextSecondaryColor,
                   ),
                 ),
                 if (item.remarks != null && item.remarks!.isNotEmpty) ...[
@@ -53,6 +66,24 @@ class GatePassItemCard extends StatelessWidget {
             ),
           ),
           16.widthBox,
+          // Eye icon button
+          InkWell(
+            onTap: () => _showItemDetails(context),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.kPrimaryColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Iconsax.eye,
+                color: AppColors.kPrimaryColor,
+                size: 20,
+              ),
+            ),
+          ),
+          12.widthBox,
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 
 /// Section title widget for organizing content sections
 class SectionTitle extends StatelessWidget {
@@ -14,7 +13,7 @@ class SectionTitle extends StatelessWidget {
       style: const TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
-        color: AppColors.kTextPrimaryColor,
+        // color: AppColors.kTextPrimaryColor,
       ),
     );
   }

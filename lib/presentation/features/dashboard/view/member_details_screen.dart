@@ -51,12 +51,6 @@ class MemberDetailsScreen extends ConsumerWidget {
         return CustomScaffold(
           appBar: AppBar(
             title: const Text('Profile'),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new),
-              onPressed: () => context.pop(),
-            ),
             actions: [
               IconButton(
                 icon: const Icon(Iconsax.logout),

@@ -4,13 +4,13 @@ class DashboardAnalytics {
   final Summary summary;
   final List<StatusDistribution> statusDistribution;
   final List<TypeDistribution> typeDistribution;
-  final List<Last7Days> last7Days;
+  final List<Last7Days> dailyTrend;
 
   const DashboardAnalytics({
     required this.summary,
     required this.statusDistribution,
     required this.typeDistribution,
-    required this.last7Days,
+    required this.dailyTrend,
   });
 
   /// Create DashboardAnalytics from JSON
@@ -23,7 +23,7 @@ class DashboardAnalytics {
       typeDistribution: (json['typeDistribution'] as List<dynamic>)
           .map((e) => TypeDistribution.fromJson(e as Map<String, dynamic>))
           .toList(),
-      last7Days: (json['last7Days'] as List<dynamic>)
+      dailyTrend: (json['dailyTrend'] as List<dynamic>)
           .map((e) => Last7Days.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -35,13 +35,13 @@ class DashboardAnalytics {
       'summary': summary.toJson(),
       'statusDistribution': statusDistribution.map((e) => e.toJson()).toList(),
       'typeDistribution': typeDistribution.map((e) => e.toJson()).toList(),
-      'last7Days': last7Days.map((e) => e.toJson()).toList(),
+      'dailyTrend': dailyTrend.map((e) => e.toJson()).toList(),
     };
   }
 
   @override
   String toString() {
-    return 'DashboardAnalytics(summary: $summary, statusDistribution: $statusDistribution, typeDistribution: $typeDistribution, last7Days: $last7Days)';
+    return 'DashboardAnalytics(summary: $summary, statusDistribution: $statusDistribution, typeDistribution: $typeDistribution, dailyTrend: $dailyTrend)';
   }
 
   @override
@@ -52,7 +52,7 @@ class DashboardAnalytics {
         other.summary == summary &&
         other.statusDistribution == statusDistribution &&
         other.typeDistribution == typeDistribution &&
-        other.last7Days == last7Days;
+        other.dailyTrend == dailyTrend;
   }
 
   @override
@@ -60,30 +60,47 @@ class DashboardAnalytics {
     return summary.hashCode ^
         statusDistribution.hashCode ^
         typeDistribution.hashCode ^
-        last7Days.hashCode;
+        dailyTrend.hashCode;
   }
 }
 
 class Summary {
   final int totalGatePasses;
   final int pendingApprovals;
+  final int approved;
   final int inTransit;
-  final int completedToday;
+  final int arrived;
+  final int completed;
+  final int rejected;
+  final int cancelled;
+  final double averageProcessingTimeHours;
 
   const Summary({
     required this.totalGatePasses,
     required this.pendingApprovals,
+    required this.approved,
     required this.inTransit,
-    required this.completedToday,
+    required this.arrived,
+    required this.completed,
+    required this.rejected,
+    required this.cancelled,
+    required this.averageProcessingTimeHours,
   });
 
   /// Create Summary from JSON
   factory Summary.fromJson(Map<String, dynamic> json) {
     return Summary(
-      totalGatePasses: json['totalGatePasses'] as int,
-      pendingApprovals: json['pendingApprovals'] as int,
-      inTransit: json['inTransit'] as int,
-      completedToday: json['completedToday'] as int,
+      totalGatePasses: json['totalGatePasses'] as int? ?? 0,
+      pendingApprovals: json['pendingApprovals'] as int? ?? 0,
+      approved: json['approved'] as int? ?? 0,
+      inTransit: json['inTransit'] as int? ?? 0,
+      arrived: json['arrived'] as int? ?? 0,
+      completed: json['completed'] as int? ?? 0,
+      rejected: json['rejected'] as int? ?? 0,
+      cancelled: json['cancelled'] as int? ?? 0,
+      averageProcessingTimeHours: (json['averageProcessingTimeHours'] is int)
+          ? (json['averageProcessingTimeHours'] as int).toDouble()
+          : (json['averageProcessingTimeHours'] as double? ?? 0.0),
     );
   }
 
@@ -92,14 +109,19 @@ class Summary {
     return {
       'totalGatePasses': totalGatePasses,
       'pendingApprovals': pendingApprovals,
+      'approved': approved,
       'inTransit': inTransit,
-      'completedToday': completedToday,
+      'arrived': arrived,
+      'completed': completed,
+      'rejected': rejected,
+      'cancelled': cancelled,
+      'averageProcessingTimeHours': averageProcessingTimeHours,
     };
   }
 
   @override
   String toString() {
-    return 'Summary(totalGatePasses: $totalGatePasses, pendingApprovals: $pendingApprovals, inTransit: $inTransit, completedToday: $completedToday)';
+    return 'Summary(totalGatePasses: $totalGatePasses, pendingApprovals: $pendingApprovals, approved: $approved, inTransit: $inTransit, arrived: $arrived, completed: $completed, rejected: $rejected, cancelled: $cancelled, averageProcessingTimeHours: $averageProcessingTimeHours)';
   }
 
   @override
@@ -109,16 +131,26 @@ class Summary {
     return other is Summary &&
         other.totalGatePasses == totalGatePasses &&
         other.pendingApprovals == pendingApprovals &&
+        other.approved == approved &&
         other.inTransit == inTransit &&
-        other.completedToday == completedToday;
+        other.arrived == arrived &&
+        other.completed == completed &&
+        other.rejected == rejected &&
+        other.cancelled == cancelled &&
+        other.averageProcessingTimeHours == averageProcessingTimeHours;
   }
 
   @override
   int get hashCode {
     return totalGatePasses.hashCode ^
         pendingApprovals.hashCode ^
+        approved.hashCode ^
         inTransit.hashCode ^
-        completedToday.hashCode;
+        arrived.hashCode ^
+        completed.hashCode ^
+        rejected.hashCode ^
+        cancelled.hashCode ^
+        averageProcessingTimeHours.hashCode;
   }
 }
 
@@ -131,14 +163,14 @@ class StatusDistribution {
   /// Create StatusDistribution from JSON
   factory StatusDistribution.fromJson(Map<String, dynamic> json) {
     return StatusDistribution(
-      count: json['_count'] as int,
-      status: json['status'] as String,
+      count: json['count'] as int? ?? 0,
+      status: json['status'] as String? ?? '',
     );
   }
 
   /// Convert StatusDistribution to JSON
   Map<String, dynamic> toJson() {
-    return {'_count': count, 'status': status};
+    return {'count': count, 'status': status};
   }
 
   @override
@@ -163,26 +195,26 @@ class StatusDistribution {
 
 class TypeDistribution {
   final int count;
-  final String gatePassType;
+  final String type;
 
-  const TypeDistribution({required this.count, required this.gatePassType});
+  const TypeDistribution({required this.count, required this.type});
 
   /// Create TypeDistribution from JSON
   factory TypeDistribution.fromJson(Map<String, dynamic> json) {
     return TypeDistribution(
-      count: json['_count'] as int,
-      gatePassType: json['gatePassType'] as String,
+      count: json['count'] as int? ?? 0,
+      type: json['type'] as String? ?? '',
     );
   }
 
   /// Convert TypeDistribution to JSON
   Map<String, dynamic> toJson() {
-    return {'_count': count, 'gatePassType': gatePassType};
+    return {'count': count, 'type': type};
   }
 
   @override
   String toString() {
-    return 'TypeDistribution(count: $count, gatePassType: $gatePassType)';
+    return 'TypeDistribution(count: $count, type: $type)';
   }
 
   @override
@@ -191,50 +223,48 @@ class TypeDistribution {
 
     return other is TypeDistribution &&
         other.count == count &&
-        other.gatePassType == gatePassType;
+        other.type == type;
   }
 
   @override
   int get hashCode {
-    return count.hashCode ^ gatePassType.hashCode;
+    return count.hashCode ^ type.hashCode;
   }
 }
 
 class Last7Days {
   final int count;
-  final DateTime gatePassDate;
+  final DateTime date;
 
-  const Last7Days({required this.count, required this.gatePassDate});
+  const Last7Days({required this.count, required this.date});
 
   /// Create Last7Days from JSON
   factory Last7Days.fromJson(Map<String, dynamic> json) {
     return Last7Days(
-      count: json['_count'] as int,
-      gatePassDate: DateTime.parse(json['gatePassDate'] as String),
+      count: json['count'] as int? ?? 0,
+      date: DateTime.parse(json['date'] as String),
     );
   }
 
   /// Convert Last7Days to JSON
   Map<String, dynamic> toJson() {
-    return {'_count': count, 'gatePassDate': gatePassDate.toIso8601String()};
+    return {'count': count, 'date': date.toIso8601String()};
   }
 
   @override
   String toString() {
-    return 'Last7Days(count: $count, gatePassDate: $gatePassDate)';
+    return 'Last7Days(count: $count, date: $date)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Last7Days &&
-        other.count == count &&
-        other.gatePassDate == gatePassDate;
+    return other is Last7Days && other.count == count && other.date == date;
   }
 
   @override
   int get hashCode {
-    return count.hashCode ^ gatePassDate.hashCode;
+    return count.hashCode ^ date.hashCode;
   }
 }

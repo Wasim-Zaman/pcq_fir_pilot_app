@@ -4,9 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
-import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
-import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
 
 import 'widgets/scan_gatepass_screen/scan_option_card.dart';
 
@@ -17,27 +16,19 @@ class ScanGatepassScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text('Scan Gatepass')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              8.heightBox,
-              // Title
-              Text(
-                'Document Input',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              40.heightBox,
               // Scan QR Code Card
               ScanOptionCard(
                 icon: Iconsax.scan,
                 title: 'Scan QR Code',
-                subtitle: 'Use camera to scan\ndocument QR code',
+                subtitle:
+                    'Use PDA (Personal Digital Assistant) to scan\ndocument QR code',
                 onTap: () => _showPassNumberDialog(context, true),
               ),
               24.heightBox,
@@ -59,68 +50,25 @@ class ScanGatepassScreen extends ConsumerWidget {
 
   /// Show dialog for entering pass number
   /// [isScan] determines if this was triggered by scan or manual input
-  void _showPassNumberDialog(BuildContext context, bool isScan) {
-    final controller = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(isScan ? 'Scan Pass Number' : 'Enter Pass Number'),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (isScan)
-                Text(
-                  'Use your PDA device to scan the QR code or enter manually',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
-                ),
-              if (isScan) 16.heightBox,
-              CustomTextField(
-                controller: controller,
-                autofocus: true,
-                labelText: 'Pass Number',
-                hintText: 'e.g., AQPCI-2025000001',
-                prefixIcon: const Icon(Icons.qr_code),
-                textInputAction: TextInputAction.done,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a pass number';
-                  }
-                  return null;
-                },
-                onFieldSubmitted: (value) {
-                  if (formKey.currentState!.validate()) {
-                    Navigator.pop(context);
-                    _navigateToDetails(context, value.trim());
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          CustomButton(
-            text: "Submit",
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                Navigator.pop(context);
-                _navigateToDetails(context, controller.text.trim());
-              }
-            },
-          ),
-        ],
-      ),
+  void _showPassNumberDialog(BuildContext context, bool isScan) async {
+    final passNumber = await CustomDialog.showInputDialog(
+      context,
+      title: isScan ? 'Scan Pass Number' : 'Enter Pass Number',
+      hintText: 'e.g., AQPCI-2025000001',
+      prefixIcon: const Icon(Iconsax.barcode),
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return 'Please enter a pass number';
+        }
+        return null;
+      },
     );
+
+    if (passNumber != null && passNumber.isNotEmpty) {
+      if (context.mounted) {
+        _navigateToDetails(context, passNumber);
+      }
+    }
   }
 
   /// Navigate to gate pass details screen

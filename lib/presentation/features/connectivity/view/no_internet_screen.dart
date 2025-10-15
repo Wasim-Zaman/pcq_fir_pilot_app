@@ -140,7 +140,7 @@ class NoInternetScreen extends ConsumerWidget {
                       Text(
                         'The app will automatically reconnect when internet is available.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.kTextSecondaryColor,
+                          // color: AppColors.kTextSecondaryColor,
                         ),
                         textAlign: TextAlign.center,
                       ),

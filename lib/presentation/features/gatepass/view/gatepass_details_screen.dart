@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import '../models/gatepass_models.dart';
 import '../providers/gatepass_details_provider.dart';
-import 'widgets/gatepass_details_screen/action_button.dart';
 import 'widgets/gatepass_details_screen/additional_info_card.dart';
 import 'widgets/gatepass_details_screen/approval_info_card.dart';
 import 'widgets/gatepass_details_screen/basic_info_card.dart';
@@ -139,14 +142,17 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
             ),
             24.heightBox,
 
-            GatePassVerificationsSection(
-              verifications: gatePass.verifications,
-              formatDateTime: _formatDateTime,
-            ),
+            GatePassVerificationsSection(verifications: gatePass.verifications),
             24.heightBox,
 
-            GatePassActionButton(gatePass: gatePass),
-            24.heightBox,
+            CustomButton(
+              text: "Start Verification",
+              icon: Icon(Iconsax.verify4),
+              backgroundColor: AppColors.kSuccessColor,
+              onPressed: () {
+                context.push(kGatePassScanItemRoute, extra: gatePass);
+              },
+            ),
           ],
         ),
       ),
@@ -160,16 +166,5 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
       message:
           'This screen displays detailed information about the gate pass including items, vehicle, driver, and verification history.',
     );
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    // final day = dateTime.day.toString().padLeft(2, '0');
-    // final month = dateTime.month.toString().padLeft(2, '0');
-    // final year = dateTime.year.toString();
-    // final hour = dateTime.hour.toString().padLeft(2, '0');
-    // final minute = dateTime.minute.toString().padLeft(2, '0');
-    // return '$day/$month/$year $hour:$minute';
-
-    return dateTime.toFormattedDateTime();
   }
 }

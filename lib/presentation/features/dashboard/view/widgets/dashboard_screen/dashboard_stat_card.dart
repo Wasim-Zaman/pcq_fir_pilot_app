@@ -25,7 +25,7 @@ class DashboardStatCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -56,7 +56,7 @@ class DashboardStatCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.kTextPrimaryColor,
+                    // color: AppColors.kTextPrimaryColor,
                   ),
                 ),
               ),
@@ -80,9 +80,9 @@ class DashboardStatCard extends StatelessWidget {
           // Subtitle
           Text(
             subtitle,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
-              color: AppColors.kTextSecondaryColor,
+              // color: AppColors.kTextSecondaryColor,
             ),
           ),
         ],

@@ -39,6 +39,10 @@ class CustomButton extends StatelessWidget {
     final bool effectivelyDisabled =
         isDisabled || isLoading || onPressed == null;
 
+    // Responsive height based on screen size
+    final screenHeight = MediaQuery.of(context).size.height;
+    final responsiveHeight = height ?? (screenHeight < 600 ? 44.0 : 52.0);
+
     Widget buttonChild = Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +72,13 @@ class CustomButton extends StatelessWidget {
       ],
     );
 
+    // Responsive padding
+    final responsivePadding =
+        padding ??
+        (screenHeight < 600
+            ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
+            : const EdgeInsets.symmetric(horizontal: 24, vertical: 16));
+
     Widget button = FilledButton(
       onPressed: effectivelyDisabled ? null : onPressed,
       style: FilledButton.styleFrom(
@@ -77,23 +88,22 @@ class CustomButton extends StatelessWidget {
         foregroundColor: effectivelyDisabled
             ? AppColors.kDisabledTextColor
             : (foregroundColor ?? AppColors.kTextOnPrimaryColor),
-        padding:
-            padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: responsivePadding,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         elevation: effectivelyDisabled ? 0 : 2,
         shadowColor: AppColors.kShadowColor,
-        minimumSize: Size(width ?? double.infinity, height ?? 52),
+        minimumSize: Size(width ?? double.infinity, responsiveHeight),
       ),
       child: buttonChild,
     );
 
-    // Wrap with gradient container if useGradient is true
-    if (useGradient && !effectivelyDisabled) {
+    // Wrap with gradient container if useGradient is true and no custom background color
+    if (useGradient && !effectivelyDisabled && backgroundColor == null) {
       return Container(
         width: width,
-        height: height ?? 52,
+        height: responsiveHeight,
         decoration: BoxDecoration(
           gradient: AppColors.kPrimaryGradient,
           borderRadius: BorderRadius.circular(borderRadius),
@@ -110,21 +120,20 @@ class CustomButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: Colors.transparent,
             foregroundColor: foregroundColor ?? AppColors.kTextOnPrimaryColor,
-            padding:
-                padding ??
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: responsivePadding,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             elevation: 0,
             shadowColor: Colors.transparent,
+            minimumSize: Size(width ?? double.infinity, responsiveHeight),
           ),
           child: buttonChild,
         ),
       );
     }
 
-    return SizedBox(width: width, height: height, child: button);
+    return SizedBox(width: width, height: responsiveHeight, child: button);
   }
 }
 

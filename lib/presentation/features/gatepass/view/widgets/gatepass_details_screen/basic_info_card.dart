@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pcq_fir_pilot_app/core/extensions/datetime_extension.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 
 import '../scan_gatepass_screen/gatepass_info_card.dart';
@@ -24,15 +25,8 @@ class GatePassBasicInfoCard extends StatelessWidget {
         16.heightBox,
         GatePassInfoRow(label: 'Gate Pass Number:', value: passNumber),
         16.heightBox,
-        GatePassInfoRow(label: 'Date:', value: _formatDate(date)),
+        GatePassInfoRow(label: 'Date:', value: date.toFormattedDate()),
       ],
     );
-  }
-
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-    return '$day/$month/$year';
   }
 }

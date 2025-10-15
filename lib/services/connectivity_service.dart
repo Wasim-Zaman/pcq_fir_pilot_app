@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/no_internet/providers/connectivity_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/connectivity/providers/connectivity_provider.dart';
 
 class ConnectivityService {
   final Connectivity _connectivity = Connectivity();
@@ -14,14 +14,21 @@ class ConnectivityService {
     final initialStatus = await _checkConnectivityWithInternet(initialResult);
     yield initialStatus;
 
+    ConnectivityStatus? lastStatus = initialStatus;
+
     // Listen to connectivity changes
     await for (final result in _connectivity.onConnectivityChanged) {
       // When connectivity changes, verify actual internet connectivity
       final status = await _checkConnectivityWithInternet(result);
-      if (kDebugMode) {
-        print('🌐 Connectivity changed: $result -> $status');
+
+      // Only yield if status actually changed (debounce)
+      if (status != lastStatus) {
+        if (kDebugMode) {
+          print('🌐 Connectivity changed: $result -> $status');
+        }
+        lastStatus = status;
+        yield status;
       }
-      yield status;
     }
   }
 
@@ -40,7 +47,7 @@ class ConnectivityService {
     try {
       final result = await InternetAddress.lookup(
         'google.com',
-      ).timeout(const Duration(seconds: 3));
+      ).timeout(const Duration(seconds: 2));
 
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         if (kDebugMode) {

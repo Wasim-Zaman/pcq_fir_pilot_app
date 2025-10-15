@@ -178,8 +178,10 @@ class CustomScaffold extends StatelessWidget {
       title: title != null
           ? Text(
               title!,
-              style: const TextStyle(
-                color: AppColors.kTextPrimaryColor,
+              style: TextStyle(
+                color: isDarkMode
+                    ? AppColors.kDarkTextPrimaryColor
+                    : AppColors.kTextPrimaryColor,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
@@ -206,10 +208,14 @@ class CustomScaffold extends StatelessWidget {
 
   /// Build back button
   Widget _buildBackButton(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return IconButton(
-      icon: const Icon(
+      icon: Icon(
         Icons.arrow_back_ios,
-        color: AppColors.kTextPrimaryColor,
+        color: isDarkMode
+            ? AppColors.kDarkTextPrimaryColor
+            : AppColors.kTextPrimaryColor,
         size: 20,
       ),
       onPressed: () {

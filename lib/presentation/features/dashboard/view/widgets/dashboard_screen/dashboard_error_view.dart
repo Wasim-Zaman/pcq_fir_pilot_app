@@ -38,9 +38,9 @@ class DashboardErrorView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               errorMessage,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
-                color: AppColors.kTextSecondaryColor,
+                // color: AppColors.kTextSecondaryColor,
               ),
               textAlign: TextAlign.center,
             ),

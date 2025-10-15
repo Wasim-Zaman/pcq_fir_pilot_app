@@ -6,13 +6,8 @@ import '../scan_gatepass_screen/gatepass_verification_card.dart';
 
 class GatePassVerificationsSection extends StatelessWidget {
   final List verifications;
-  final String Function(DateTime) formatDateTime;
 
-  const GatePassVerificationsSection({
-    super.key,
-    required this.verifications,
-    required this.formatDateTime,
-  });
+  const GatePassVerificationsSection({super.key, required this.verifications});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +23,6 @@ class GatePassVerificationsSection extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 16.0),
             child: GatePassVerificationCard(
               verification: verification,
-              formatDateTime: formatDateTime,
             ),
           ),
         ),

@@ -23,7 +23,7 @@ class GatePassVehicleInfoCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.kSurfaceColor,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -37,7 +37,7 @@ class GatePassVehicleInfoCard extends StatelessWidget {
             children: [
               // Vehicle Image
               CustomCachedNetworkImage(
-                imageUrl: "https://pcq.gstsa1.org${vehicle.imageUrl}",
+                imageUrl: vehicle.imageUrl,
                 width: double.infinity,
                 height: 150,
                 borderRadius: BorderRadius.circular(12),
