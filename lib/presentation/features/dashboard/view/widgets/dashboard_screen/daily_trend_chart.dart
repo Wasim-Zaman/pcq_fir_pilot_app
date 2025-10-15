@@ -12,11 +12,13 @@ class DailyTrendChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     if (dailyTrend.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.kSurfaceColor,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -29,7 +31,7 @@ class DailyTrendChart extends StatelessWidget {
         child: const Center(
           child: Text(
             'No trend data available',
-            style: TextStyle(color: AppColors.kTextSecondaryColor),
+            // style: TextStyle(color: AppColors.kTextSecondaryColor),
           ),
         ),
       );
@@ -38,7 +40,7 @@ class DailyTrendChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -56,13 +58,15 @@ class DailyTrendChart extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.kBlack87Color,
+              // color: isDark
+              //     ? AppColors.kDarkTextPrimaryColor
+              //     : const Color.fromARGB(221, 20, 11, 11),
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          const Text(
             'Gate passes over time',
-            style: TextStyle(fontSize: 14, color: AppColors.kGrey600Color),
+            // style: TextStyle(fontSize: 14, color: AppColors.kGrey600Color),
           ),
           const SizedBox(height: 24),
           SizedBox(
@@ -75,7 +79,9 @@ class DailyTrendChart extends StatelessWidget {
                   horizontalInterval: 1,
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
-                      color: AppColors.kGrey200Color,
+                      color: isDark
+                          ? AppColors.kGrey600Color
+                          : AppColors.kGrey200Color,
                       strokeWidth: 1,
                     );
                   },
@@ -122,7 +128,7 @@ class DailyTrendChart extends StatelessWidget {
                         return Text(
                           value.toInt().toString(),
                           style: TextStyle(
-                            color: AppColors.kGrey600Color,
+                            // color: AppColors.kGrey600Color,
                             fontWeight: FontWeight.w500,
                             fontSize: 10,
                           ),
@@ -134,8 +140,16 @@ class DailyTrendChart extends StatelessWidget {
                 borderData: FlBorderData(
                   show: true,
                   border: Border(
-                    bottom: BorderSide(color: AppColors.kGrey300Color),
-                    left: BorderSide(color: AppColors.kGrey300Color),
+                    bottom: BorderSide(
+                      color: isDark
+                          ? AppColors.kGrey600Color
+                          : AppColors.kGrey300Color,
+                    ),
+                    left: BorderSide(
+                      color: isDark
+                          ? AppColors.kGrey600Color
+                          : AppColors.kGrey300Color,
+                    ),
                   ),
                 ),
                 minX: 0,
@@ -163,7 +177,9 @@ class DailyTrendChart extends StatelessWidget {
                       getDotPainter: (spot, percent, barData, index) {
                         return FlDotCirclePainter(
                           radius: 4,
-                          color: AppColors.kSurfaceColor,
+                          color: isDark
+                              ? AppColors.kDarkSurfaceColor
+                              : AppColors.kSurfaceColor,
                           strokeWidth: 2,
                           strokeColor: AppColors.kPrimaryColor,
                         );
@@ -183,8 +199,10 @@ class DailyTrendChart extends StatelessWidget {
                         final date = dailyTrend[touchedSpot.x.toInt()].date;
                         return LineTooltipItem(
                           '${DateFormat('MMM dd').format(date)}\n${touchedSpot.y.toInt()} passes',
-                          const TextStyle(
-                            color: AppColors.kSurfaceColor,
+                          TextStyle(
+                            color: isDark
+                                ? AppColors.kDarkSurfaceColor
+                                : AppColors.kSurfaceColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),

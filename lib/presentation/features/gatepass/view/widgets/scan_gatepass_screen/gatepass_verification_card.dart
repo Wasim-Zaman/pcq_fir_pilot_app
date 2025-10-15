@@ -36,7 +36,7 @@ class GatePassVerificationCard extends StatelessWidget {
                 verification.scanType.replaceAll('_', ' '),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.kTextPrimaryColor,
+                  // color: AppColors.kTextPrimaryColor,
                 ),
               ),
               Icon(
@@ -51,14 +51,14 @@ class GatePassVerificationCard extends StatelessWidget {
           Text(
             'Scanned by: ${verification.scannedBy.fullName}',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.kTextPrimaryColor,
+              // color: AppColors.kTextPrimaryColor,
             ),
           ),
           4.heightBox,
           Text(
             'Time: ${verification.scannedAt.toFormattedDateTime()}',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppColors.kTextSecondaryColor,
+              // color: AppColors.kTextSecondaryColor,
             ),
           ),
           if (verification.notes != null && verification.notes!.isNotEmpty) ...[
@@ -67,7 +67,7 @@ class GatePassVerificationCard extends StatelessWidget {
               verification.notes!,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontStyle: FontStyle.italic,
-                color: AppColors.kTextPrimaryColor,
+                // color: AppColors.kTextPrimaryColor,
               ),
             ),
           ],

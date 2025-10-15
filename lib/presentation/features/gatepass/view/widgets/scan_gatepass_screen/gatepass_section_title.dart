@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 
 /// Section title widget for gate pass details sections
 class GatePassSectionTitle extends StatelessWidget {
@@ -13,7 +12,7 @@ class GatePassSectionTitle extends StatelessWidget {
       title,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
         fontWeight: FontWeight.bold,
-        color: AppColors.kTextPrimaryColor,
+        // color: AppColors.kTextPrimaryColor,
       ),
     );
   }

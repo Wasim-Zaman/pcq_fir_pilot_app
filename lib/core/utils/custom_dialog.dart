@@ -692,6 +692,8 @@ class _DetailSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -708,10 +710,12 @@ class _DetailSection extends StatelessWidget {
             8.widthBox,
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: AppColors.kTextPrimaryColor,
+                color: isDarkMode
+                    ? AppColors.kDarkTextPrimaryColor
+                    : AppColors.kTextPrimaryColor,
               ),
             ),
           ],
@@ -721,9 +725,15 @@ class _DetailSection extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.kBackgroundColor,
+            color: isDarkMode
+                ? AppColors.kDarkBackgroundColor
+                : AppColors.kBackgroundColor,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.kBorderLightColor),
+            border: Border.all(
+              color: isDarkMode
+                  ? AppColors.kDarkBorderColor
+                  : AppColors.kBorderLightColor,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -745,6 +755,8 @@ class _DetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -754,9 +766,11 @@ class _DetailRow extends StatelessWidget {
             flex: 2,
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
-                color: AppColors.kTextSecondaryColor,
+                color: isDarkMode
+                    ? AppColors.kDarkTextSecondaryColor
+                    : AppColors.kTextSecondaryColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -768,7 +782,11 @@ class _DetailRow extends StatelessWidget {
               value,
               style: TextStyle(
                 fontSize: 13,
-                color: valueColor ?? AppColors.kTextPrimaryColor,
+                color:
+                    valueColor ??
+                    (isDarkMode
+                        ? AppColors.kDarkTextPrimaryColor
+                        : AppColors.kTextPrimaryColor),
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.end,

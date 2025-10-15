@@ -19,12 +19,18 @@ class GatePassItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.kBorderLightColor),
+        border: Border.all(
+          color: isDark
+              ? AppColors.kDarkBorderColor
+              : AppColors.kBorderLightColor,
+        ),
       ),
       child: Row(
         children: [
@@ -36,14 +42,14 @@ class GatePassItemCard extends StatelessWidget {
                   item.itemCode,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.kTextPrimaryColor,
+                    // color: AppColors.kTextPrimaryColor,
                   ),
                 ),
                 4.heightBox,
                 Text(
                   item.description,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.kTextSecondaryColor,
+                    // color: AppColors.kTextSecondaryColor,
                   ),
                 ),
                 if (item.remarks != null && item.remarks!.isNotEmpty) ...[

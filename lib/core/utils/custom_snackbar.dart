@@ -27,16 +27,21 @@ class CustomSnackbar {
     String message,
     CustomSnackbarType type,
   ) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkMode
+        ? AppColors.kDarkBackgroundColor
+        : AppColors.kBackgroundColor;
+
     final snackBar = SnackBar(
       content: Row(
         children: [
-          Icon(_getIcon(type), color: AppColors.kBackgroundColor, size: 24),
+          Icon(_getIcon(type), color: textColor, size: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               message,
-              style: const TextStyle(
-                color: AppColors.kBackgroundColor,
+              style: TextStyle(
+                color: textColor,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -52,7 +57,7 @@ class CustomSnackbar {
       action: type == CustomSnackbarType.error
           ? SnackBarAction(
               label: 'Dismiss',
-              textColor: AppColors.kBackgroundColor,
+              textColor: textColor,
               onPressed: () {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
               },

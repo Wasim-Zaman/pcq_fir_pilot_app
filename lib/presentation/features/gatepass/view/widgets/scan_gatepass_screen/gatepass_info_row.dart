@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 
 /// Info row widget for displaying label-value pairs
@@ -18,9 +17,9 @@ class GatePassInfoRow extends StatelessWidget {
           flex: 2,
           child: Text(
             label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.kTextSecondaryColor,
-            ),
+            // style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            //   color: AppColors.kTextSecondaryColor,
+            // ),
           ),
         ),
         8.widthBox,
@@ -30,7 +29,7 @@ class GatePassInfoRow extends StatelessWidget {
             value,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColors.kTextPrimaryColor,
+              // color: AppColors.kTextPrimaryColor,
             ),
             textAlign: TextAlign.right,
           ),

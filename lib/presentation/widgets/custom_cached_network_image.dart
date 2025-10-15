@@ -33,6 +33,13 @@ class CustomCachedNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final effectiveBackgroundColor =
+        backgroundColor ??
+        (isDarkMode
+            ? AppColors.kDarkBackgroundColor
+            : AppColors.kBackgroundColor);
+
     return Container(
       width: width,
       height: height,
@@ -52,7 +59,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
                     : 'https://pcq.gstsa1.org$imageUrl',
                 fit: fit,
                 placeholder: (context, url) => Container(
-                  color: backgroundColor ?? AppColors.kBackgroundColor,
+                  color: effectiveBackgroundColor,
                   child: Center(
                     child:
                         placeholderWidget ??
@@ -65,7 +72,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
                   ),
                 ),
                 errorWidget: (context, url, error) => Container(
-                  color: backgroundColor ?? AppColors.kBackgroundColor,
+                  color: effectiveBackgroundColor,
                   child:
                       errorWidget ??
                       const Icon(
@@ -75,7 +82,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
                 ),
               )
             : Container(
-                color: backgroundColor ?? AppColors.kBackgroundColor,
+                color: effectiveBackgroundColor,
                 child:
                     errorWidget ??
                     const Icon(

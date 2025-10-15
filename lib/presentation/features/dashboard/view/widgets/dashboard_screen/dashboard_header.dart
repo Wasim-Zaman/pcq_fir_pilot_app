@@ -18,10 +18,12 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -35,12 +37,14 @@ class DashboardHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Dashboard Title
-          const Text(
+          Text(
             'Dashboard',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppColors.kTextPrimaryColor,
+              color: isDark
+                  ? AppColors.kDarkTextPrimaryColor
+                  : AppColors.kTextPrimaryColor,
             ),
           ),
 

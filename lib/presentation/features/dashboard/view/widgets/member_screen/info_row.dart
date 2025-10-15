@@ -54,7 +54,7 @@ class InfoRow extends StatelessWidget {
                       valueStyle ??
                       TextStyle(
                         fontSize: 14,
-                        color: valueColor ?? AppColors.kTextPrimaryColor,
+                        // color: valueColor ?? AppColors.kTextPrimaryColor,
                         fontWeight: FontWeight.w600,
                       ),
                 ),

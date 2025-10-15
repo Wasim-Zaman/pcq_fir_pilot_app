@@ -16,7 +16,7 @@ class ScanGatepassScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScaffold(
-      appBar: AppBar(title: const Text('Scan Document')),
+      appBar: AppBar(title: const Text('Scan Gatepass')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -27,7 +27,8 @@ class ScanGatepassScreen extends ConsumerWidget {
               ScanOptionCard(
                 icon: Iconsax.scan,
                 title: 'Scan QR Code',
-                subtitle: 'Use camera to scan\ndocument QR code',
+                subtitle:
+                    'Use PDA (Personal Digital Assistant) to scan\ndocument QR code',
                 onTap: () => _showPassNumberDialog(context, true),
               ),
               24.heightBox,

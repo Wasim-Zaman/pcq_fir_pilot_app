@@ -31,6 +31,7 @@ class DashboardContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedActionType = ref.watch(actionTypeProvider);
     final actionTypes = ref.watch(actionTypeListProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
@@ -63,7 +64,7 @@ class DashboardContent extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.kBlack87Color,
+                // color: AppColors.kBlack87Color,
               ),
             ),
 
@@ -139,7 +140,9 @@ class DashboardContent extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.kSurfaceColor,
+                color: isDark
+                    ? AppColors.kDarkSurfaceColor
+                    : AppColors.kSurfaceColor,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -172,7 +175,7 @@ class DashboardContent extends ConsumerWidget {
                           'Average Processing Time',
                           style: TextStyle(
                             fontSize: 14,
-                            color: AppColors.kTextSecondaryColor,
+                            // color: AppColors.kTextSecondaryColor,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
