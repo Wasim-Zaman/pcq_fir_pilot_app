@@ -89,11 +89,44 @@
     <td colspan="2" align="center"><i>QR code scanning for gate pass verification</i></td>
   </tr>
   <tr>
-    <td><img src="assets/screenshots/light/gatepass/gatepass-2.png" alt="Gate Pass Details - Light" width="300"/></td>
-    <td><img src="assets/screenshots/dark/gatepass/gatepass-2.png" alt="Gate Pass Details - Dark" width="300"/></td>
+    <td><img src="assets/screenshots/light/gatepass/gatepass-2.png" alt="Gate Pass Verification - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass/gatepass-2.png" alt="Gate Pass Verification - Dark" width="300"/></td>
   </tr>
   <tr>
-    <td colspan="2" align="center"><i>Detailed gate pass information and verification</i></td>
+    <td colspan="2" align="center"><i>Gate pass verification interface</i></td>
+  </tr>
+</table>
+
+</details>
+
+<details open>
+<summary><b>📋 Gate Pass Details & Item Management</b></summary>
+
+<table>
+  <tr>
+    <td align="center"><b>Light Mode</b></td>
+    <td align="center"><b>Dark Mode</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/light/gatepass_details/1.png" alt="Gate Pass Details Overview - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass_details/1.png" alt="Gate Pass Details Overview - Dark" width="300"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><i>Comprehensive gate pass details with member information</i></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/light/gatepass_details/2.png" alt="Item List View - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass_details/2.png" alt="Item List View - Dark" width="300"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><i>Detailed item list with verification status</i></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/light/gatepass_details/3.png" alt="Item Verification - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass_details/3.png" alt="Item Verification - Dark" width="300"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><i>Individual item verification and tracking</i></td>
   </tr>
 </table>
 
@@ -227,31 +260,74 @@ lib/
 ├── 🎨 app.dart                         # Root app configuration
 ├── 🔧 core/
 │   ├── constants/
-│   │   └── app_colors.dart            # App-wide color definitions
+│   │   ├── app_colors.dart            # App-wide color definitions
+│   │   └── app_themes.dart            # Theme configurations
+│   ├── extensions/
+│   │   ├── datetime_extension.dart    # DateTime utilities
+│   │   └── sizedbox_extension.dart    # SizedBox extensions
+│   ├── network/
+│   │   └── api_client.dart            # Dio HTTP client setup
 │   ├── router/
 │   │   ├── app_router.dart            # GoRouter configuration
 │   │   └── app_routes.dart            # Route constants
 │   └── utils/                          # Utility functions
+│       ├── custom_dialog.dart         # Reusable dialogs
+│       └── custom_snackbar.dart       # Snackbar utilities
 ├── 🎯 presentation/
 │   ├── features/
 │   │   ├── 🔐 auth/                    # Authentication module
+│   │   │   ├── models/
+│   │   │   │   └── member_model.dart  # Member data model
 │   │   │   ├── providers/
-│   │   │   │   └── signin_provider.dart
+│   │   │   │   ├── signin_provider.dart
+│   │   │   │   └── validation_provider.dart
 │   │   │   └── view/
 │   │   │       └── signin_screen.dart
 │   │   ├── 📊 dashboard/               # Dashboard & Analytics
+│   │   │   ├── models/
+│   │   │   │   ├── dashboard_analytics.dart
+│   │   │   │   └── dashboard_state.dart
 │   │   │   ├── providers/
+│   │   │   │   ├── action_type_provider.dart
+│   │   │   │   └── dashboard_provider.dart
 │   │   │   └── view/
 │   │   │       ├── dashboard_screen.dart
-│   │   │       └── member_details_screen.dart
+│   │   │       ├── member_details_screen.dart
+│   │   │       └── widgets/
+│   │   │           ├── dashboard_screen/
+│   │   │           │   ├── compact_stat_card.dart
+│   │   │           │   ├── daily_trend_chart.dart
+│   │   │           │   ├── dashboard_content.dart
+│   │   │           │   ├── dashboard_error_view.dart
+│   │   │           │   ├── dashboard_header.dart
+│   │   │           │   ├── dashboard_icon_button.dart
+│   │   │           │   ├── dashboard_stat_card.dart
+│   │   │           │   └── status_distribution_chart.dart
+│   │   │           └── member_screen/
+│   │   │               ├── action_buttons.dart
+│   │   │               ├── dashboard_screen_widgets.dart
+│   │   │               ├── info_card.dart
+│   │   │               └── info_row.dart
 │   │   ├── 🎫 gatepass/                # Gate Pass Management
+│   │   │   ├── models/
+│   │   │   │   ├── gatepass_models.dart
+│   │   │   │   └── item_model.dart
 │   │   │   ├── providers/
+│   │   │   │   ├── gatepass_details_provider.dart
+│   │   │   │   ├── gatepass_scan_item_provider.dart
+│   │   │   │   ├── gatepass_verification_provider.dart
+│   │   │   │   └── gatepass_verify_item_provider.dart
 │   │   │   └── view/
 │   │   │       ├── scan_gatepass_screen.dart
 │   │   │       ├── gatepass_details_screen.dart
 │   │   │       ├── gatepass_verification_screen.dart
 │   │   │       ├── gatepass_scan_items_screen.dart
-│   │   │       └── gatepass_item_verification_screen.dart
+│   │   │       ├── gatepass_item_verification_screen.dart
+│   │   │       └── widgets/
+│   │   │           ├── gatepass_details_screen/
+│   │   │           ├── gatepass_item_verification_screen/
+│   │   │           ├── gatepass_scan_items_screen/
+│   │   │           └── scan_gatepass_screen/
 │   │   └── 🔌 connectivity/            # Connectivity handling
 │   │       ├── providers/
 │   │       │   └── connectivity_provider.dart
@@ -259,9 +335,13 @@ lib/
 │   │           └── no_internet_screen.dart
 │   └── 🧩 widgets/                     # Reusable widgets
 │       ├── custom_button_widget.dart
+│       ├── custom_cached_network_image.dart
+│       ├── custom_dropdown.dart
 │       ├── custom_scaffold.dart
 │       └── custom_text_field.dart
 ├── 📦 repos/                            # Repository layer
+│   ├── gatepass_repo.dart              # Gate pass data repository
+│   └── member_repo.dart                # Member data repository
 └── 🔧 services/                         # Services layer
     ├── connectivity_service.dart       # Network monitoring
     └── shared_preferences_service.dart # Local storage
@@ -676,6 +756,7 @@ flutter run
 - Ensure you have proper permissions in `AndroidManifest.xml`
 - Check iOS `Info.plist` for network permissions
 - Test on a physical device (emulators may not reflect real network changes)
+
 </details>
 
 <details>
