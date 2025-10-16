@@ -20,11 +20,7 @@ class VerificationStatusSelector extends StatelessWidget {
       children: [
         const Text(
           'Verification Status',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.kTextPrimaryColor,
-          ),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         12.heightBox,
         Row(
@@ -72,10 +68,10 @@ class VerificationStatusSelector extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? color.withValues(alpha: 0.1)
-              : AppColors.kSurfaceColor,
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? color : AppColors.kBorderColor,
+            color: isSelected ? color : Theme.of(context).dividerColor,
             width: isSelected ? 2 : 1,
           ),
         ),

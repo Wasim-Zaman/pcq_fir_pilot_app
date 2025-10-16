@@ -14,9 +14,9 @@ class ItemInfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.kBorderColor),
+        border: Border.all(color: Theme.of(context).dividerColor),
         boxShadow: const [
           BoxShadow(
             color: AppColors.kShadowLightColor,
@@ -48,20 +48,13 @@ class ItemInfoCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Item Details',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.kTextSecondaryColor,
-                      ),
-                    ),
+                    const Text('Item Details', style: TextStyle(fontSize: 12)),
                     4.heightBox,
                     Text(
                       item.itemCode,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.kTextPrimaryColor,
                       ),
                     ),
                   ],
@@ -72,13 +65,7 @@ class ItemInfoCard extends StatelessWidget {
           16.heightBox,
 
           // Description
-          Text(
-            item.description,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.kTextSecondaryColor,
-            ),
-          ),
+          Text(item.description, style: const TextStyle(fontSize: 14)),
           16.heightBox,
 
           // Divider
@@ -106,22 +93,14 @@ class ItemInfoCard extends StatelessWidget {
           flex: 2,
           child: Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.kTextSecondaryColor,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ),
         Expanded(
           flex: 3,
           child: Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.kTextPrimaryColor,
-              fontWeight: FontWeight.w600,
-            ),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
         ),
       ],
