@@ -122,11 +122,44 @@
     <td colspan="2" align="center"><i>Detailed item list with verification status</i></td>
   </tr>
   <tr>
-    <td><img src="assets/screenshots/light/gatepass_details/3.png" alt="Item Verification - Light" width="300"/></td>
-    <td><img src="assets/screenshots/dark/gatepass_details/3.png" alt="Item Verification - Dark" width="300"/></td>
+    <td><img src="assets/screenshots/light/gatepass_details/3.png" alt="Item Details - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass_details/3.png" alt="Item Details - Dark" width="300"/></td>
   </tr>
   <tr>
-    <td colspan="2" align="center"><i>Individual item verification and tracking</i></td>
+    <td colspan="2" align="center"><i>Detailed item information and history</i></td>
+  </tr>
+</table>
+
+</details>
+
+<details open>
+<summary><b>🔍 Item Scanning & Verification Workflow</b></summary>
+
+<table>
+  <tr>
+    <td align="center"><b>Light Mode</b></td>
+    <td align="center"><b>Dark Mode</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/light/gatepass_item_scanning/1.png" alt="Item Scan Initial State - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass_item_scanning/1.png" alt="Item Scan Initial State - Dark" width="300"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><i>Empty scan state ready for QR code scanning</i></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/light/gatepass_item_scanning/2.png" alt="Scanned Items List - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass_item_scanning/2.png" alt="Scanned Items List - Dark" width="300"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><i>Multiple scanned items with verification status tracking</i></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/light/gatepass_item_scanning/3.png" alt="Item Verification Form - Light" width="300"/></td>
+    <td><img src="assets/screenshots/dark/gatepass_item_scanning/3.png" alt="Item Verification Form - Dark" width="300"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><i>Item verification form with status selection and quantity verification</i></td>
   </tr>
 </table>
 
