@@ -50,11 +50,12 @@ class ScannedItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isVerified = _isItemVerified();
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.kSurfaceColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isVerified
@@ -129,17 +130,15 @@ class ScannedItemCard extends StatelessWidget {
           12.heightBox,
 
           // Description
-          Text(
-            item.description,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.kTextSecondaryColor,
-            ),
-          ),
+          Text(item.description, style: TextStyle(fontSize: 14)),
           16.heightBox,
 
           // Divider
-          Divider(color: AppColors.kBorderLightColor),
+          Divider(
+            color: isDarkMode
+                ? AppColors.kBorderLightColor
+                : AppColors.kDarkBorderColor,
+          ),
           16.heightBox,
 
           // Quantity
@@ -183,7 +182,11 @@ class ScannedItemCard extends StatelessWidget {
           // Action Buttons
           if (onVerify != null || onRemove != null) ...[
             16.heightBox,
-            Divider(color: AppColors.kBorderLightColor),
+            Divider(
+              color: isDarkMode
+                  ? AppColors.kBorderLightColor
+                  : AppColors.kDarkBorderColor,
+            ),
             16.heightBox,
             // Show "Already Verified" message if item is verified
             if (_isItemVerified()) ...[
@@ -309,6 +312,7 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -316,11 +320,7 @@ class InfoRow extends StatelessWidget {
           flex: 2,
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.kTextSecondaryColor,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ),
         Expanded(
@@ -329,7 +329,11 @@ class InfoRow extends StatelessWidget {
             value,
             style: TextStyle(
               fontSize: 14,
-              color: valueColor ?? AppColors.kTextPrimaryColor,
+              color:
+                  valueColor ??
+                  (isDarkMode
+                      ? AppColors.kDarkTextPrimaryColor
+                      : AppColors.kTextSecondaryColor),
               fontWeight: FontWeight.w600,
             ),
           ),
