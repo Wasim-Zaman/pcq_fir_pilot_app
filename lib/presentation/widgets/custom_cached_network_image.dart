@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_config.dart';
 
 /// A custom cached network image widget with loading and error states
 class CustomCachedNetworkImage extends StatelessWidget {
@@ -56,7 +57,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
             ? CachedNetworkImage(
                 imageUrl: imageUrl!.startsWith('http')
                     ? imageUrl!
-                    : 'https://pcq.gstsa1.org$imageUrl',
+                    : '${AppConfig.imageBaseUrl}$imageUrl',
                 fit: fit,
                 placeholder: (context, url) => Container(
                   color: effectiveBackgroundColor,

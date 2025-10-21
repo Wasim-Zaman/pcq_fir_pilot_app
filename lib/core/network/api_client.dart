@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pcq_fir_pilot_app/core/constants/app_config.dart';
 
 // ==================== API Response State ====================
 sealed class ApiState<T> {
@@ -70,7 +71,7 @@ class ApiClientConfig {
 // ==================== Dio Instance Provider ====================
 final apiClientConfigProvider = Provider<ApiClientConfig>((ref) {
   return const ApiClientConfig(
-    baseUrl: 'https://pcq.gstsa1.org/api',
+    baseUrl: AppConfig.apiBaseUrl,
     enableLogging: true,
   );
 });
