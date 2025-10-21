@@ -60,9 +60,9 @@ class ApiClientConfig {
 
   const ApiClientConfig({
     required this.baseUrl,
-    this.connectTimeout = const Duration(seconds: 30),
-    this.receiveTimeout = const Duration(seconds: 30),
-    this.sendTimeout = const Duration(seconds: 30),
+    this.connectTimeout = const Duration(minutes: 5),
+    this.receiveTimeout = const Duration(minutes: 5),
+    this.sendTimeout = const Duration(minutes: 5),
     this.headers,
     this.enableLogging = true,
   });

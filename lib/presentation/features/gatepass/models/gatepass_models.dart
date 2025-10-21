@@ -26,16 +26,20 @@ class Location {
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
-      id: json['id'] as String,
-      code: json['code'] as String,
-      name: json['name'] as String,
-      address: json['address'] as String,
-      type: json['type'] as String,
-      contactPerson: json['contactPerson'] as String,
-      phone: json['phone'] as String,
-      status: json['status'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      id: json['id'] as String? ?? '',
+      code: json['code'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      address: json['address'] as String? ?? '',
+      type: json['type'] as String? ?? '',
+      contactPerson: json['contactPerson'] as String? ?? '',
+      phone: json['phone'] as String? ?? '',
+      status: json['status'] as String? ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -83,16 +87,20 @@ class Vehicle {
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
     return Vehicle(
-      id: json['id'] as String,
-      plateNumber: json['plateNumber'] as String,
-      vehicleType: json['vehicleType'] as String,
-      make: json['make'] as String,
-      color: json['color'] as String,
-      imageUrl: json['imageUrl'] as String,
-      ownerCompany: json['ownerCompany'] as String,
-      status: json['status'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      id: json['id'] as String? ?? '',
+      plateNumber: json['plateNumber'] as String? ?? '',
+      vehicleType: json['vehicleType'] as String? ?? '',
+      make: json['make'] as String? ?? '',
+      color: json['color'] as String? ?? '',
+      imageUrl: json['imageUrl'] as String? ?? '',
+      ownerCompany: json['ownerCompany'] as String? ?? '',
+      status: json['status'] as String? ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -136,14 +144,18 @@ class Driver {
 
   factory Driver.fromJson(Map<String, dynamic> json) {
     return Driver(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      licenseNumber: json['licenseNumber'] as String,
-      phone: json['phone'] as String,
-      photoUrl: json['photoUrl'] as String,
-      status: json['status'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      licenseNumber: json['licenseNumber'] as String? ?? '',
+      phone: json['phone'] as String? ?? '',
+      photoUrl: json['photoUrl'] as String? ?? '',
+      status: json['status'] as String? ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
     );
   }
 
@@ -173,9 +185,9 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
+      id: json['id'] as String? ?? '',
+      firstName: json['firstName'] as String? ?? '',
+      lastName: json['lastName'] as String? ?? '',
     );
   }
 
@@ -197,7 +209,7 @@ class GatePassItem {
   final String? remarks;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final dynamic item; // Can be null or an item object
+  final dynamic item;
 
   GatePassItem({
     required this.id,
@@ -216,17 +228,21 @@ class GatePassItem {
 
   factory GatePassItem.fromJson(Map<String, dynamic> json) {
     return GatePassItem(
-      id: json['id'] as String,
-      srNo: json['srNo'] as int,
-      gatePassId: json['gatePassId'] as String,
+      id: json['id'] as String? ?? '',
+      srNo: json['srNo'] as int? ?? 0,
+      gatePassId: json['gatePassId'] as String? ?? '',
       itemId: json['itemId'] as String?,
-      itemCode: json['itemCode'] as String,
-      description: json['description'] as String,
-      uom: json['uom'] as String,
-      quantity: json['quantity'] as int,
+      itemCode: json['itemCode'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      uom: json['uom'] as String? ?? '',
+      quantity: json['quantity'] as int? ?? 0,
       remarks: json['remarks'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
       item: json['item'],
     );
   }
@@ -275,15 +291,19 @@ class Verification {
 
   factory Verification.fromJson(Map<String, dynamic> json) {
     return Verification(
-      id: json['id'] as String,
-      gatePassId: json['gatePassId'] as String,
+      id: json['id'] as String? ?? '',
+      gatePassId: json['gatePassId'] as String? ?? '',
       gatePassItemId: json['gatePassItemId'] as String?,
-      scanType: json['scanType'] as String,
-      scannedAt: DateTime.parse(json['scannedAt'] as String),
-      isVerified: json['isVerified'] as bool,
-      scannedById: json['scannedById'] as String,
+      scanType: json['scanType'] as String? ?? '',
+      scannedAt: json['scannedAt'] != null
+          ? DateTime.parse(json['scannedAt'] as String)
+          : DateTime.now(),
+      isVerified: json['isVerified'] as bool? ?? false,
+      scannedById: json['scannedById'] as String? ?? '',
       notes: json['notes'] as String?,
-      scannedBy: User.fromJson(json['scannedBy'] as Map<String, dynamic>),
+      scannedBy: json['scannedBy'] != null
+          ? User.fromJson(json['scannedBy'] as Map<String, dynamic>)
+          : User(id: '', firstName: '', lastName: ''),
     );
   }
 
@@ -382,25 +402,33 @@ class GatePass {
 
   factory GatePass.fromJson(Map<String, dynamic> json) {
     return GatePass(
-      id: json['id'] as String,
-      passNumber: json['passNumber'] as String,
-      gatePassType: json['gatePassType'] as String,
-      returnable: json['returnable'] as bool,
-      sourceFromId: json['sourceFromId'] as String,
-      destinationToId: json['destinationToId'] as String,
-      senderName: json['senderName'] as String,
-      receiverName: json['receiverName'] as String,
-      vehicleId: json['vehicleId'] as String,
-      driverId: json['driverId'] as String,
-      gatePassDate: DateTime.parse(json['gatePassDate'] as String),
-      validUntil: DateTime.parse(json['validUntil'] as String),
-      status: json['status'] as String,
-      preparedById: json['preparedById'] as String,
-      preparedDate: DateTime.parse(json['preparedDate'] as String),
-      approvedById: json['approvedById'] as String,
-      approvedDate: DateTime.parse(json['approvedDate'] as String),
-      approvalStatus: json['approvalStatus'] as String,
-      approvalRemarks: json['approvalRemarks'] as String,
+      id: json['id'] as String? ?? '',
+      passNumber: json['passNumber'] as String? ?? '',
+      gatePassType: json['gatePassType'] as String? ?? '',
+      returnable: json['returnable'] as bool? ?? false,
+      sourceFromId: json['sourceFromId'] as String? ?? '',
+      destinationToId: json['destinationToId'] as String? ?? '',
+      senderName: json['senderName'] as String? ?? '',
+      receiverName: json['receiverName'] as String? ?? '',
+      vehicleId: json['vehicleId'] as String? ?? '',
+      driverId: json['driverId'] as String? ?? '',
+      gatePassDate: json['gatePassDate'] != null
+          ? DateTime.parse(json['gatePassDate'] as String)
+          : DateTime.now(),
+      validUntil: json['validUntil'] != null
+          ? DateTime.parse(json['validUntil'] as String)
+          : DateTime.now(),
+      status: json['status'] as String? ?? '',
+      preparedById: json['preparedById'] as String? ?? '',
+      preparedDate: json['preparedDate'] != null
+          ? DateTime.parse(json['preparedDate'] as String)
+          : DateTime.now(),
+      approvedById: json['approvedById'] as String? ?? '',
+      approvedDate: json['approvedDate'] != null
+          ? DateTime.parse(json['approvedDate'] as String)
+          : DateTime.now(),
+      approvalStatus: json['approvalStatus'] as String? ?? '',
+      approvalRemarks: json['approvalRemarks'] as String? ?? '',
       securityCheckOut: json['securityCheckOut'] != null
           ? DateTime.parse(json['securityCheckOut'] as String)
           : null,
@@ -416,25 +444,88 @@ class GatePass {
       remarks: json['remarks'] as String?,
       returnedRemarks: json['returnedRemarks'] as String?,
       oracleHeaderId: json['oracleHeaderId'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      sourceFrom: Location.fromJson(json['sourceFrom'] as Map<String, dynamic>),
-      destinationTo: Location.fromJson(
-        json['destinationTo'] as Map<String, dynamic>,
-      ),
-      vehicle: Vehicle.fromJson(json['vehicle'] as Map<String, dynamic>),
-      driver: Driver.fromJson(json['driver'] as Map<String, dynamic>),
-      preparedBy: User.fromJson(json['preparedBy'] as Map<String, dynamic>),
-      approvedBy: User.fromJson(json['approvedBy'] as Map<String, dynamic>),
-      items: (json['items'] as List<dynamic>)
-          .map((item) => GatePassItem.fromJson(item as Map<String, dynamic>))
-          .toList(),
-      verifications: (json['verifications'] as List<dynamic>)
-          .map(
-            (verification) =>
-                Verification.fromJson(verification as Map<String, dynamic>),
-          )
-          .toList(),
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
+      sourceFrom: json['sourceFrom'] != null
+          ? Location.fromJson(json['sourceFrom'] as Map<String, dynamic>)
+          : Location(
+              id: '',
+              code: '',
+              name: '',
+              address: '',
+              type: '',
+              contactPerson: '',
+              phone: '',
+              status: '',
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            ),
+      destinationTo: json['destinationTo'] != null
+          ? Location.fromJson(json['destinationTo'] as Map<String, dynamic>)
+          : Location(
+              id: '',
+              code: '',
+              name: '',
+              address: '',
+              type: '',
+              contactPerson: '',
+              phone: '',
+              status: '',
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            ),
+      vehicle: json['vehicle'] != null
+          ? Vehicle.fromJson(json['vehicle'] as Map<String, dynamic>)
+          : Vehicle(
+              id: '',
+              plateNumber: '',
+              vehicleType: '',
+              make: '',
+              color: '',
+              imageUrl: '',
+              ownerCompany: '',
+              status: '',
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            ),
+      driver: json['driver'] != null
+          ? Driver.fromJson(json['driver'] as Map<String, dynamic>)
+          : Driver(
+              id: '',
+              name: '',
+              licenseNumber: '',
+              phone: '',
+              photoUrl: '',
+              status: '',
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            ),
+      preparedBy: json['preparedBy'] != null
+          ? User.fromJson(json['preparedBy'] as Map<String, dynamic>)
+          : User(id: '', firstName: '', lastName: ''),
+      approvedBy: json['approvedBy'] != null
+          ? User.fromJson(json['approvedBy'] as Map<String, dynamic>)
+          : User(id: '', firstName: '', lastName: ''),
+      items: json['items'] != null
+          ? (json['items'] as List<dynamic>)
+                .map(
+                  (item) => GatePassItem.fromJson(item as Map<String, dynamic>),
+                )
+                .toList()
+          : [],
+      verifications: json['verifications'] != null
+          ? (json['verifications'] as List<dynamic>)
+                .map(
+                  (verification) => Verification.fromJson(
+                    verification as Map<String, dynamic>,
+                  ),
+                )
+                .toList()
+          : [],
     );
   }
 
@@ -496,9 +587,83 @@ class GatePassResponse {
 
   factory GatePassResponse.fromJson(Map<String, dynamic> json) {
     return GatePassResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String,
-      data: GatePass.fromJson(json['data'] as Map<String, dynamic>),
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String? ?? '',
+      data: json['data'] != null
+          ? GatePass.fromJson(json['data'] as Map<String, dynamic>)
+          : GatePass(
+              id: '',
+              passNumber: '',
+              gatePassType: '',
+              returnable: false,
+              sourceFromId: '',
+              destinationToId: '',
+              senderName: '',
+              receiverName: '',
+              vehicleId: '',
+              driverId: '',
+              gatePassDate: DateTime.now(),
+              validUntil: DateTime.now(),
+              status: '',
+              preparedById: '',
+              preparedDate: DateTime.now(),
+              approvedById: '',
+              approvedDate: DateTime.now(),
+              approvalStatus: '',
+              approvalRemarks: '',
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+              sourceFrom: Location(
+                id: '',
+                code: '',
+                name: '',
+                address: '',
+                type: '',
+                contactPerson: '',
+                phone: '',
+                status: '',
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now(),
+              ),
+              destinationTo: Location(
+                id: '',
+                code: '',
+                name: '',
+                address: '',
+                type: '',
+                contactPerson: '',
+                phone: '',
+                status: '',
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now(),
+              ),
+              vehicle: Vehicle(
+                id: '',
+                plateNumber: '',
+                vehicleType: '',
+                make: '',
+                color: '',
+                imageUrl: '',
+                ownerCompany: '',
+                status: '',
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now(),
+              ),
+              driver: Driver(
+                id: '',
+                name: '',
+                licenseNumber: '',
+                phone: '',
+                photoUrl: '',
+                status: '',
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now(),
+              ),
+              preparedBy: User(id: '', firstName: '', lastName: ''),
+              approvedBy: User(id: '', firstName: '', lastName: ''),
+              items: [],
+              verifications: [],
+            ),
     );
   }
 
