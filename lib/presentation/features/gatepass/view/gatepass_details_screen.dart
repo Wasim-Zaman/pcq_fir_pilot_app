@@ -63,22 +63,18 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
         data: (state) {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.error != null) {
+          } else if (state.error != null) {
             return GatePassErrorView(
               error: state.error!,
               onRetry: () => ref
                   .read(gatePassDetailsProvider.notifier)
                   .refreshDetails(widget.passNumber),
             );
-          }
-
-          if (state.gatePass == null) {
+          } else if (state.gatePass == null) {
             return const Center(child: Text('No gate pass found'));
+          } else {
+            return _buildGatePassDetails(state.gatePass!);
           }
-
-          return _buildGatePassDetails(state.gatePass!);
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => GatePassErrorView(

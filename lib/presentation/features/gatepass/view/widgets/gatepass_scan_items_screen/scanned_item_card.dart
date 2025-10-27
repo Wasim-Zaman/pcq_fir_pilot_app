@@ -241,54 +241,54 @@ class ScannedItemCard extends StatelessWidget {
               ],
             ] else ...[
               // Show action buttons for unverified items
-              Row(
-                children: [
-                  if (onRemove != null)
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: isLoading ? null : onRemove,
-                        icon: const Icon(Iconsax.trash, size: 18),
-                        label: const Text('Remove'),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.kErrorColor,
-                          side: const BorderSide(color: AppColors.kErrorColor),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                  if (onRemove != null && onVerify != null) 12.widthBox,
-                  if (onVerify != null)
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: isLoading ? null : onVerify,
-                        icon: isLoading
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    AppColors.kCardColor,
-                                  ),
-                                ),
-                              )
-                            : const Icon(Iconsax.verify5, size: 18),
-                        label: Text(isLoading ? 'Verifying...' : 'Verify'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.kSuccessColor,
-                          foregroundColor: AppColors.kCardColor,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     if (onRemove != null)
+              //       Expanded(
+              //         child: OutlinedButton.icon(
+              //           onPressed: isLoading ? null : onRemove,
+              //           icon: const Icon(Iconsax.trash, size: 18),
+              //           label: const Text('Remove'),
+              //           style: OutlinedButton.styleFrom(
+              //             foregroundColor: AppColors.kErrorColor,
+              //             side: const BorderSide(color: AppColors.kErrorColor),
+              //             padding: const EdgeInsets.symmetric(vertical: 12),
+              //             shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(8),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     if (onRemove != null && onVerify != null) 12.widthBox,
+              //     if (onVerify != null)
+              //       Expanded(
+              //         child: ElevatedButton.icon(
+              //           onPressed: isLoading ? null : onVerify,
+              //           icon: isLoading
+              //               ? const SizedBox(
+              //                   width: 18,
+              //                   height: 18,
+              //                   child: CircularProgressIndicator(
+              //                     strokeWidth: 2,
+              //                     valueColor: AlwaysStoppedAnimation<Color>(
+              //                       AppColors.kCardColor,
+              //                     ),
+              //                   ),
+              //                 )
+              //               : const Icon(Iconsax.verify5, size: 18),
+              //           label: Text(isLoading ? 'Verifying...' : 'Verify'),
+              //           style: ElevatedButton.styleFrom(
+              //             backgroundColor: AppColors.kSuccessColor,
+              //             foregroundColor: AppColors.kCardColor,
+              //             padding: const EdgeInsets.symmetric(vertical: 12),
+              //             shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(8),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //   ],
+              // ),
             ],
           ],
         ],

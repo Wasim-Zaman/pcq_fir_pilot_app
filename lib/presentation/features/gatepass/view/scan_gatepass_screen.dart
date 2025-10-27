@@ -17,32 +17,31 @@ class ScanGatepassScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScaffold(
       appBar: AppBar(title: const Text('Scan Gatepass')),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Scan QR Code Card
-              ScanOptionCard(
-                icon: Iconsax.scan,
-                title: 'Scan QR Code',
-                subtitle:
-                    'Use PDA (Personal Digital Assistant) to scan\ndocument QR code',
-                onTap: () => _showPassNumberDialog(context, true),
-              ),
-              24.heightBox,
-              // Manual Input Card
-              ScanOptionCard(
-                icon: Iconsax.keyboard,
-                title: 'Manual Input',
-                subtitle: 'Enter document\ndetails manually',
-                onTap: () => _showPassNumberDialog(context, false),
-              ),
-              const Spacer(),
-              24.heightBox,
-            ],
-          ),
+      extendBody: true,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Scan QR Code Card
+            ScanOptionCard(
+              icon: Iconsax.scan,
+              title: 'Scan QR Code',
+              subtitle:
+                  'Use PDA (Personal Digital Assistant) to scan\ndocument QR code',
+              onTap: () => _showPassNumberDialog(context, true),
+            ),
+            24.heightBox,
+            // Manual Input Card
+            ScanOptionCard(
+              icon: Iconsax.keyboard,
+              title: 'Manual Input',
+              subtitle: 'Enter document\ndetails manually',
+              onTap: () => _showPassNumberDialog(context, false),
+            ),
+            const Spacer(),
+            24.heightBox,
+          ],
         ),
       ),
     );

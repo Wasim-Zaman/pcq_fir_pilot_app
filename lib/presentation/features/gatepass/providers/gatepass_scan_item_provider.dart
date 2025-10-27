@@ -6,6 +6,7 @@ import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_details_provider.dart';
 import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
 
 /// State class for Item Verification
@@ -58,6 +59,21 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
           currentState.copyWith(
             isLoading: false,
             error: 'Item already scanned',
+          ),
+        );
+        return;
+      }
+
+      final gatePassDetails = ref.read(gatePassDetailsProvider).value;
+      final gatePassItemsList = gatePassDetails?.gatePass?.items.map(
+        (e) => e.itemCode,
+      );
+
+      if (gatePassItemsList?.contains(itemId) == false) {
+        state = AsyncValue.data(
+          currentState.copyWith(
+            isLoading: false,
+            error: 'Item not found in this gate pass',
           ),
         );
         return;
