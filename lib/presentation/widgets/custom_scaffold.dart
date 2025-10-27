@@ -121,6 +121,7 @@ class CustomScaffold extends StatelessWidget {
             statusBarBrightness: Brightness.light,
           ),
       child: Scaffold(
+        
         backgroundColor:
             backgroundColor ??
             (isDarkMode

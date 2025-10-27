@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/action_type_provider.dart';
-import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
-import 'package:pcq_fir_pilot_app/presentation/widgets/custom_dropdown.dart';
 
 import 'compact_stat_card.dart';
 import 'daily_trend_chart.dart';
@@ -29,8 +26,8 @@ class DashboardContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedActionType = ref.watch(actionTypeProvider);
-    final actionTypes = ref.watch(actionTypeListProvider);
+    // final selectedActionType = ref.watch(actionTypeProvider);
+    // final actionTypes = ref.watch(actionTypeListProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -195,38 +192,26 @@ class DashboardContent extends ConsumerWidget {
               ),
             ),
 
-            24.heightBox,
+            // 24.heightBox,
 
-            // Action Type Dropdown
-            CustomDropdown<ActionType>(
-              value: selectedActionType,
-              labelText: 'Select Action Type',
-              hintText: 'Choose an action',
-              prefixIcon: const Icon(Iconsax.setting_2),
-              items: actionTypes.map((actionType) {
-                return DropdownMenuItem<ActionType>(
-                  value: actionType,
-                  child: Text(actionType.displayName),
-                );
-              }).toList(),
-              onChanged: (ActionType? newValue) {
-                if (newValue != null) {
-                  ref.read(actionTypeProvider.notifier).setActionType(newValue);
-                }
-              },
-            ),
-
-            16.heightBox,
-
-            // Scan QR Code Button
-            CustomButton(
-              text: 'Scan QR Code',
-              onPressed: onScanQRCode,
-              width: double.infinity,
-              icon: const Icon(Iconsax.scan_barcode),
-              useGradient: true,
-            ),
-
+            // // Action Type Dropdown
+            // CustomDropdown<ActionType>(
+            //   value: selectedActionType,
+            //   labelText: 'Select Action Type',
+            //   hintText: 'Choose an action',
+            //   prefixIcon: const Icon(Iconsax.setting_2),
+            //   items: actionTypes.map((actionType) {
+            //     return DropdownMenuItem<ActionType>(
+            //       value: actionType,
+            //       child: Text(actionType.displayName),
+            //     );
+            //   }).toList(),
+            //   onChanged: (ActionType? newValue) {
+            //     if (newValue != null) {
+            //       ref.read(actionTypeProvider.notifier).setActionType(newValue);
+            //     }
+            //   },
+            // ),
             16.heightBox,
           ],
         ),

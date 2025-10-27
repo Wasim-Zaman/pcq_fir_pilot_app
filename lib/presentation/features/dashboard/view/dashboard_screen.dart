@@ -83,6 +83,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _handleScanQRCode,
+        label: Text("Scan QR Code"),
+      ),
     );
   }
 }
