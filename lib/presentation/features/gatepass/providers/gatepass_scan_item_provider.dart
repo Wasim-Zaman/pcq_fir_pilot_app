@@ -8,6 +8,7 @@ import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_details_provider.dart';
 import 'package:pcq_fir_pilot_app/repos/gatepass_repo.dart';
+import 'package:pcq_fir_pilot_app/services/shared_preferences_service.dart';
 
 /// State class for Item Verification
 class GatePassScanItemState {
@@ -16,6 +17,7 @@ class GatePassScanItemState {
   final List<VerifiedItem> scannedItems;
   final ItemVerificationResponse? response;
   final String? actionType;
+  final String? message;
 
   const GatePassScanItemState({
     this.isLoading = false,
@@ -23,6 +25,7 @@ class GatePassScanItemState {
     this.scannedItems = const [],
     this.response,
     this.actionType,
+    this.message,
   });
 
   GatePassScanItemState copyWith({
@@ -31,6 +34,7 @@ class GatePassScanItemState {
     List<VerifiedItem>? scannedItems,
     ItemVerificationResponse? response,
     String? actionType,
+    String? message,
   }) {
     return GatePassScanItemState(
       isLoading: isLoading ?? this.isLoading,
@@ -38,6 +42,7 @@ class GatePassScanItemState {
       scannedItems: scannedItems ?? this.scannedItems,
       response: response ?? this.response,
       actionType: actionType ?? this.actionType,
+      message: message ?? this.message,
     );
   }
 }
@@ -239,6 +244,55 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
           kGatePassItemVerificationRoute,
           extra: {'gatePass': gatePass, 'item': item},
         );
+  }
+
+  void handleCheckInOrOut({required String notes}) async {
+    try {
+      state = AsyncValue.data(state.value!.copyWith(isLoading: true));
+      // Get the local storage provider
+      final scannedById = ref
+          .read(sharedPreferencesServiceProvider)
+          .getUserId();
+
+      // Get the gate pass details
+      final gatePassDetails = ref.read(gatePassDetailsProvider).value;
+      final gatePassId = gatePassDetails?.gatePass?.id;
+
+      if (gatePassId == null) {
+        throw Exception('Missing gate pass ID');
+      }
+
+      // Call check-in/check-out API
+      final gatepassRepo = ref.read(gatepassRepoProvider);
+      final result = await gatepassRepo.checkInOrOut(
+        gatePassId: gatePassId,
+        scannedById: scannedById ?? '',
+        notes: notes,
+      );
+
+      if (result is ApiSuccess<Map<String, dynamic>>) {
+        // Clear scanned items after successful check-in/check-out
+        clearScannedItems();
+        // Extract success message from response data
+        final successMessage = result.data['message'] as String?;
+        // Success - you can handle success state if needed
+        state = AsyncValue.data(
+          state.value!.copyWith(
+            error: null,
+            message: successMessage ?? 'Successfully completed the action.',
+          ),
+        );
+      } else if (result is ApiError<Map<String, dynamic>>) {
+        // API error
+        state = AsyncValue.data(
+          state.value!.copyWith(error: result.message, isLoading: false),
+        );
+      }
+    } catch (e) {
+      state = AsyncValue.data(
+        state.value!.copyWith(error: e.toString(), isLoading: false),
+      );
+    }
   }
 }
 

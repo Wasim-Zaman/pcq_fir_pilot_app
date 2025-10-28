@@ -54,6 +54,12 @@ class SharedPreferencesService {
     return _prefs.getBool(PrefsKeys.isLoggedIn) ?? false;
   }
 
+  // User ID retrieval
+  String? getUserId() {
+    final memberData = getMemberData();
+    return memberData != null ? memberData['id'] as String? : null;
+  }
+
   // Clear all data (logout)
   Future<bool> clearAll() async {
     await removeToken();

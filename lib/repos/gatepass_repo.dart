@@ -94,6 +94,18 @@ class GatepassRepo {
           VerifyItemResponse.fromJson(data as Map<String, dynamic>),
     );
   }
+
+  Future<ApiState<Map<String, dynamic>>> checkInOrOut({
+    required String gatePassId,
+    required String scannedById,
+    required String notes,
+  }) async {
+    return _apiClient.post<Map<String, dynamic>>(
+      '/gate-passes/$gatePassId/security-scan',
+      data: {"notes": notes, "scannedById": scannedById},
+      parser: (data) => data as Map<String, dynamic>,
+    );
+  }
 }
 
 // ==================== Gatepass Repository Provider ====================

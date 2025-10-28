@@ -28,6 +28,10 @@ class _GatePassScanItemsScreenState
 
   @override
   void initState() {
+    // clear the state and scanned items when screen is initialized
+    Future.microtask(() {
+      ref.read(gatePassScanItemProvider.notifier).clearScannedItems();
+    });
     super.initState();
   }
 
@@ -96,8 +100,14 @@ class _GatePassScanItemsScreenState
           appBar: AppBar(title: const Text('Scan Items')),
           floatingActionButton: state.actionType != null
               ? FloatingActionButton.extended(
-                  onPressed: () {},
-                  label: Text('Proceed to ${state.actionType}'),
+                  onPressed: () {
+                    ref
+                        .read(gatePassScanItemProvider.notifier)
+                        .handleCheckInOrOut(notes: '');
+                  },
+                  label: itemVerificationState.value?.isLoading == true
+                      ? const CircularProgressIndicator()
+                      : Text('Proceed to ${state.actionType}'),
                   icon: const Icon(Iconsax.document_text),
                 )
               : null,

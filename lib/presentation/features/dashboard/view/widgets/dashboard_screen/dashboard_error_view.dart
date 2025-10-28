@@ -20,39 +20,41 @@ class DashboardErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.error_outline,
-            size: 64,
-            color: AppColors.kErrorColor,
-          ),
-          16.heightBox,
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          8.heightBox,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              errorMessage,
-              style: const TextStyle(
-                fontSize: 14,
-                // color: AppColors.kTextSecondaryColor,
-              ),
-              textAlign: TextAlign.center,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.error_outline,
+              size: 64,
+              color: AppColors.kErrorColor,
             ),
-          ),
-          24.heightBox,
-          CustomButton(
-            text: 'Retry',
-            onPressed: onRetry,
-            icon: const Icon(Iconsax.refresh),
-            width: 200,
-          ),
-        ],
+            16.heightBox,
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            8.heightBox,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Text(
+                errorMessage,
+                style: const TextStyle(
+                  fontSize: 14,
+                  // color: AppColors.kTextSecondaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            24.heightBox,
+            CustomButton(
+              text: 'Retry',
+              onPressed: onRetry,
+              icon: const Icon(Iconsax.refresh),
+              width: 200,
+            ),
+          ],
+        ),
       ),
     );
   }
