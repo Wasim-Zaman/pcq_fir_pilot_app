@@ -126,29 +126,29 @@ class _GatePassScanItemsScreenState
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            4.heightBox,
-                            Row(
-                              children: [
-                                Icon(
-                                  Iconsax.verify5,
-                                  size: 16,
-                                  color: AppColors.kSuccessColor,
-                                ),
-                                4.widthBox,
-                                Text(
-                                  '${_getVerifiedCount(state.scannedItems)} of ${state.scannedItems.length} verified',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        _getVerifiedCount(state.scannedItems) ==
-                                            state.scannedItems.length
-                                        ? AppColors.kSuccessColor
-                                        : AppColors.kTextSecondaryColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // 4.heightBox,
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Iconsax.verify5,
+                            //       size: 16,
+                            //       color: AppColors.kSuccessColor,
+                            //     ),
+                            //     4.widthBox,
+                            //     Text(
+                            //       '${_getVerifiedCount(state.scannedItems)} of ${state.scannedItems.length} verified',
+                            //       style: TextStyle(
+                            //         fontSize: 14,
+                            //         color:
+                            //             _getVerifiedCount(state.scannedItems) ==
+                            //                 state.scannedItems.length
+                            //             ? AppColors.kSuccessColor
+                            //             : AppColors.kTextSecondaryColor,
+                            //         fontWeight: FontWeight.w600,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
