@@ -51,7 +51,7 @@ class _GatePassScanItemsScreenState
     // Navigate to verification screen
     ref
         .read(gatePassScanItemProvider.notifier)
-        .handleVerifyItem(context, widget.gatePass, item);
+        .handleVerifyItem(widget.gatePass, item);
 
     // The state will be automatically updated by the verifyItemProvider
     // when the verification is complete
@@ -94,6 +94,13 @@ class _GatePassScanItemsScreenState
       data: (state) {
         return CustomScaffold(
           appBar: AppBar(title: const Text('Scan Items')),
+          floatingActionButton: state.actionType != null
+              ? FloatingActionButton.extended(
+                  onPressed: () {},
+                  label: Text('Proceed to ${state.actionType}'),
+                  icon: const Icon(Iconsax.document_text),
+                )
+              : null,
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(

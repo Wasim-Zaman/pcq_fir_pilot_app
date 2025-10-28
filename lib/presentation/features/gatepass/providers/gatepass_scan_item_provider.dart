@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/core/network/api_client.dart';
+import 'package:pcq_fir_pilot_app/core/router/app_router.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
@@ -15,12 +15,14 @@ class GatePassScanItemState {
   final String? error;
   final List<VerifiedItem> scannedItems;
   final ItemVerificationResponse? response;
+  final String? actionType;
 
   const GatePassScanItemState({
     this.isLoading = false,
     this.error,
     this.scannedItems = const [],
     this.response,
+    this.actionType,
   });
 
   GatePassScanItemState copyWith({
@@ -28,12 +30,14 @@ class GatePassScanItemState {
     String? error,
     List<VerifiedItem>? scannedItems,
     ItemVerificationResponse? response,
+    String? actionType,
   }) {
     return GatePassScanItemState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
       scannedItems: scannedItems ?? this.scannedItems,
       response: response ?? this.response,
+      actionType: actionType ?? this.actionType,
     );
   }
 }
@@ -47,6 +51,11 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
 
   /// Fetch item verification details by item ID
   Future<void> fetchItemVerification(String itemId, String gatePassId) async {
+    // Get gate pass details to access the list of items
+    final gatePassDetails = ref.read(gatePassDetailsProvider).value;
+    final gatePassItemsList = gatePassDetails?.gatePass?.items.map(
+      (e) => e.itemCode,
+    );
     // Set loading state while keeping existing scanned items
     state.whenData((currentState) {
       // Check if item is already scanned
@@ -63,11 +72,6 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
         );
         return;
       }
-
-      final gatePassDetails = ref.read(gatePassDetailsProvider).value;
-      final gatePassItemsList = gatePassDetails?.gatePass?.items.map(
-        (e) => e.itemCode,
-      );
 
       if (gatePassItemsList?.contains(itemId) == false) {
         state = AsyncValue.data(
@@ -111,12 +115,21 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
           // Add new item to the list
           state.whenData((currentState) {
             final updatedList = [...currentState.scannedItems, verifiedItem];
+
+            // Check if all items have been scanned
+            final scannedAll = gatePassItemsList?.length == updatedList.length;
+
             state = AsyncValue.data(
               currentState.copyWith(
                 isLoading: false,
                 scannedItems: updatedList,
                 response: response,
                 error: null,
+                actionType: scannedAll
+                    ? (gatePassDetails?.gatePass?.status == 'APPROVED'
+                          ? 'Check-Out'
+                          : "Check-In")
+                    : null,
               ),
             );
           });
@@ -218,16 +231,14 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   }
 
   /// Handle verify item button for a specific item
-  void handleVerifyItem(
-    BuildContext context,
-    GatePass gatePass,
-    VerifiedItem item,
-  ) async {
+  void handleVerifyItem(GatePass gatePass, VerifiedItem item) async {
     // Navigate to verification screen using Go Router
-    context.push(
-      kGatePassItemVerificationRoute,
-      extra: {'gatePass': gatePass, 'item': item},
-    );
+    ref
+        .read(goRouterProvider)
+        .push(
+          kGatePassItemVerificationRoute,
+          extra: {'gatePass': gatePass, 'item': item},
+        );
   }
 }
 
