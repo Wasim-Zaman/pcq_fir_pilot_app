@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
@@ -94,23 +95,20 @@ class _GatePassScanItemsScreenState
   Widget build(BuildContext context) {
     final itemVerificationState = ref.watch(gatePassScanItemProvider);
 
+    // add listeners if needed
+    itemVerificationState.whenData((state) {
+      // You can add side effects here if needed
+      if (state.message != null) {
+        CustomSnackbar.showNormal(context, state.message ?? '');
+      } else if (state.error != null) {
+        CustomSnackbar.showError(context, state.error ?? '');
+      }
+    });
+
     return itemVerificationState.when(
       data: (state) {
         return CustomScaffold(
           appBar: AppBar(title: const Text('Scan Items')),
-          floatingActionButton: state.actionType != null
-              ? FloatingActionButton.extended(
-                  onPressed: () {
-                    ref
-                        .read(gatePassScanItemProvider.notifier)
-                        .handleCheckInOrOut(notes: '');
-                  },
-                  label: itemVerificationState.value?.isLoading == true
-                      ? const CircularProgressIndicator()
-                      : Text('Proceed to ${state.actionType}'),
-                  icon: const Icon(Iconsax.document_text),
-                )
-              : null,
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(

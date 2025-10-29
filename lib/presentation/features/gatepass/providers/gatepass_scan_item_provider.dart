@@ -130,6 +130,7 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
                 scannedItems: updatedList,
                 response: response,
                 error: null,
+                message: null,
                 actionType: scannedAll
                     ? (gatePassDetails?.gatePass?.status == 'APPROVED'
                           ? 'Check-Out'
@@ -137,6 +138,11 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
                     : null,
               ),
             );
+
+            // Do the checkInOrOut process if all items are scanned
+            if (scannedAll) {
+              handleCheckInOrOut(notes: 'All items scanned');
+            }
           });
         } else {
           state.whenData((currentState) {
@@ -174,7 +180,9 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
       final updatedList = currentState.scannedItems
           .where((item) => item.id != itemId)
           .toList();
-      state = AsyncValue.data(currentState.copyWith(scannedItems: updatedList));
+      state = AsyncValue.data(
+        currentState.copyWith(scannedItems: updatedList, message: null),
+      );
     });
   }
 
@@ -279,6 +287,8 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
         state = AsyncValue.data(
           state.value!.copyWith(
             error: null,
+            isLoading: false,
+            scannedItems: [], // Clear scanned itemms
             message: successMessage ?? 'Successfully completed the action.',
           ),
         );
