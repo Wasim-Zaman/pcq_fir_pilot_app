@@ -28,6 +28,7 @@ class _GatePassScanItemsScreenState
 
   @override
   void initState() {
+    super.initState();
     // clear the state and scanned items when screen is initialized
     Future.microtask(() {
       ref.read(gatePassScanItemProvider.notifier).clearScannedItems();
@@ -35,7 +36,6 @@ class _GatePassScanItemsScreenState
       // Show scan dialog on screen load
       _scanItemDialog();
     });
-    super.initState();
   }
 
   @override
@@ -85,30 +85,43 @@ class _GatePassScanItemsScreenState
         .fetchItemVerification(itemId, widget.gatePass.id);
   }
 
-  /// Get count of verified items
-  int _getVerifiedCount(List<VerifiedItem> items) {
-    return items.where((item) {
-      final status = item.verificationStatus.toLowerCase();
-      return status == 'verified' || status == 'approved';
-    }).length;
-  }
-
   @override
   Widget build(BuildContext context) {
     final itemVerificationState = ref.watch(gatePassScanItemProvider);
 
-    // add listner and show the input dialog until we scan all items
+    // Listen for state changes and show dialog when appropriate
     ref.listen(gatePassScanItemProvider, (previous, next) {
-      // check if all items are not scanned, then show the scan dialog again
-      if (next is AsyncData<GatePassScanItemState>) {
-        final state = next.value;
-        if (state.scannedItems.length < widget.gatePass.items.length) {
-          // show the scan dialog again
-          Future.microtask(() => _scanItemDialog());
-        } else if (state.error != null) {
-          // Show the snackbar for error
-          CustomSnackbar.showError(context, state.error!);
-        }
+      if (previous is! AsyncData<GatePassScanItemState> ||
+          next is! AsyncData<GatePassScanItemState>) {
+        return;
+      }
+
+      final previousState = previous.value;
+      final currentState = next.value;
+
+      // Check if we just finished loading (was loading, now not loading)
+      final justFinishedLoading =
+          previousState.isLoading && !currentState.isLoading;
+
+      if (!justFinishedLoading) return;
+
+      // Show error if present
+      if (currentState.error != null) {
+        CustomSnackbar.showError(context, currentState.error!);
+        // Reset error and show dialog again
+        ref.read(gatePassScanItemProvider.notifier).resetError();
+        if (currentState.scannedAll) return;
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (context.mounted) _scanItemDialog();
+        });
+        return;
+      }
+
+      // Show scan dialog again if not all items are scanned
+      if (!currentState.scannedAll) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (context.mounted) _scanItemDialog();
+        });
       }
     });
 
@@ -137,29 +150,6 @@ class _GatePassScanItemsScreenState
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            // 4.heightBox,
-                            // Row(
-                            //   children: [
-                            //     Icon(
-                            //       Iconsax.verify5,
-                            //       size: 16,
-                            //       color: AppColors.kSuccessColor,
-                            //     ),
-                            //     4.widthBox,
-                            //     Text(
-                            //       '${_getVerifiedCount(state.scannedItems)} of ${state.scannedItems.length} verified',
-                            //       style: TextStyle(
-                            //         fontSize: 14,
-                            //         color:
-                            //             _getVerifiedCount(state.scannedItems) ==
-                            //                 state.scannedItems.length
-                            //             ? AppColors.kSuccessColor
-                            //             : AppColors.kTextSecondaryColor,
-                            //         fontWeight: FontWeight.w600,
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                           ],
                         ),
                       ),

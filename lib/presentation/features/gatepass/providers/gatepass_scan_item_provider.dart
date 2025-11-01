@@ -62,44 +62,40 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   Future<void> fetchItemVerification(String itemId, String gatePassId) async {
     // Get gate pass details to access the list of items
     final gatePassDetails = ref.read(gatePassDetailsProvider).value;
-    final gatePassItemsList = gatePassDetails?.gatePass?.items.map(
-      (e) => e.itemCode,
+    final gatePassItemsList = gatePassDetails?.gatePass?.items
+        .map((e) => e.itemCode)
+        .toList();
+
+    // Get current state
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    // Check if item is already scanned
+    final isAlreadyScanned = currentState.scannedItems.any(
+      (item) => item.itemCode.toLowerCase() == itemId.toLowerCase(),
     );
-    // Set loading state while keeping existing scanned items
-    state.whenData((currentState) {
-      // Check if item is already scanned
-      final isAlreadyScanned = currentState.scannedItems.any(
-        (item) => item.itemCode.toLowerCase() == itemId.toLowerCase(),
+
+    if (isAlreadyScanned) {
+      state = AsyncValue.data(
+        currentState.copyWith(isLoading: false, error: 'Item already scanned'),
       );
-
-      if (isAlreadyScanned) {
-        state = AsyncValue.data(
-          currentState.copyWith(
-            isLoading: false,
-            error: 'Item already scanned',
-          ),
-        );
-        return;
-      }
-
-      if (gatePassItemsList?.contains(itemId) == false) {
-        state = AsyncValue.data(
-          currentState.copyWith(
-            isLoading: false,
-            error: 'Item not found in this gate pass',
-          ),
-        );
-        return;
-      }
-
-      state = AsyncValue.data(currentState.copyWith(isLoading: true));
-    });
-
-    // Early return if already showing error
-    final currentError = state.value?.error;
-    if (currentError != null) {
       return;
     }
+
+    if (gatePassItemsList?.contains(itemId) == false) {
+      state = AsyncValue.data(
+        currentState.copyWith(
+          isLoading: false,
+          error: 'Item not found in this gate pass',
+        ),
+      );
+      return;
+    }
+
+    // Set loading state
+    state = AsyncValue.data(
+      currentState.copyWith(isLoading: true, error: null),
+    );
 
     try {
       // Get gatepass repository
@@ -121,56 +117,47 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
             : null;
 
         if (verifiedItem != null) {
-          // Add new item to the list
-          state.whenData((currentState) {
-            final updatedList = [...currentState.scannedItems, verifiedItem];
+          final updatedList = [...currentState.scannedItems, verifiedItem];
 
-            // Check if all items have been scanned
-            final scannedAll = gatePassItemsList?.length == updatedList.length;
+          // Check if all items have been scanned
+          final scannedAll = gatePassItemsList?.length == updatedList.length;
 
-            state = AsyncValue.data(
-              currentState.copyWith(
-                isLoading: false,
-                scannedItems: updatedList,
-                response: response,
-                error: null,
-                message: null,
-                scannedAll: scannedAll,
-                actionType: scannedAll
-                    ? (gatePassDetails?.gatePass?.status == 'APPROVED'
-                          ? 'Check-Out'
-                          : "Check-In")
-                    : null,
-              ),
-            );
+          state = AsyncValue.data(
+            currentState.copyWith(
+              isLoading: false,
+              scannedItems: updatedList,
+              response: response,
+              error: null,
+              message: null,
+              scannedAll: scannedAll,
+              actionType: scannedAll
+                  ? (gatePassDetails?.gatePass?.status == 'APPROVED'
+                        ? 'Check-Out'
+                        : "Check-In")
+                  : null,
+            ),
+          );
 
-            // Do the checkInOrOut process if all items are scanned
-            if (scannedAll) {
-              handleCheckInOrOut(notes: 'All items scanned');
-            }
-          });
+          // Do the checkInOrOut process if all items are scanned
+          if (scannedAll) {
+            handleCheckInOrOut(notes: 'All items scanned');
+          }
         } else {
-          state.whenData((currentState) {
-            state = AsyncValue.data(
-              currentState.copyWith(isLoading: false, error: 'No item found'),
-            );
-          });
+          state = AsyncValue.data(
+            currentState.copyWith(isLoading: false, error: 'No item found'),
+          );
         }
       } else if (result is ApiError<ItemVerificationResponse>) {
         // Handle error
-        state.whenData((currentState) {
-          state = AsyncValue.data(
-            currentState.copyWith(isLoading: false, error: result.message),
-          );
-        });
+        state = AsyncValue.data(
+          currentState.copyWith(isLoading: false, error: result.message),
+        );
       }
     } catch (e) {
       // Handle unexpected errors
-      state.whenData((currentState) {
-        state = AsyncValue.data(
-          currentState.copyWith(isLoading: false, error: e.toString()),
-        );
-      });
+      state = AsyncValue.data(
+        currentState.copyWith(isLoading: false, error: e.toString()),
+      );
     }
   }
 

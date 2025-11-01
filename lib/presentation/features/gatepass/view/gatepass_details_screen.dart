@@ -61,7 +61,7 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
       ),
       body: gatePassState.when(
         data: (state) {
-          if (state.isLoading) {
+          if (state.gatePass == null && state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.error != null) {
             return GatePassErrorView(
