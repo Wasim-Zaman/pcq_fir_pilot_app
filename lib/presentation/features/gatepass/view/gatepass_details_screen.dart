@@ -142,7 +142,7 @@ class _GatePassDetailsScreenState extends ConsumerState<GatePassDetailsScreen> {
             24.heightBox,
 
             CustomButton(
-              text: "Start Verification",
+              text: "Star Scanning Items",
               icon: Icon(Iconsax.verify4),
               backgroundColor: AppColors.kSuccessColor,
               onPressed: () {

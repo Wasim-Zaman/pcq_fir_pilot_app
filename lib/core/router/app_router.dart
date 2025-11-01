@@ -13,7 +13,6 @@ import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_d
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_item_verification_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_scan_items_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/gatepass_verification_screen.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/scan_gatepass_screen.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 import 'package:pcq_fir_pilot_app/services/shared_preferences_service.dart';
@@ -57,18 +56,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           return MaterialPage(
             key: state.pageKey,
             child: const MemberDetailsScreen(),
-          );
-        },
-      ),
-
-      // Scan Barcode Route
-      GoRoute(
-        path: kScanGatepassRoute,
-        name: kScanGatepassRouteName,
-        pageBuilder: (context, state) {
-          return MaterialPage(
-            key: state.pageKey,
-            child: const ScanGatepassScreen(),
           );
         },
       ),

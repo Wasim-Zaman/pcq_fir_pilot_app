@@ -18,6 +18,7 @@ class GatePassScanItemState {
   final ItemVerificationResponse? response;
   final String? actionType;
   final String? message;
+  final bool scannedAll;
 
   const GatePassScanItemState({
     this.isLoading = false,
@@ -26,6 +27,7 @@ class GatePassScanItemState {
     this.response,
     this.actionType,
     this.message,
+    this.scannedAll = false,
   });
 
   GatePassScanItemState copyWith({
@@ -35,6 +37,7 @@ class GatePassScanItemState {
     ItemVerificationResponse? response,
     String? actionType,
     String? message,
+    bool? scannedAll,
   }) {
     return GatePassScanItemState(
       isLoading: isLoading ?? this.isLoading,
@@ -43,6 +46,7 @@ class GatePassScanItemState {
       response: response ?? this.response,
       actionType: actionType ?? this.actionType,
       message: message ?? this.message,
+      scannedAll: scannedAll ?? this.scannedAll,
     );
   }
 }
@@ -131,6 +135,7 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
                 response: response,
                 error: null,
                 message: null,
+                scannedAll: scannedAll,
                 actionType: scannedAll
                     ? (gatePassDetails?.gatePass?.status == 'APPROVED'
                           ? 'Check-Out'

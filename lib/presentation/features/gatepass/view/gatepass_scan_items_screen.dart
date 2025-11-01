@@ -8,7 +8,6 @@ import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
-import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scan_section.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scanned_item_card.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
@@ -32,6 +31,9 @@ class _GatePassScanItemsScreenState
     // clear the state and scanned items when screen is initialized
     Future.microtask(() {
       ref.read(gatePassScanItemProvider.notifier).clearScannedItems();
+
+      // Show scan dialog on screen load
+      _scanItemDialog();
     });
     super.initState();
   }
@@ -95,13 +97,18 @@ class _GatePassScanItemsScreenState
   Widget build(BuildContext context) {
     final itemVerificationState = ref.watch(gatePassScanItemProvider);
 
-    // add listeners if needed
-    itemVerificationState.whenData((state) {
-      // You can add side effects here if needed
-      if (state.message != null) {
-        CustomSnackbar.showNormal(context, state.message ?? '');
-      } else if (state.error != null) {
-        CustomSnackbar.showError(context, state.error ?? '');
+    // add listner and show the input dialog until we scan all items
+    ref.listen(gatePassScanItemProvider, (previous, next) {
+      // check if all items are not scanned, then show the scan dialog again
+      if (next is AsyncData<GatePassScanItemState>) {
+        final state = next.value;
+        if (state.scannedItems.length < widget.gatePass.items.length) {
+          // show the scan dialog again
+          Future.microtask(() => _scanItemDialog());
+        } else if (state.error != null) {
+          // Show the snackbar for error
+          CustomSnackbar.showError(context, state.error!);
+        }
       }
     });
 
@@ -114,10 +121,6 @@ class _GatePassScanItemsScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Scan Section
-                ScanSection(onTap: _scanItemDialog),
-                24.heightBox,
-
                 // Scanned Items List Section
                 if (state.scannedItems.isNotEmpty) ...[
                   Row(

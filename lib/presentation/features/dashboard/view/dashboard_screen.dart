@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/dashboard/providers/dashboard_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
@@ -31,9 +32,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     await ref.read(dashboardProvider.notifier).refreshDashboard();
   }
 
-  void _handleScanQRCode() {
-    // Navigate to QR code scanner
-    context.push(kScanGatepassRoute);
+  void _handleScanQRCode() async {
+    // Show dialog for entering pass number
+    final passNumber = await CustomDialog.showInputDialog(
+      context,
+      title: 'Scan Pass Number',
+      hintText: 'e.g., AQPCI-2025000001',
+      prefixIcon: const Icon(Icons.qr_code_scanner),
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return 'Please enter a pass number';
+        }
+        return null;
+      },
+    );
+
+    if (passNumber != null && passNumber.isNotEmpty && mounted) {
+      context.push(kGatePassDetailsRoute, extra: passNumber);
+    }
   }
 
   void _handleNotifications() {
