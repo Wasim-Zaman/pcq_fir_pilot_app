@@ -196,6 +196,54 @@ class _GatePassScanItemsScreenState
                   ),
                 ],
 
+                // Show success message if all items are scanned
+                if (state.scannedAll && state.message != null) ...[
+                  16.heightBox,
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.kSuccessColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.kSuccessColor.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.check_circle_outline,
+                          color: AppColors.kSuccessColor,
+                          size: 24,
+                        ),
+                        12.widthBox,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Success!',
+                                style: TextStyle(
+                                  color: AppColors.kSuccessColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              4.heightBox,
+                              Text(
+                                state.message!,
+                                style: const TextStyle(
+                                  color: AppColors.kSuccessColor,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+
                 // Show error if any
                 if (state.error != null) ...[
                   16.heightBox,

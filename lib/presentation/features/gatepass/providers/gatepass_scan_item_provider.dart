@@ -271,16 +271,13 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
       );
 
       if (result is ApiSuccess<Map<String, dynamic>>) {
-        // Clear scanned items after successful check-in/check-out
-        clearScannedItems();
         // Extract success message from response data
         final successMessage = result.data['message'] as String?;
-        // Success - you can handle success state if needed
+        // Success - keep scanned items visible and show success message
         state = AsyncValue.data(
           state.value!.copyWith(
             error: null,
             isLoading: false,
-            scannedItems: [], // Clear scanned itemms
             message: successMessage ?? 'Successfully completed the action.',
           ),
         );
