@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
+import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
@@ -105,6 +106,20 @@ class _GatePassScanItemsScreenState
 
       if (!justFinishedLoading) return;
 
+      // Show success dialog if all items are scanned and message is available
+      if (currentState.scannedAll && currentState.message != null) {
+        Future.microtask(() {
+          if (context.mounted) {
+            CustomDialog.showScanSuccessDialog(
+              context,
+              title: 'All Items Scanned!',
+              message: currentState.message!,
+            );
+          }
+        });
+        return;
+      }
+
       // Show error if present
       if (currentState.error != null) {
         CustomSnackbar.showError(context, currentState.error!);
@@ -193,54 +208,6 @@ class _GatePassScanItemsScreenState
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
                     child: const EmptyScanState(),
-                  ),
-                ],
-
-                // Show success message if all items are scanned
-                if (state.scannedAll && state.message != null) ...[
-                  16.heightBox,
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.kSuccessColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppColors.kSuccessColor.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.check_circle_outline,
-                          color: AppColors.kSuccessColor,
-                          size: 24,
-                        ),
-                        12.widthBox,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Success!',
-                                style: TextStyle(
-                                  color: AppColors.kSuccessColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              4.heightBox,
-                              Text(
-                                state.message!,
-                                style: const TextStyle(
-                                  color: AppColors.kSuccessColor,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
 
