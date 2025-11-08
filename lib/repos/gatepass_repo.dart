@@ -106,6 +106,19 @@ class GatepassRepo {
       parser: (data) => data as Map<String, dynamic>,
     );
   }
+
+  // Scan individual item - new security scan API
+  Future<ApiState<Map<String, dynamic>>> scanGatePassItem({
+    required String itemId,
+    required String scannedById,
+    String? notes,
+  }) async {
+    return _apiClient.post<Map<String, dynamic>>(
+      '/gate-passes/gate-pass-items/$itemId/security-scan',
+      data: {"scannedById": scannedById, if (notes != null) "notes": notes},
+      parser: (data) => data as Map<String, dynamic>,
+    );
+  }
 }
 
 // ==================== Gatepass Repository Provider ====================

@@ -89,13 +89,14 @@ class CustomDialog {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                // Continue button
+                // Continue button - navigates to dashboard
                 CustomButton(
-                  text: "Continue",
-                  icon: Icon(Iconsax.tick_circle),
+                  text: "Go to Dashboard",
+                  icon: const Icon(Iconsax.tick_circle),
                   width: double.infinity,
                   onPressed: () {
-                    // navigate to dashboard
+                    // Close dialog and navigate to dashboard
+                    Navigator.of(dialogContext).pop();
                     context.go(kDashboardRoute);
                   },
                 ),

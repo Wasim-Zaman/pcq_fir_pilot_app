@@ -66,6 +66,8 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
         .map((e) => e.itemCode)
         .toList();
 
+    debugPrint("Total items in the gatepass : ${gatePassItemsList?.length}");
+
     // Get current state
     final currentState = state.value;
     if (currentState == null) return;
@@ -119,28 +121,65 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
         if (verifiedItem != null) {
           final updatedList = [...currentState.scannedItems, verifiedItem];
 
-          // Check if all items have been scanned
+          // Check if all items have been scanned FIRST
           final scannedAll = gatePassItemsList?.length == updatedList.length;
 
-          state = AsyncValue.data(
-            currentState.copyWith(
-              isLoading: false,
-              scannedItems: updatedList,
-              response: response,
-              error: null,
-              message: null,
-              scannedAll: scannedAll,
-              actionType: scannedAll
-                  ? (gatePassDetails?.gatePass?.status == 'APPROVED'
-                        ? 'Check-Out'
-                        : "Check-In")
-                  : null,
-            ),
+          // Call The security scan API.
+          final scannedById = ref
+              .read(sharedPreferencesServiceProvider)
+              .getUserId();
+
+          final securityScanResult = await gatepassRepo.scanGatePassItem(
+            itemId: verifiedItem.id.toString(),
+            scannedById: scannedById.toString(),
+            notes: "Item scanned during verification",
           );
 
-          // Do the checkInOrOut process if all items are scanned
+          // Handle security scan error only if not all items are scanned
+          if (securityScanResult is ApiError<Map<String, dynamic>> &&
+              !scannedAll) {
+            // Handle security scan error for items that are not the last one
+            state = AsyncValue.data(
+              currentState.copyWith(
+                isLoading: false,
+                scannedItems: updatedList,
+                error: securityScanResult.message,
+                scannedAll: false,
+              ),
+            );
+            return;
+          }
+
           if (scannedAll) {
-            handleCheckInOrOut(notes: 'All items scanned');
+            debugPrint('All items have been scanned.');
+            // All items scanned - show success message (ignore security scan errors)
+            state = AsyncValue.data(
+              currentState.copyWith(
+                isLoading: false,
+                scannedItems: updatedList,
+                response: response,
+                error: null,
+                message:
+                    '🎉 Great! All items have been scanned successfully. You can now proceed to the dashboard.',
+                scannedAll: true,
+                actionType: gatePassDetails?.gatePass?.status == 'APPROVED'
+                    ? 'Check-Out'
+                    : "Check-In",
+              ),
+            );
+          } else {
+            debugPrint('More items to scan.');
+            // More items to scan
+            state = AsyncValue.data(
+              currentState.copyWith(
+                isLoading: false,
+                scannedItems: updatedList,
+                response: response,
+                error: null,
+                message: null,
+                scannedAll: false,
+              ),
+            );
           }
         } else {
           state = AsyncValue.data(

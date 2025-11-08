@@ -108,11 +108,12 @@ class _GatePassScanItemsScreenState
 
       // Show success dialog if all items are scanned and message is available
       if (currentState.scannedAll && currentState.message != null) {
+        debugPrint('All items have been scanned.');
         Future.microtask(() {
           if (context.mounted) {
             CustomDialog.showScanSuccessDialog(
               context,
-              title: 'All Items Scanned!',
+              title: '✅ All Items Scanned!',
               message: currentState.message!,
             );
           }
@@ -126,7 +127,7 @@ class _GatePassScanItemsScreenState
         // Reset error and show dialog again
         ref.read(gatePassScanItemProvider.notifier).resetError();
         if (currentState.scannedAll) return;
-        Future.delayed(const Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(seconds: 1), () {
           if (context.mounted) _scanItemDialog();
         });
         return;
