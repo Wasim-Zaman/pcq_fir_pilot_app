@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_themes.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/connectivity/providers/connectivity_provider.dart';
@@ -116,7 +117,7 @@ class ConnectivityWrapper extends ConsumerWidget {
                       // Refresh the connectivity provider
                       ref.invalidate(connectivityStatusProvider);
                     },
-                    icon: const Icon(Icons.refresh),
+                    icon: const Icon(Iconsax.refresh),
                     text: 'Retry',
                   ),
                 ],

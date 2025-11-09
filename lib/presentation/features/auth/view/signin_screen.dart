@@ -6,8 +6,11 @@ import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
 import 'package:pcq_fir_pilot_app/core/router/app_routes.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/biometric_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/signin_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/auth/provider/validation_provider.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/auth/view/widgets/signin_screen/biometric_auth_button.dart';
+import 'package:pcq_fir_pilot_app/presentation/features/auth/view/widgets/signin_screen/biometric_enable_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_text_field.dart';
@@ -57,6 +60,19 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           }
         }
       });
+    }
+  }
+
+  Future<void> _handleBiometricSignIn() async {
+    final credentials = await ref
+        .read(biometricProvider.notifier)
+        .authenticateAndGetCredentials();
+
+    if (credentials != null && mounted) {
+      // Use biometric credentials to sign in
+      _emailController.text = credentials.email;
+      _passwordController.text = credentials.password;
+      await _handleSignIn();
     }
   }
 
@@ -186,6 +202,23 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     useGradient: true,
                     icon: const Icon(Iconsax.barcode),
                   ),
+
+                  24.heightBox,
+
+                  // Biometric Authentication Button
+                  Center(
+                    child: BiometricAuthButton(
+                      onSuccess: _handleBiometricSignIn,
+                    ),
+                  ),
+
+                  // Biometric Enable Widget (shown after successful login)
+                  if (_emailController.text.isNotEmpty &&
+                      _passwordController.text.isNotEmpty)
+                    BiometricEnableWidget(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    ),
 
                   32.heightBox,
 

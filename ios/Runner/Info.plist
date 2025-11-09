@@ -45,7 +45,9 @@
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
-		<key>UIStatusBarHidden</key>
-		<false/>
-	</dict>
+	<key>UIStatusBarHidden</key>
+	<false/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Authenticate using Face ID to securely sign in to your account</string>
+</dict>
 </plist>

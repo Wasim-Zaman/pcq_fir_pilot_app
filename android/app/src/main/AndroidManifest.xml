@@ -2,6 +2,9 @@
 
     <!-- Internet permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    
+    <!-- Biometric authentication permission -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
 
     <application
         android:label="pcq_fir_pilot_app"
