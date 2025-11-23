@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pcq_fir_pilot_app/core/constants/app_colors.dart';
 import 'package:pcq_fir_pilot_app/core/extensions/sizedbox_extension.dart';
-import 'package:pcq_fir_pilot_app/core/utils/custom_dialog.dart';
 import 'package:pcq_fir_pilot_app/core/utils/custom_snackbar.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/gatepass_models.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/models/item_model.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/providers/gatepass_scan_item_provider.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/empty_scan_state.dart';
 import 'package:pcq_fir_pilot_app/presentation/features/gatepass/view/widgets/gatepass_scan_items_screen/scanned_item_card.dart';
+import 'package:pcq_fir_pilot_app/presentation/widgets/custom_button_widget.dart';
 import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 /// Item Verification Screen with QR scanning capability
@@ -86,6 +87,104 @@ class _GatePassScanItemsScreenState
         .fetchItemVerification(itemId, widget.gatePass.id);
   }
 
+  /// Show dialog with options after scanning an item
+  void _showScanActionDialog(GatePassScanItemState state) {
+    final allItemsScanned = state.scannedAll;
+    final scannedCount = state.scannedItems.length;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(
+              allItemsScanned ? Icons.check_circle : Icons.qr_code_scanner,
+              color: allItemsScanned ? Colors.green : AppColors.kPrimaryColor,
+              size: 28,
+            ),
+            12.widthBox,
+            Expanded(
+              child: Text(
+                allItemsScanned ? '✅ All Items Scanned!' : '✓ Item Scanned',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              allItemsScanned
+                  ? '🎉 Great! All items have been scanned successfully.'
+                  : 'Item scanned successfully!',
+              style: const TextStyle(fontSize: 16),
+            ),
+            12.heightBox,
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.kPrimaryColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.inventory_2_outlined,
+                    color: AppColors.kPrimaryColor,
+                  ),
+                  8.widthBox,
+                  Text(
+                    '$scannedCount ${scannedCount == 1 ? 'item' : 'items'} scanned',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.kPrimaryColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (!allItemsScanned) ...[
+              16.heightBox,
+              const Text(
+                'What would you like to do?',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          if (!allItemsScanned)
+            TextButton(
+              onPressed: () {
+                context.pop();
+                // Show scan dialog again
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  if (context.mounted) _scanItemDialog();
+                });
+              },
+              child: const Text('Scan Another Item'),
+            ),
+          CustomButton(
+            text: 'Back to Dashboard',
+            onPressed: () {
+              context.pop(); // Close dialog
+              context.pop(); // Go back to dashboard
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final itemVerificationState = ref.watch(gatePassScanItemProvider);
@@ -106,21 +205,6 @@ class _GatePassScanItemsScreenState
 
       if (!justFinishedLoading) return;
 
-      // Show success dialog if all items are scanned and message is available
-      if (currentState.scannedAll && currentState.message != null) {
-        debugPrint('All items have been scanned.');
-        Future.microtask(() {
-          if (context.mounted) {
-            CustomDialog.showScanSuccessDialog(
-              context,
-              title: '✅ All Items Scanned!',
-              message: currentState.message!,
-            );
-          }
-        });
-        return;
-      }
-
       // Show error if present
       if (currentState.error != null) {
         CustomSnackbar.showError(context, currentState.error!);
@@ -133,10 +217,10 @@ class _GatePassScanItemsScreenState
         return;
       }
 
-      // Show scan dialog again if not all items are scanned
-      if (!currentState.scannedAll) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (context.mounted) _scanItemDialog();
+      // Show action dialog after each successful scan
+      if (currentState.scannedItems.isNotEmpty) {
+        Future.microtask(() {
+          if (context.mounted) _showScanActionDialog(currentState);
         });
       }
     });
