@@ -165,10 +165,10 @@ class _GatePassScanItemsScreenState
           if (!allItemsScanned)
             TextButton(
               onPressed: () {
-                context.pop();
-                // Show scan dialog again
-                Future.delayed(const Duration(milliseconds: 300), () {
-                  if (context.mounted) _scanItemDialog();
+                Navigator.of(context).pop();
+                // Show scan dialog again immediately using microtask
+                Future.microtask(() {
+                  if (mounted) _scanItemDialog();
                 });
               },
               child: const Text('Scan Another Item'),
@@ -208,11 +208,13 @@ class _GatePassScanItemsScreenState
       // Show error if present
       if (currentState.error != null) {
         CustomSnackbar.showError(context, currentState.error!);
-        // Reset error and show dialog again
+        // Reset error first
         ref.read(gatePassScanItemProvider.notifier).resetError();
+        // Don't reshow dialog if all items are scanned
         if (currentState.scannedAll) return;
-        Future.delayed(const Duration(seconds: 1), () {
-          if (context.mounted) _scanItemDialog();
+        // Show dialog again using microtask for immediate execution
+        Future.microtask(() {
+          if (mounted) _scanItemDialog();
         });
         return;
       }

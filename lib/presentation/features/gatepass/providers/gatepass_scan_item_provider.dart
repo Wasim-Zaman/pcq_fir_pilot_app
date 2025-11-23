@@ -258,7 +258,7 @@ class GatePassScanItemNotifier extends AsyncNotifier<GatePassScanItemState> {
   /// Reset error state
   void resetError() {
     state.whenData((data) {
-      state = AsyncValue.data(data.copyWith(error: null));
+      state = AsyncValue.data(data.copyWith(error: null, isLoading: false));
     });
   }
 
