@@ -9,6 +9,7 @@ import 'package:pcq_fir_pilot_app/presentation/widgets/custom_scaffold.dart';
 
 import 'widgets/dashboard_screen/dashboard_content.dart';
 import 'widgets/dashboard_screen/dashboard_error_view.dart';
+import 'widgets/dashboard_loading_widget.dart';
 
 /// Dashboard screen displaying user statistics and quick actions
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -73,7 +74,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           child: dashboardState.when(
             data: (state) {
               if (state.isLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const DashboardLoadingWidget();
               }
 
               if (state.error != null) {
@@ -90,7 +91,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 onProfile: _handleProfile,
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const DashboardLoadingWidget(),
             error: (error, stackTrace) => DashboardErrorView(
               title: 'Failed to load dashboard',
               errorMessage: error.toString(),
